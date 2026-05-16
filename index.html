@@ -1963,7 +1963,8 @@ const firebaseConfig = {
 const CLOUDINARY_CLOUD = "dancaaglf";
 const CLOUDINARY_PRESET = "wolfs-garage";
 const MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
-const ADMIN_EMAIL = "wolfsgaragenw@gmail.com";
+const ADMIN_EMAILS = ["wolfsgaragenw@gmail.com", "illsupernova.ja@gmail.com"];
+const ADMIN_EMAIL = ADMIN_EMAILS[0];
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -2133,7 +2134,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
 
     // 2. Write metadata to Firestore (status=pending)
     progress.textContent = 'Submitting for review...';
-    const isWolf = (user.email === ADMIN_EMAIL);
+    const isWolf = ADMIN_EMAILS.includes(user.email);
     await db.collection('gallery').add({
       userId: user.uid,
       userEmail: user.email,
