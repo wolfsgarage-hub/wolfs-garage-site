@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/directory",
+      "destination": "https://wolfs-garage-community.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/directory/(.*)",
+      "destination": "https://wolfs-garage-community.vercel.app/$1",
+      "permanent": false
+    }
+  ]
+}
