@@ -378,12 +378,21 @@ section { padding: 80px 24px; position: relative; }
 .product-card:hover { transform: translateY(-4px); border-color: var(--red); }
 .product-img {
   height: 240px;
-  background: linear-gradient(135deg, var(--panel-2), var(--panel));
+  background: var(--panel-2);
   display: flex; align-items: center; justify-content: center;
   position: relative;
+  overflow: hidden;
 }
+.product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.product-card:hover .product-img img { transform: scale(1.04); }
 .product-img::after {
-  content: 'COMING SOON';
+  content: '';
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.8rem;
   color: rgba(245,241,232,0.15);
@@ -1345,6 +1354,12 @@ document.addEventListener('DOMContentLoaded', function() {
     <h2 class="section-title">WOLF <span class="pop">WARES</span></h2>
     <p class="section-intro">Tees, gear, and goods built for the garage. Every dollar funds the next build.</p>
     <div class="wares-grid">
+      <div class="product-card featured-badge"><div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/4115988220191323640_2048.jpg?v=1771829688" alt="Get off your phone dark edition" loading="lazy"></div><div class="product-info"><h4>Get Off Your Phone</h4><span class="price">$24.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/angry-wolf-mascot-t-shirt-fierce-cartoon-wolf-head-tee'">SHOP NOW</button></div></div>
+      <div class="product-card new-badge"><div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/14142384868575678680_2048.jpg?v=1772653819" alt="Wolf Pup 1.0" loading="lazy"></div><div class="product-info"><h4>Wolf Pup 1.0 Kids</h4><span class="price">$22.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/kids-tee-growing-up-to-finish-dads-project-wolf-cub-truck-design'">SHOP NOW</button></div></div>
+      <div class="product-card"><div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/unisex-classic-tee-black-front-and-back-69b1a8fbed487.jpg?v=1773250832" alt="For the Haters" loading="lazy"></div><div class="product-info"><h4>For the Haters</h4><span class="price">$24.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/for-the-haters'">SHOP NOW</button></div></div>
+      <div class="product-card"><div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/baby-jersey-bodysuit-black-front-69a9d634dae6d.jpg?v=1772738123" alt="Wolf Pup Bodysuit" loading="lazy"></div><div class="product-info"><h4>Wolf Pup Bodysuit</h4><span class="price">$22.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/wolf-pup-bodysuit'">SHOP NOW</button></div></div>
+      <div class="product-card"><div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/unisex-classic-tee-graphite-heather-front-6998fd1a63418.jpg?v=1771633969" alt="Get Some Tee" loading="lazy"></div><div class="product-info"><h4>Get Some Tee</h4><span class="price">$24.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/unisex-classic-tee'">SHOP NOW</button></div></div>
+      <div class="product-card"><div class="product-img"><img src="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/vanity-plate-white-glossy-front-699bf6f874f7c.jpg?v=1771829000" alt="It's Exactly What It Looks Like" loading="lazy"></div><div class="product-info"><h4>It's Exactly What It Looks Like</h4><span class="price">$14.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/im-buying-this'">SHOP NOW</button></div>
       <div class="product-card featured-badge"><div class="product-img"></div><div class="product-info"><h4>Get Off Your Phone</h4><span class="price">$26.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/angry-wolf-mascot-t-shirt-fierce-cartoon-wolf-head-tee'">SHOP NOW</button></div></div>
       <div class="product-card new-badge"><div class="product-img"></div><div class="product-info"><h4>Wolf Pup 1.0 Kids</h4><span class="price">$26.99</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/kids-tee-growing-up-to-finish-dads-project-wolf-cub-truck-design'">SHOP NOW</button></div></div>
       <div class="product-card"><div class="product-img"></div><div class="product-info"><h4>For the Haters Hat</h4><span class="price">$20.00</span><button class="add-to-cart" onclick="window.location.href='https://shop.wolfsgarage.com/products/for-the-haters'">SHOP NOW</button></div></div>
