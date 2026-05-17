@@ -2096,8 +2096,8 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// --- Session persistence: signed in only for current browser session (signs out on close) ---
-auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(function(err) {
+// --- Local persistence: stay signed in across refreshes and browser close (manual sign-out only) ---
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(err) {
   console.warn('Auth persistence error:', err);
 });
 
