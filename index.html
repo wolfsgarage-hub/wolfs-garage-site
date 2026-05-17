@@ -306,15 +306,15 @@ section { padding: 80px 24px; position: relative; }
 #featured { background: var(--bg); padding-top: 40px; padding-bottom: 30px; }
 .featured-row {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
   align-items: stretch;
-  margin-top: 18px;
+  margin-top: 22px;
 }
 .featured-card {
   background: var(--panel-2);
   border: 1px solid var(--border);
-  padding: 10px 10px 12px;
+  padding: 16px 14px 18px;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -322,10 +322,10 @@ section { padding: 80px 24px; position: relative; }
 .featured-card-label {
   font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  font-size: 0.68rem;
   color: var(--copper);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   line-height: 1.2;
 }
 .featured-card .placeholder-img {
@@ -333,40 +333,24 @@ section { padding: 80px 24px; position: relative; }
   aspect-ratio: 1/1;
   background: linear-gradient(135deg, rgba(204,0,0,0.05), rgba(245,241,232,0.02));
   border: 1px dashed rgba(245,241,232,0.13);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .featured-card-desc {
-  color: rgba(245,241,232,0.65);
-  font-size: 0.68rem;
-  line-height: 1.4;
+  color: rgba(245,241,232,0.72);
+  font-size: 0.82rem;
+  line-height: 1.5;
   margin: 0;
   flex-grow: 1;
-}
-
-/* Real piston graphic */
-.featured-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-}
-.featured-piston {
-  display: block;
-  width: 100%;
-  max-width: 50px;
-  height: auto;
 }
 
 /* Desktop scale-up */
 @media (min-width: 720px) {
   #featured { padding-top: 60px; padding-bottom: 50px; }
-  .featured-row { gap: 24px; margin-top: 32px; }
-  .featured-card { padding: 18px 16px 18px; }
-  .featured-card-label { font-size: 0.72rem; margin-bottom: 14px; letter-spacing: 0.14em; }
-  .featured-card .placeholder-img { aspect-ratio: 4/3; margin-bottom: 14px; }
-  .featured-card-desc { font-size: 0.92rem; line-height: 1.55; }
-  .featured-divider { min-width: 80px; }
-  .featured-piston { max-width: 160px; }
+  .featured-row { gap: 32px; margin-top: 36px; }
+  .featured-card { padding: 28px 24px 26px; }
+  .featured-card-label { font-size: 0.86rem; margin-bottom: 18px; letter-spacing: 0.14em; }
+  .featured-card .placeholder-img { aspect-ratio: 4/3; margin-bottom: 18px; }
+  .featured-card-desc { font-size: 1.05rem; line-height: 1.6; }
 }
 
 /* WARES */
@@ -1427,11 +1411,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="featured-card-desc">Featured business text will appear here, pulled from the admin app.</p>
       </div>
 
-      <!-- CENTER: Real piston graphic -->
-      <div class="featured-divider" aria-hidden="true">
-        <img src="/assets/pistons.svg" alt="" class="featured-piston">
-      </div>
-
       <!-- RIGHT: Wolf's Pick of the Week -->
       <div class="featured-card placeholder-card">
         <div class="featured-card-label">Wolf's Pick of the Week</div>
@@ -1786,6 +1765,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="javascript:void(0)" onclick="openModal()">My Account</a></li>
+        <li id="footSignOutLi" style="display:none;"><a href="javascript:void(0)" onclick="signOut()">Sign Out</a></li>
         <li><a href="javascript:void(0)" onclick="window.open('https://shop.wolfsgarage.com/policies/privacy-policy','_blank')">Privacy Policy</a></li>
         <li><a href="javascript:void(0)" onclick="window.open('https://shop.wolfsgarage.com/policies/terms-of-service','_blank')">Terms of Service</a></li>
         <li><a href="javascript:void(0)" onclick="showToast('Accessibility info coming soon')">Accessibility</a></li>
@@ -2106,9 +2086,11 @@ auth.onAuthStateChanged(function(user) {
   const signedOut = document.getElementById('uploadSignedOut');
   const signedIn = document.getElementById('uploadSignedIn');
   const hello = document.getElementById('uploadHello');
+  const footSignOutLi = document.getElementById('footSignOutLi');
   if (user) {
     if (signedOut) signedOut.style.display = 'none';
     if (signedIn) signedIn.style.display = 'block';
+    if (footSignOutLi) footSignOutLi.style.display = '';
     if (hello) {
       const who = user.displayName || user.email;
       hello.textContent = 'Signed in as ' + who + '. Post your build.';
@@ -2116,6 +2098,7 @@ auth.onAuthStateChanged(function(user) {
   } else {
     if (signedOut) signedOut.style.display = 'block';
     if (signedIn) signedIn.style.display = 'none';
+    if (footSignOutLi) footSignOutLi.style.display = 'none';
   }
 });
 
