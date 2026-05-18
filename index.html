@@ -9,13 +9,21 @@
 <meta property="og:title" content="Wolf's Garage. Get Back in the Garage.">
 <meta property="og:description" content="Portland, Oregon hot rod culture. Apparel, tools, free Hot Rodder Directory, community for working-class car &amp; truck builders. Get Back in the Garage.">
 <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/4115988220191323640_2048.jpg?v=1771829688">
+<meta property="og:image:alt" content="Wolf's Garage logo. Cartoon wolf in sunglasses with Portland skyline reflected, red and white pinstripe ring.">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="2048">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wolfsgarage.com">
+<meta property="og:site_name" content="Wolf's Garage">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wolf's Garage. Get Back in the Garage.">
+<meta name="twitter:description" content="Portland, Oregon hot rod culture. Apparel, tools, free Hot Rodder Directory, community for working-class car and truck builders.">
+<meta name="twitter:image" content="https://cdn.shopify.com/s/files/1/0741/2904/7719/files/4115988220191323640_2048.jpg?v=1771829688">
+<link rel="canonical" href="https://wolfsgarage.com/">
 <link rel="icon" type="image/png" href="WG_ASSET_WOLF">
 <link rel="apple-touch-icon" href="WG_ASSET_WOLF">
 <title>Wolf's Garage. Get Back in the Garage.</title>
-<meta name="site-version" content="1.29">
+<meta name="site-version" content="1.30">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -908,9 +916,11 @@ section { padding: 80px 24px; position: relative; }
 }
 .bulletin-thumb:hover { border-color: var(--red); transform: scale(1.05); }
 .bulletin-thumb::after {
-  content: '🔍';
-  position: absolute; bottom: 4px; right: 4px;
-  font-size: 0.7rem; opacity: 0.6;
+  content: '+';
+  position: absolute; bottom: 2px; right: 6px;
+  font-size: 1rem; opacity: 0.6;
+  font-family: 'Oswald', sans-serif;
+  color: var(--bone);
 }
 .bulletin-thumb.placeholder {
   display: flex; align-items: center; justify-content: center;
@@ -1381,30 +1391,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-<!-- FEATURED THIS WEEK (Pass 6 scaffold, data wiring TODO) -->
-<section id="featured">
-  <div class="container reveal">
-    <span class="section-eyebrow">Featured This Week</span>
-    <h2 class="section-title">FROM THE <span class="pop">PACK</span></h2>
-    <div class="featured-row">
-
-      <!-- LEFT: Featured Hot Rodder Business -->
-      <div class="featured-card placeholder-card">
-        <div class="featured-card-label">Featured Hot Rodder Business</div>
-        <div class="placeholder-img" aria-hidden="true"></div>
-        <p class="featured-card-desc">Featured business text will appear here, pulled from the admin app.</p>
-      </div>
-
-      <!-- RIGHT: Wolf's Pick of the Week -->
-      <div class="featured-card placeholder-card">
-        <div class="featured-card-label">Wolf's Pick of the Week</div>
-        <div class="placeholder-img" aria-hidden="true"></div>
-        <p class="featured-card-desc">Wolf's pick text will appear here, pulled from the admin app.</p>
-      </div>
-
-    </div>
-  </div>
-</section><!-- DIRECTORY -->
+<!-- DIRECTORY -->
 <section id="directory">
   <div class="container reveal">
     <span class="section-eyebrow">The Network</span>
@@ -1413,7 +1400,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div style="text-align:center;margin-top:40px;padding:40px 24px;background:#111;border:1px solid #CC0000;">
       <p style="font-family:'Oswald',sans-serif;font-size:1.1rem;color:#F5F1E8;letter-spacing:0.08em;margin-bottom:8px;">DIRECTORY IS LIVE. LISTINGS ARE OPEN.</p>
       <p style="font-family:'Work Sans',sans-serif;font-size:0.95rem;color:#999;margin-bottom:32px;">Browse the map. Find a shop. Add your business. Free to list, always.</p>
-      <a href="https://wolfs-garage-community.vercel.app" target="_blank" rel="noopener" class="btn-red" style="display:inline-block;padding:14px 36px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.12em;background:#CC0000;color:#F5F1E8;text-decoration:none;">ENTER THE DIRECTORY</a>
+      <a href="/directory" class="btn-red" style="display:inline-block;padding:14px 36px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.12em;background:#CC0000;color:#F5F1E8;text-decoration:none;">ENTER THE DIRECTORY</a>
     </div>
   </div>
 </section>
@@ -1493,30 +1480,21 @@ document.addEventListener('DOMContentLoaded', function() {
     <p class="section-intro">Parts wanted, parts for sale, shops sharing wins, builds in progress, public notices. Pack-submitted, admin-approved. Click thumbnails to expand.</p>
 
     <div class="bulletin-post">
-      <button class="report-btn" onclick="showToast('Reported to admin queue')">🚩 Report</button>
+      <button class="report-btn" onclick="showToast('Reported to admin queue')">REPORT</button>
       <div class="meta"><span>Build Update · Wolf's Garage <span class="verified-badge">WOLF</span></span><span>2 days ago</span></div>
       <h4>C-10 FRONT CLIP BENCH. REBUILD IN PROGRESS</h4>
       <p>1968 C-10 front clip getting rebuilt into the booth centerpiece bench. Subframe welded, fenders mounted next. Pulled from forest. Previous builder's $300 work didn't meet spec. Starting fresh.</p>
-      <div class="bulletin-thumbs">
-        <div class="bulletin-thumb placeholder" onclick="expandThumb(this)">Photo 1</div>
-        <div class="bulletin-thumb placeholder" onclick="expandThumb(this)">Photo 2</div>
-        <div class="bulletin-thumb placeholder" onclick="expandThumb(this)">Photo 3</div>
-      </div>
     </div>
 
     <div class="bulletin-post">
-      <button class="report-btn" onclick="showToast('Reported to admin queue')">🚩 Report</button>
+      <button class="report-btn" onclick="showToast('Reported to admin queue')">REPORT</button>
       <div class="meta"><span>For Sale · Pack Member</span><span>5 days ago</span></div>
       <h4>BBC 396 SHORT BLOCK. $1,200</h4>
       <p>Bored 0.030 over, balanced, ready for assembly. Pickup Hillsboro. Cash or trade for SBC parts.</p>
-      <div class="bulletin-thumbs">
-        <div class="bulletin-thumb placeholder" onclick="expandThumb(this)">Photo 1</div>
-        <div class="bulletin-thumb placeholder" onclick="expandThumb(this)">Photo 2</div>
-      </div>
     </div>
 
     <div class="bulletin-post">
-      <button class="report-btn" onclick="showToast('Reported to admin queue')">🚩 Report</button>
+      <button class="report-btn" onclick="showToast('Reported to admin queue')">REPORT</button>
       <div class="meta"><span>Wanted · Pack Member</span><span>1 week ago</span></div>
       <h4>WANTED: 1967-72 C10 BIG BACK GLASS</h4>
       <p>Looking for original or repop. Tinted preferred. Will travel within 200 miles for the right one.</p>
@@ -1608,7 +1586,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="event-meta">Past Event · Portland International Raceway</p>
         <p>Booths #1217 & #1218. Wolf's Garage first vendor presence.</p>
       </div>
-      <button class="event-flyer-btn">FLYER</button>
     </div>
 
     <!-- UPCOMING events -->
@@ -1619,7 +1596,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="event-meta">Barton Park, Boring OR · Hosted by Class Act</p>
         <p>First Wolf's Garage vendor booth. Hosted by Class Act, presented by Mini Truck Cartel. Come hang.</p>
       </div>
-      <button class="event-flyer-btn">FLYER</button>
     </div>
     <div class="event-card">
       <div class="event-date"><span class="month">JUN</span><span class="day">26</span><span class="year">2026</span></div>
@@ -1628,7 +1604,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="event-meta">Jubitz Truck Stop, Portland · Run by Driven Dead</p>
         <p>16th Annual at Jubitz Truck Stop. Pre-64 cars & trucks, live music, gates 9 AM. Run by Driven Dead.</p>
       </div>
-      <button class="event-flyer-btn">FLYER</button>
     </div>
     <div class="event-card">
       <div class="event-date"><span class="month">JUL</span><span class="day">11</span><span class="year">2026</span></div>
@@ -1637,7 +1612,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="event-meta">Vancouver Lake Park, WA · SW WA C10 Club</p>
         <p>Annual SW WA C10 Club meetup. Family-friendly. BYO grill.</p>
       </div>
-      <button class="event-flyer-btn">FLYER</button>
     </div>
     <div class="event-card">
       <div class="event-date"><span class="month">JUL</span><span class="day">18</span><span class="year">2026</span></div>
@@ -1646,7 +1620,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="event-meta">Sauvie Island, Portland · 11AM-4:30PM</p>
         <p>Proceeds to OHSU Cancer Institute. Pre-party July 17 at Cocina Los Girasoles.</p>
       </div>
-      <button class="event-flyer-btn">FLYER</button>
     </div>
 
     <div class="admin-note" style="margin-top:24px;">
@@ -1681,12 +1654,17 @@ document.addEventListener('DOMContentLoaded', function() {
     <span class="section-eyebrow">Stay In The Loop</span>
     <h2 class="section-title">JOIN THE <span class="pop">PACK</span></h2>
     <p class="section-intro" style="margin-left:auto;margin-right:auto;">First dibs on drops. Event reminders. Inside scoops. Swag discounts. Nothing else.</p>
+    <!-- NOTE: form action currently posts to Mailchimp (us2.list-manage.com). Project rules
+         say MailerLite should be the email backend (group ID 183432150782052021), but
+         Mailchimp is also connected to Shopify and may still be the active list. Verify
+         with John which is canonical before swapping the action URL. Leaving Mailchimp
+         in place since it is currently working. -->
     <form class="join-form" action="https://wolfsgarage.us2.list-manage.com/subscribe/post?u=dc4fc447e326886743fcd078b&id=b0d82514d3&f_id=003196e3f0" method="POST" target="_blank" onsubmit="showToast('You\'re in. Welcome to the pack.');">
       <input type="email" placeholder="your@email.com" required aria-label="Email">
       <button type="submit" class="btn-red">I'M IN</button>
     </form>
     <p class="no-spam">NO SPAM, EVER · GET BACK IN THE GARAGE</p>
-    <p class="unsub-note">* By signing up or creating an account, you'll be added to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. Don't want them? Unsubscribe anytime from any email — one click, no hassle.</p>
+    <p class="unsub-note">* By signing up or creating an account, you'll be added to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. Don't want them? Unsubscribe anytime from any email. One click, no hassle.</p>
   </div>
 </section>
 
@@ -1775,7 +1753,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <input type="password" name="password" placeholder="Password *" required minlength="8">
       <input type="text" name="contact" placeholder="Phone or contact method">
       <input type="url" name="website" placeholder="Website (optional)">
-      <textarea name="bio" placeholder="Your hobby bio — what do you wrench on, why are you in this scene? *" required rows="3" style="resize:vertical;font-family:'Work Sans',sans-serif;font-size:1rem;"></textarea>
+      <textarea name="bio" placeholder="Your hobby bio: what do you wrench on, why are you in this scene? *" required rows="3" style="resize:vertical;font-family:'Work Sans',sans-serif;font-size:1rem;"></textarea>
       <input type="text" name="currentRides" placeholder="Current rides (e.g. '68 C10, '49 GMC)">
       <input type="text" name="pastRides" placeholder="Past rides">
 
@@ -1784,7 +1762,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <label class="upload-label">Your Rides Gallery <span class="req">*</span></label>
         <p class="upload-hint">At least one photo of your ride is required. JPG/PNG, max 25MB each.</p>
         <input type="file" id="rideFiles" accept="image/jpeg,image/png" multiple onchange="handleRidePhotos(event)" style="display:none;">
-        <button type="button" class="btn-ghost upload-trigger" onclick="document.getElementById('rideFiles').click()">📷 ADD RIDE PHOTOS</button>
+        <button type="button" class="btn-ghost upload-trigger" onclick="document.getElementById('rideFiles').click()">ADD RIDE PHOTOS</button>
         <div id="ridePhotoPreview" class="ride-preview"></div>
         <p id="ridePhotoError" class="ride-error">Add at least one photo of your ride to submit.</p>
       </div>
@@ -1792,12 +1770,12 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="upload-block">
         <label class="upload-label">Business photos (optional)</label>
         <input type="file" id="bizFiles" accept="image/jpeg,image/png" multiple onchange="handleBizPhotos(event)" style="display:none;">
-        <button type="button" class="btn-ghost upload-trigger" onclick="document.getElementById('bizFiles').click()">📷 ADD SHOP PHOTOS</button>
+        <button type="button" class="btn-ghost upload-trigger" onclick="document.getElementById('bizFiles').click()">ADD SHOP PHOTOS</button>
         <div id="bizPhotoPreview" class="ride-preview"></div>
       </div>
 
       <div class="modal-disclosure">
-        <strong>Heads up:</strong> Your account auto-subscribes to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. <em>Unsubscribe anytime from any email</em> — one click, no hassle.
+        <strong>Heads up:</strong> Your account auto-subscribes to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. <em>Unsubscribe anytime from any email.</em> One click, no hassle.
       </div>
       <button type="submit" class="btn-red" id="bizSubmitBtn">SUBMIT LISTING</button>
     </form>
@@ -1903,7 +1881,7 @@ function toggleHeart(btn) {
   const count = btn.querySelector('span');
   let n = parseInt(count.textContent);
   count.textContent = isLiked ? (n + 1) : (n - 1);
-  btn.firstChild.textContent = isLiked ? '♥ ' : '♡ ';
+  btn.firstChild.textContent = isLiked ? 'LIKED ' : 'LIKE ';
 }
 
 function expandThumb(el) {
@@ -2014,7 +1992,7 @@ function submitBiz(e) {
     document.getElementById('ridePhotoError').scrollIntoView({behavior:'smooth',block:'center'});
     return false;
   }
-  showToast('Submitted — Wolf reviews within 24 hrs');
+  showToast('Submitted. Wolf reviews within 24 hrs');
   closeBizModal();
   document.getElementById('bizForm').reset();
   ridePhotos = []; bizPhotos = [];
@@ -2042,7 +2020,7 @@ function submitBiz(e) {
 </script>
 
 <script>
-// ===== WOLF'S GARAGE — AUTH + GALLERY UPLOAD =====
+// ===== WOLF'S GARAGE: AUTH + GALLERY UPLOAD =====
 // Reuses wolfs-garage-directory Firebase project
 const firebaseConfig = {
   apiKey: "AIzaSyAGcEHgch3ofFWFDUlYphyaXAxqk06DAQ0",
@@ -2129,7 +2107,7 @@ function renderGalleryFromCache() {
     const likes = p.likes || 0;
     return '<div class="gphoto" style="background-image:url(' + p.imageUrl + ');background-size:cover;background-position:center;">'
          + verifiedBadge
-         + '<button class="gphoto-heart" onclick="toggleHeart(this)">&#9825; <span>' + likes + '</span></button>'
+         + '<button class="gphoto-heart" onclick="toggleHeart(this)">LIKE <span>' + likes + '</span></button>'
          + '<span class="gphoto-label">' + safeCaption + '</span>'
          + '</div>';
   }).join('');
