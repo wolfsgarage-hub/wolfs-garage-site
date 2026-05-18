@@ -9,6 +9,21 @@
       "source": "/directory/(.*)",
       "destination": "https://wolfs-garage-community.vercel.app/$1",
       "permanent": false
+    },
+    {
+      "source": "/pages/hot-rodder-directory",
+      "destination": "https://wolfs-garage-community.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/pages/hot-rodder-directory/(.*)",
+      "destination": "https://wolfs-garage-community.vercel.app/$1",
+      "permanent": false
+    },
+    {
+      "source": "/pack",
+      "destination": "https://wolfs-garage-community.vercel.app",
+      "permanent": false
     }
   ]
 }
