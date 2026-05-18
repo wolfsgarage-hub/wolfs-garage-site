@@ -23,7 +23,7 @@
 <link rel="icon" type="image/png" href="WG_ASSET_WOLF">
 <link rel="apple-touch-icon" href="WG_ASSET_WOLF">
 <title>Wolf's Garage. Get Back in the Garage.</title>
-<meta name="site-version" content="1.30">
+<meta name="site-version" content="1.31">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1654,11 +1654,8 @@ document.addEventListener('DOMContentLoaded', function() {
     <span class="section-eyebrow">Stay In The Loop</span>
     <h2 class="section-title">JOIN THE <span class="pop">PACK</span></h2>
     <p class="section-intro" style="margin-left:auto;margin-right:auto;">First dibs on drops. Event reminders. Inside scoops. Swag discounts. Nothing else.</p>
-    <!-- NOTE: form action currently posts to Mailchimp (us2.list-manage.com). Project rules
-         say MailerLite should be the email backend (group ID 183432150782052021), but
-         Mailchimp is also connected to Shopify and may still be the active list. Verify
-         with John which is canonical before swapping the action URL. Leaving Mailchimp
-         in place since it is currently working. -->
+    <!-- Email backend: Mailchimp (us2.list-manage.com). Canonical per John May 18 2026.
+         MailerLite is NOT in use for Wolf's Garage. Do not switch endpoints. -->
     <form class="join-form" action="https://wolfsgarage.us2.list-manage.com/subscribe/post?u=dc4fc447e326886743fcd078b&id=b0d82514d3&f_id=003196e3f0" method="POST" target="_blank" onsubmit="showToast('You\'re in. Welcome to the pack.');">
       <input type="email" placeholder="your@email.com" required aria-label="Email">
       <button type="submit" class="btn-red">I'M IN</button>
