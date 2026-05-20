@@ -817,6 +817,17 @@ section { padding: 80px 24px; position: relative; }
   }
   .event-date .day { font-size: 2.4rem; }
 }
+.event-flyer-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--copper);
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+.event-flyer-link:hover { color: var(--red); }
 
 /* BULLETIN */
 #bulletin { background: var(--panel); }
@@ -970,6 +981,13 @@ section { padding: 80px 24px; position: relative; }
   overflow-wrap: anywhere;
   word-break: break-word;
   line-height: 1.25;
+}
+.social-tile--email h5 {
+  font-family: 'Work Sans', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: clamp(0.82rem, 2.4vw, 1rem);
+  word-break: break-all;
 }
 .social-tile p {
   font-size: 0.88rem;
@@ -1299,7 +1317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="upload-zone" id="uploadZone">
       <div id="uploadSignedOut">
         <p>Sign in to upload your build photos to the Pack Gallery.</p>
-        <button class="btn-red" onclick="openModal('signup')">SIGN IN TO POST</button>
+        <button class="btn-red" onclick="openModal()">SIGN IN TO POST</button>
         <p class="typewriter">Max file size: 10MB | JPG/PNG only | Reviewed before going live</p>
       </div>
       <div id="uploadSignedIn" style="display:none;">
@@ -1510,6 +1528,9 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
+    <!-- Approved community-submitted events render here (loadEvents in script block below) -->
+    <div id="eventsLiveGrid"></div>
+
     <div class="upload-zone" id="eventSubmitZone" style="margin-top:24px;">
       <div id="eventSubmitSignedOut">
         <p><strong>SUBMIT AN EVENT:</strong> Sign in to submit. Events are reviewed by an admin within 24 hours before they post.</p>
@@ -1549,7 +1570,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="social-grid">
       <a href="https://instagram.com/_wolfsgarage" class="social-tile"><div class="ico">IG</div><div><h5>@_wolfsgarage</h5><p>Instagram</p></div></a>
       <a href="https://facebook.com/wolfsgaragenw" class="social-tile"><div class="ico">FB</div><div><h5>Wolf's Garage</h5><p>Facebook</p></div></a>
-      <a href="mailto:wolfsgaragenw@gmail.com" class="social-tile"><div class="ico">@</div><div><h5>wolfsgaragenw@gmail.com</h5><p>Email</p></div></a>
+      <a href="mailto:wolfsgaragenw@gmail.com" class="social-tile social-tile--email"><div class="ico">@</div><div><h5>wolfsgaragenw@gmail.com</h5><p>Email</p></div></a>
       <div class="social-tile coming-soon-tile"><div class="ico">YT</div><div><h5>YouTube</h5><p>Coming Soon</p></div></div>
     </div>
   </div>
@@ -1937,6 +1958,68 @@ function renderGalleryFromCache() {
 
 // Initial load
 loadGallery();
+
+// --- Events: load approved submissions from Firestore + render below hardcoded cards ---
+let eventsCache = [];
+const EVENT_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+function escapeHtml(s) {
+  return (s || '').replace(/[<>&"]/g, function(c) {
+    return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c];
+  });
+}
+
+function renderEventsFromCache() {
+  const grid = document.getElementById('eventsLiveGrid');
+  if (!grid) return;
+  if (!eventsCache.length) { grid.innerHTML = ''; return; }
+  const today = new Date().toISOString().slice(0, 10);
+  // Sort client-side by yyyy-mm-dd date string (avoids needing a new Firestore composite index)
+  const sorted = eventsCache.slice().sort(function(a, b) {
+    return (a.date || '').localeCompare(b.date || '');
+  });
+  grid.innerHTML = sorted.map(function(ev) {
+    const isPast = ev.date && ev.date < today;
+    const parts = (ev.date || '').split('-');
+    const year = parts[0] || '';
+    const monthIdx = parts[1] ? parseInt(parts[1], 10) - 1 : -1;
+    const month = (monthIdx >= 0 && monthIdx < 12) ? EVENT_MONTHS[monthIdx] : '';
+    const day = parts[2] || '';
+    const timeSuffix = ev.time ? ' · ' + escapeHtml(ev.time) : '';
+    const flyerLink = ev.flyerUrl
+      ? '<a href="' + escapeHtml(ev.flyerUrl) + '" target="_blank" rel="noopener" class="event-flyer-link">View Flyer →</a>'
+      : '';
+    return '<div class="event-card' + (isPast ? ' past' : '') + '">'
+         +   '<div class="event-date">'
+         +     '<span class="month">' + month + '</span>'
+         +     '<span class="day">' + escapeHtml(day) + '</span>'
+         +     '<span class="year">' + escapeHtml(year) + '</span>'
+         +   '</div>'
+         +   '<div class="event-body">'
+         +     '<h4>' + escapeHtml(ev.title) + '</h4>'
+         +     '<p class="event-meta">' + escapeHtml(ev.location) + timeSuffix + '</p>'
+         +     '<p>' + escapeHtml(ev.description) + '</p>'
+         +     flyerLink
+         +   '</div>'
+         + '</div>';
+  }).join('');
+}
+
+async function loadEvents() {
+  const grid = document.getElementById('eventsLiveGrid');
+  if (!grid) return;
+  try {
+    const snap = await db.collection('events')
+      .where('status', '==', 'approved')
+      .get();
+    eventsCache = snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+    renderEventsFromCache();
+  } catch (err) {
+    console.error('Events load error:', err);
+  }
+}
+
+loadEvents();
 function showAuthError(msg) {
   const el = document.getElementById('authError');
   if (el) { el.textContent = msg; el.style.display = 'block'; }
