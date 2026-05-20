@@ -25,7 +25,9 @@ Two swap scripts rewrite the sentinels at runtime:
 
 **CSS-rule limitation:** Neither script rewrites `url(WG_ASSET_*)` inside `<style>` blocks or stylesheets — only inline `style="background-image:..."` attributes. Putting a token in a CSS rule will silently 404. Use inline style or `<img>` instead.
 
-To add a new image: add a new `WG_ASSET_<NAME>` key to the `WG_ASSETS` object (base64 data URI as the value), then reference `WG_ASSET_<NAME>` as an `<img src=...>`, in inline `style="background-image:url(WG_ASSET_<NAME>)"`, or in a `<link href>`. Favicon + apple-touch-icon use this same mechanism; the OG/Twitter image is the one exception and is served from the Shopify CDN. Loose image files generally should not be added.
+To add a new image: add a new `WG_ASSET_<NAME>` key to the `WG_ASSETS` object (base64 data URI as the value), then reference `WG_ASSET_<NAME>` as an `<img src=...>` or in inline `style="background-image:url(WG_ASSET_<NAME>)"`. The OG/Twitter image is served from the Shopify CDN; loose image files generally should not be added.
+
+**Favicon exception:** `<link rel="icon">` and `<link rel="apple-touch-icon">` (head, ~line 23–24) hold the **literal `data:image/png;base64,...` URI inline**, not a `WG_ASSET_*` token. Browsers request the favicon before `DOMContentLoaded` fires, so the swap script can't reach it in time — the token would 404 on first visit. If you ever regenerate the wolf logo, update `WG_ASSETS["WG_ASSET_WOLF"]` **and** both `<link>` hrefs together.
 
 ## Runtime integrations
 
