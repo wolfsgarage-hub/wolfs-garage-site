@@ -1370,13 +1370,11 @@ document.addEventListener('DOMContentLoaded', function() {
     <p class="section-intro">Parts wanted, parts for sale, shops sharing wins, builds in progress, public notices. Pack-submitted, admin-approved.</p>
 
     <div class="bulletin-filters" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:18px;padding:14px;border:1px solid var(--border);background:rgba(0,0,0,0.3);">
-      <div style="display:inline-flex;align-items:center;gap:8px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:nowrap;">
         <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">// ZIP</span>
         <input type="text" id="blt-zip" inputmode="numeric" pattern="\d{5}" maxlength="5" value="97217" onchange="bltSetZipFromInput(this.value)" style="width:80px;padding:6px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
         <button type="button" id="blt-locate-btn" onclick="bltDetectUserZip()" title="Use my location" style="background:none;border:1px solid var(--border);color:var(--bone);padding:6px 10px;cursor:pointer;">📍</button>
-      </div>
-      <div style="display:inline-flex;align-items:center;gap:8px;">
-        <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">WITHIN</span>
+        <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;margin-left:6px;">WITHIN</span>
         <select id="blt-radius" onchange="bltApplyFilters()" style="padding:6px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
           <option value="10">10 miles</option>
           <option value="25">25 miles</option>
@@ -1384,16 +1382,6 @@ document.addEventListener('DOMContentLoaded', function() {
           <option value="100">100 miles</option>
           <option value="200">200 miles</option>
           <option value="0">any distance</option>
-        </select>
-      </div>
-      <div style="display:inline-flex;align-items:center;gap:8px;">
-        <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">TYPE</span>
-        <select id="blt-type-filter" onchange="bltApplyFilters()" style="padding:6px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
-          <option value="">all</option>
-          <option value="build">Build Update</option>
-          <option value="sale">For Sale</option>
-          <option value="wanted">Wanted</option>
-          <option value="notice">Public Notice</option>
         </select>
       </div>
     </div>
@@ -2198,10 +2186,8 @@ async function bltLoad() {
 window.bltApplyFilters = function() {
   const list = document.getElementById('blt-list');
   if (!list) return;
-  const typeFilter = (document.getElementById('blt-type-filter') || {}).value || '';
   const radius = parseFloat((document.getElementById('blt-radius') || {}).value || '0');
   let filtered = bltCache.slice();
-  if (typeFilter) filtered = filtered.filter(b => b.type === typeFilter);
   if (radius > 0 && bltCurrentZipLatLng) {
     filtered = filtered.filter(b => !b.lat || !b.lng || bltDistanceMiles(bltCurrentZipLatLng.lat, bltCurrentZipLatLng.lng, b.lat, b.lng) <= radius);
   }
