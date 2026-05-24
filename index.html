@@ -34,6 +34,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
+<!-- Google Maps Geocoder (for bulletin zip-to-latlng; key restricted to wolfsgarage.com domains) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL36tbjsFEHLEQdU-Ny7-YH0SDcWtxmdw&libraries=places&callback=initWGMaps" async defer></script>
+
 <style>
 :root {
   --bg: #0A0A0A;
@@ -1364,32 +1367,91 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="container reveal">
     <span class="section-eyebrow">Public Notices</span>
     <h2 class="section-title">COMMUNITY <span class="pop">BULLETIN</span></h2>
-    <p class="section-intro">Parts wanted, parts for sale, shops sharing wins, builds in progress, public notices. Pack-submitted, admin-approved. Click thumbnails to expand.</p>
+    <p class="section-intro">Parts wanted, parts for sale, shops sharing wins, builds in progress, public notices. Pack-submitted, admin-approved.</p>
 
-    <div class="bulletin-post">
-      <a class="report-btn" href="mailto:wolfsgaragenw@gmail.com?subject=Bulletin%20report%3A%20C-10%20FRONT%20CLIP%20BENCH&body=Reporting%20this%20bulletin%20post.%20Reason%3A%20">REPORT</a>
-      <div class="meta"><span>Build Update · Wolf's Garage <span class="verified-badge">WOLF</span></span><span>2 days ago</span></div>
-      <h4>C-10 FRONT CLIP BENCH. REBUILD IN PROGRESS</h4>
-      <p>1968 C-10 front clip getting rebuilt into the booth centerpiece bench. Subframe welded, fenders mounted next. Pulled from forest. Previous builder's $300 work didn't meet spec. Starting fresh.</p>
+    <div class="bulletin-filters" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:18px;padding:14px;border:1px solid var(--border);background:rgba(0,0,0,0.3);">
+      <div style="display:inline-flex;align-items:center;gap:8px;">
+        <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">// ZIP</span>
+        <input type="text" id="blt-zip" inputmode="numeric" pattern="\d{5}" maxlength="5" value="97217" onchange="bltSetZipFromInput(this.value)" style="width:80px;padding:6px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+        <button type="button" id="blt-locate-btn" onclick="bltDetectUserZip()" title="Use my location" style="background:none;border:1px solid var(--border);color:var(--bone);padding:6px 10px;cursor:pointer;">📍</button>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;">
+        <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">WITHIN</span>
+        <select id="blt-radius" onchange="bltApplyFilters()" style="padding:6px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+          <option value="10">10 miles</option>
+          <option value="25">25 miles</option>
+          <option value="50" selected>50 miles</option>
+          <option value="100">100 miles</option>
+          <option value="200">200 miles</option>
+          <option value="0">any distance</option>
+        </select>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;">
+        <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">TYPE</span>
+        <select id="blt-type-filter" onchange="bltApplyFilters()" style="padding:6px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+          <option value="">all</option>
+          <option value="build">Build Update</option>
+          <option value="sale">For Sale</option>
+          <option value="wanted">Wanted</option>
+          <option value="notice">Public Notice</option>
+        </select>
+      </div>
     </div>
 
-    <div class="bulletin-post">
-      <a class="report-btn" href="mailto:wolfsgaragenw@gmail.com?subject=Bulletin%20report%3A%20BBC%20396%20SHORT%20BLOCK&body=Reporting%20this%20bulletin%20post.%20Reason%3A%20">REPORT</a>
-      <div class="meta"><span>For Sale · Pack Member</span><span>5 days ago</span></div>
-      <h4>BBC 396 SHORT BLOCK. $1,200</h4>
-      <p>Bored 0.030 over, balanced, ready for assembly. Pickup Hillsboro. Cash or trade for SBC parts.</p>
-    </div>
-
-    <div class="bulletin-post">
-      <a class="report-btn" href="mailto:wolfsgaragenw@gmail.com?subject=Bulletin%20report%3A%20WANTED%201967-72%20C10%20BACK%20GLASS&body=Reporting%20this%20bulletin%20post.%20Reason%3A%20">REPORT</a>
-      <div class="meta"><span>Wanted · Pack Member</span><span>1 week ago</span></div>
-      <h4>WANTED: 1967-72 C10 BIG BACK GLASS</h4>
-      <p>Looking for original or repop. Tinted preferred. Will travel within 200 miles for the right one.</p>
+    <div id="blt-list">
+      <p id="blt-empty" style="text-align:center;color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;padding:30px 0;">Loading bulletins...</p>
     </div>
 
     <div class="admin-note" style="margin-top:24px;">
-      <strong>ADMIN APPROVAL REQUIRED:</strong> Post builds wanted, sale ads, public notices, and pictures. Pictures show as thumbnails. Tap to expand.
-      <a class="btn-red" style="margin-left:14px;padding:8px 16px;font-size:0.8rem;display:inline-block;" href="mailto:wolfsgaragenw@gmail.com?subject=Bulletin%20post%20submission&body=Post%20type%20(build%20update%20%2F%20for%20sale%20%2F%20wanted%20%2F%20notice)%3A%20%0AHeadline%3A%20%0ADetails%3A%20%0APhotos%3A%20attach%20to%20this%20email">POST TO BULLETIN</a>
+      <strong>POST TO THE BULLETIN:</strong> Sign in to post. Posts go through admin review before going live.
+    </div>
+
+    <div id="blt-submit-zone" style="margin-top:18px;padding:18px;border:1px solid var(--border);background:rgba(0,0,0,0.3);">
+      <div id="blt-submit-signedout">
+        <p style="margin-bottom:10px;">Sign in to post a bulletin.</p>
+        <button class="btn-red" onclick="openModal()">SIGN IN TO POST</button>
+      </div>
+      <div id="blt-submit-signedin" style="display:none;">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin:0 0 12px 0;">POST A BULLETIN</h3>
+        <form id="bulletin-form" style="display:flex;flex-direction:column;gap:10px;max-width:520px;">
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">ZIP CODE (required) *</span>
+            <input type="text" id="blt-form-zip" inputmode="numeric" pattern="\d{5}" maxlength="5" required placeholder="97217" style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">POST TYPE *</span>
+            <select id="blt-form-type" required onchange="bltTogglePriceRequired()" style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+              <option value="">— select —</option>
+              <option value="build">Build Update</option>
+              <option value="sale">For Sale</option>
+              <option value="wanted">Wanted</option>
+              <option value="notice">Public Notice</option>
+            </select>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">HEADLINE *</span>
+            <input type="text" id="blt-form-headline" required maxlength="80" placeholder="e.g. BBC 396 short block, $1,200" style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;" id="blt-price-label">PRICE</span>
+            <input type="text" id="blt-form-price" maxlength="40" placeholder="$0 / OBO / trade — leave blank if N/A" style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">CONTACT INFO * (phone or email)</span>
+            <input type="text" id="blt-form-contact" required maxlength="80" placeholder="e.g. 503-555-1234 or email@example.com" style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">DETAILS</span>
+            <textarea id="blt-form-details" maxlength="600" rows="4" placeholder="What it is, condition, pickup location, etc." style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;resize:vertical;"></textarea>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--copper);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;">PHOTO (optional, max 3MB)</span>
+            <input type="file" id="blt-form-photo" accept="image/jpeg,image/png" style="color:var(--bone);font-family:'Work Sans',sans-serif;font-size:0.9rem;">
+          </label>
+          <div id="blt-form-status" style="color:var(--copper);font-size:0.85rem;min-height:1em;"></div>
+          <button type="submit" class="btn-red" id="blt-submit-btn">SUBMIT FOR REVIEW</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>
@@ -2027,6 +2089,249 @@ async function loadEvents() {
 }
 
 loadEvents();
+
+// --- BULLETIN: filter, render, submit, geocode ---
+const BLT_DEFAULT_ZIP = '97217';
+let bltGeocoder = null;
+let bltCurrentZip = BLT_DEFAULT_ZIP;
+let bltCurrentZipLatLng = null;
+let bltCache = [];
+const BLT_TYPE_LABELS = { build:'Build Update', sale:'For Sale', wanted:'Wanted', notice:'Public Notice' };
+
+window.initWGMaps = function() {
+  try {
+    bltGeocoder = new google.maps.Geocoder();
+    bltGeocodeZipAndApply(bltCurrentZip);
+  } catch (err) { console.warn('Maps init failed:', err); }
+};
+
+function bltDistanceMiles(lat1, lng1, lat2, lng2) {
+  const R = 3958.8;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function bltEscape(s) { return (s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+function bltGeocodeZip(zip) {
+  return new Promise(function(resolve) {
+    if (!bltGeocoder) { resolve(null); return; }
+    bltGeocoder.geocode({ address: zip + ', USA', componentRestrictions: { country: 'US', postalCode: zip } }, function(results, status) {
+      if (status === 'OK' && results[0]) {
+        const loc = results[0].geometry.location;
+        resolve({ lat: loc.lat(), lng: loc.lng() });
+      } else { resolve(null); }
+    });
+  });
+}
+
+async function bltGeocodeZipAndApply(zip) {
+  const coords = await bltGeocodeZip(zip);
+  if (coords) {
+    bltCurrentZip = zip;
+    bltCurrentZipLatLng = coords;
+    bltApplyFilters();
+  } else {
+    const el = document.getElementById('blt-zip');
+    if (el) el.value = bltCurrentZip;
+  }
+}
+
+window.bltSetZipFromInput = function(raw) {
+  const zip = (raw || '').trim();
+  if (!/^\d{5}$/.test(zip)) {
+    document.getElementById('blt-zip').value = bltCurrentZip;
+    return;
+  }
+  bltGeocodeZipAndApply(zip);
+};
+
+window.bltDetectUserZip = function() {
+  const btn = document.getElementById('blt-locate-btn');
+  if (btn) btn.textContent = '⏳';
+  if (!navigator.geolocation || !bltGeocoder) {
+    if (btn) btn.textContent = '📍';
+    bltGeocodeZipAndApply(BLT_DEFAULT_ZIP);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    if (btn) btn.textContent = '📍';
+    bltGeocoder.geocode({ location: { lat: pos.coords.latitude, lng: pos.coords.longitude } }, function(results, status) {
+      if (status === 'OK' && results) {
+        for (const r of results) {
+          for (const c of r.address_components) {
+            if (c.types.includes('postal_code')) {
+              const z = c.short_name;
+              const inp = document.getElementById('blt-zip');
+              if (inp) inp.value = z;
+              bltGeocodeZipAndApply(z);
+              return;
+            }
+          }
+        }
+      }
+      bltGeocodeZipAndApply(BLT_DEFAULT_ZIP);
+    });
+  }, function() { if (btn) btn.textContent = '📍'; }, { timeout: 8000 });
+};
+
+async function bltLoad() {
+  try {
+    const snap = await db.collection('bulletins').where('status', '==', 'approved').limit(80).get();
+    bltCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    bltCache.sort((a,b) => {
+      const ta = a.submittedAt && a.submittedAt.toMillis ? a.submittedAt.toMillis() : 0;
+      const tb = b.submittedAt && b.submittedAt.toMillis ? b.submittedAt.toMillis() : 0;
+      return tb - ta;
+    });
+    bltApplyFilters();
+  } catch (err) {
+    console.warn('Bulletin load error:', err);
+    const el = document.getElementById('blt-list');
+    if (el) el.innerHTML = '<p style="text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:30px 0;">Bulletin loading slow. Pull to refresh.</p>';
+  }
+}
+
+window.bltApplyFilters = function() {
+  const list = document.getElementById('blt-list');
+  if (!list) return;
+  const typeFilter = (document.getElementById('blt-type-filter') || {}).value || '';
+  const radius = parseFloat((document.getElementById('blt-radius') || {}).value || '0');
+  let filtered = bltCache.slice();
+  if (typeFilter) filtered = filtered.filter(b => b.type === typeFilter);
+  if (radius > 0 && bltCurrentZipLatLng) {
+    filtered = filtered.filter(b => !b.lat || !b.lng || bltDistanceMiles(bltCurrentZipLatLng.lat, bltCurrentZipLatLng.lng, b.lat, b.lng) <= radius);
+  }
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:30px 0;">No bulletins match. Widen the radius or change the type.</p>';
+    return;
+  }
+  list.innerHTML = filtered.map(b => {
+    const typeLabel = BLT_TYPE_LABELS[b.type] || 'Notice';
+    const isWolf = b.isWolf ? '<span class="verified-badge" style="margin-left:6px;">WOLF</span>' : '';
+    const dist = (b.lat && b.lng && bltCurrentZipLatLng) ? Math.round(bltDistanceMiles(bltCurrentZipLatLng.lat, bltCurrentZipLatLng.lng, b.lat, b.lng)) + ' mi' : '';
+    const priceLine = b.price ? '<div style="color:var(--copper);font-family:\'Oswald\',sans-serif;font-size:13px;letter-spacing:2px;margin-top:4px;">' + bltEscape(b.price) + '</div>' : '';
+    const photo = b.imageData || b.imageUrl;
+    const photoHtml = photo ? '<img src="' + bltEscape(photo) + '" style="max-width:100%;max-height:240px;display:block;margin:8px 0;border:1px solid rgba(245,241,232,0.2);">' : '';
+    const reportSubj = encodeURIComponent('Bulletin report: ' + (b.headline || ''));
+    return '<div class="bulletin-post"><a class="report-btn" href="mailto:wolfsgaragenw@gmail.com?subject=' + reportSubj + '&body=Reporting%20this%20bulletin%20post.%20Reason%3A%20">REPORT</a>'
+      + '<div class="meta"><span>' + bltEscape(typeLabel) + isWolf + '</span><span>' + bltEscape(b.zip || '') + (dist ? ' · ' + dist : '') + '</span></div>'
+      + '<h4>' + bltEscape(b.headline || '') + '</h4>'
+      + priceLine
+      + photoHtml
+      + '<p>' + bltEscape(b.details || '') + '</p>'
+      + '<p style="color:rgba(245,241,232,0.6);font-size:13px;font-family:\'Work Sans\',sans-serif;margin-top:6px;">Contact: ' + bltEscape(b.contact || '') + '</p>'
+      + '</div>';
+  }).join('');
+};
+
+window.bltTogglePriceRequired = function() {
+  const t = document.getElementById('blt-form-type').value;
+  const label = document.getElementById('blt-price-label');
+  const input = document.getElementById('blt-form-price');
+  if (t === 'sale') { label.textContent = 'PRICE *'; input.required = true; }
+  else { label.textContent = 'PRICE'; input.required = false; }
+};
+
+function bltCompressImage(file) {
+  return new Promise(function(resolve, reject) {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = function() {
+        const maxDim = 1400;
+        let w = img.width, h = img.height;
+        if (w > h && w > maxDim) { h = h * (maxDim / w); w = maxDim; }
+        else if (h > maxDim) { w = w * (maxDim / h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.8));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('bulletin-form');
+  if (!form) return;
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const status = document.getElementById('blt-form-status');
+    const btn = document.getElementById('blt-submit-btn');
+    const user = auth.currentUser;
+    if (!user) { status.textContent = 'Sign in required.'; status.style.color = 'var(--red)'; return; }
+    const zip = document.getElementById('blt-form-zip').value.trim();
+    if (!/^\d{5}$/.test(zip)) { status.textContent = 'Zip code must be 5 digits.'; status.style.color = 'var(--red)'; return; }
+    const type = document.getElementById('blt-form-type').value;
+    const headline = document.getElementById('blt-form-headline').value.trim();
+    const price = document.getElementById('blt-form-price').value.trim();
+    const contact = document.getElementById('blt-form-contact').value.trim();
+    const details = document.getElementById('blt-form-details').value.trim();
+    const photoFile = document.getElementById('blt-form-photo').files[0];
+    if (!type || !headline || !contact) { status.textContent = 'Type, headline, and contact are required.'; status.style.color = 'var(--red)'; return; }
+    if (type === 'sale' && !price) { status.textContent = 'Price is required for For Sale.'; status.style.color = 'var(--red)'; return; }
+    if (photoFile && photoFile.size > 3 * 1024 * 1024) { status.textContent = 'Photo too large (max 3MB).'; status.style.color = 'var(--red)'; return; }
+    btn.disabled = true; btn.textContent = 'SUBMITTING...';
+    status.style.color = 'var(--copper)'; status.textContent = 'Geocoding zip...';
+    let coords = null;
+    try { coords = await bltGeocodeZip(zip); } catch (err) { console.warn('Geocode failed:', err); }
+    let imageData = null;
+    if (photoFile) {
+      status.textContent = 'Compressing photo...';
+      try { imageData = await bltCompressImage(photoFile); } catch (err) { status.textContent = 'Photo failed to process.'; status.style.color = 'var(--red)'; btn.disabled = false; btn.textContent = 'SUBMIT FOR REVIEW'; return; }
+    }
+    const adminEmails = ['wolfsgaragenw@gmail.com', 'illsupernova.ja@gmail.com'];
+    const isWolf = adminEmails.includes(user.email);
+    const doc = {
+      zip: zip,
+      lat: coords ? coords.lat : null,
+      lng: coords ? coords.lng : null,
+      type: type,
+      headline: headline,
+      price: price || null,
+      contact: contact,
+      details: details || null,
+      imageData: imageData,
+      submittedBy: user.email,
+      submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      status: isWolf ? 'approved' : 'pending',
+      isWolf: isWolf
+    };
+    try {
+      await db.collection('bulletins').add(doc);
+      status.style.color = 'var(--copper)';
+      status.textContent = isWolf ? 'Posted live.' : 'Submitted. Wolf reviews within 24 hrs.';
+      form.reset();
+      if (isWolf) bltLoad();
+    } catch (err) {
+      console.error('Bulletin submit failed:', err);
+      status.style.color = 'var(--red)';
+      status.textContent = 'Submit failed: ' + err.message;
+    }
+    btn.disabled = false;
+    btn.textContent = 'SUBMIT FOR REVIEW';
+  });
+});
+
+// Toggle bulletin submit zone based on auth
+auth.onAuthStateChanged(function(user) {
+  const out = document.getElementById('blt-submit-signedout');
+  const inn = document.getElementById('blt-submit-signedin');
+  if (out && inn) {
+    if (user) { out.style.display = 'none'; inn.style.display = 'block'; }
+    else { out.style.display = 'block'; inn.style.display = 'none'; }
+  }
+});
+
+bltLoad();
 function showAuthError(msg) {
   const el = document.getElementById('authError');
   if (el) { el.textContent = msg; el.style.display = 'block'; }
