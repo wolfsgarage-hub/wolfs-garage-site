@@ -1327,7 +1327,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <p class="typewriter">Max file size: 10MB | JPG/PNG only | Reviewed before going live</p>
       </div>
       <div id="uploadSignedIn" style="display:none;">
-        <p id="uploadHello" style="margin-bottom:14px;">Signed in. Post your build.</p>
+        <p id="uploadHello" style="margin-bottom:14px;">Signed in. Post pics.</p>
         <form id="uploadForm" style="display:flex;flex-direction:column;gap:12px;max-width:480px;margin:0 auto;">
           <input type="file" id="uploadFile" accept="image/jpeg,image/png" required style="color:var(--bone);font-family:'Work Sans',sans-serif;font-size:0.9rem;">
           <input type="text" id="uploadCaption" placeholder="Caption (e.g. '49 GMC front clip)" maxlength="80" required style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
@@ -1973,7 +1973,7 @@ auth.onAuthStateChanged(function(user) {
     if (evSignedIn) evSignedIn.style.display = 'block';
     if (footSignOutLi) footSignOutLi.style.display = '';
     const who = user.displayName || user.email;
-    if (hello) hello.textContent = 'Signed in as ' + who + '. Post your build.';
+    if (hello) hello.textContent = 'Signed in as ' + who + '. Post pics.';
     if (evHello) evHello.textContent = 'Signed in as ' + who + '. Submit your event for review.';
   } else {
     if (signedOut) signedOut.style.display = 'block';
