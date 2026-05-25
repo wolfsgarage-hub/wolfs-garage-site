@@ -1308,14 +1308,18 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="container reveal">
     <span class="section-eyebrow">The Visuals</span>
     <h2 class="section-title">PACK <span class="pop">GALLERY</span></h2>
-    <p class="section-intro">Wolf's photos, pack-submitted photos, and video. Heart what you love. Post your own. Sign in required.</p>
-    <div class="gallery-tabs">
-      <button class="gtab active" onclick="switchGTab(this, 'wolfsphotos')">Wolf's Photos</button>
-      <button class="gtab" onclick="switchGTab(this, 'packphotos')">Pack Photos</button>
+    <p class="section-intro">Wolf's photos and Pak-submitted photos and video. Heart what you love. Post your own. Sign in required to post.</p>
+
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;margin:28px 0 12px 0;color:var(--bone);">WOLF'S PICKS</h3>
+    <div class="gallery-grid" id="wolfPicksGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <p id="wolfPicksEmpty" style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;padding:20px 0;">Loading Wolf's picks...</p>
     </div>
-    <div class="gallery-grid" id="galleryGrid">
-      <p id="galleryEmpty" style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;padding:40px 0;">Loading the pack gallery...</p>
+
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;margin:28px 0 12px 0;color:var(--bone);">RECENT FROM THE PACK</h3>
+    <div class="gallery-grid" id="packRecentGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <p id="packRecentEmpty" style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;padding:20px 0;">Loading the pack...</p>
     </div>
+
     <div class="upload-zone" id="uploadZone">
       <div id="uploadSignedOut">
         <p>Sign in to upload your build photos to the Pack Gallery.</p>
@@ -1336,6 +1340,32 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </section>
+
+<!-- GALLERY LIGHTBOX MODAL -->
+<div id="galleryLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;overflow-y:auto;padding:20px;">
+  <div style="max-width:720px;margin:0 auto;background:#0A0A0A;border:1px solid var(--border-strong);padding:20px;position:relative;">
+    <button onclick="closeLightbox()" aria-label="Close" style="position:absolute;top:10px;right:10px;background:none;border:1px solid var(--border);color:var(--bone);width:36px;height:36px;cursor:pointer;font-size:18px;">✕</button>
+    <img id="lbImage" src="" alt="" style="display:block;max-width:100%;max-height:60vh;margin:0 auto;">
+    <div id="lbBadge" style="margin-top:12px;"></div>
+    <h3 id="lbCaption" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin:8px 0;color:var(--bone);"></h3>
+    <div style="display:flex;align-items:center;gap:14px;margin:10px 0 18px 0;">
+      <button id="lbHeartBtn" onclick="toggleHeart()" style="background:none;border:1px solid var(--red);color:var(--red);padding:8px 14px;font-family:'Oswald',sans-serif;letter-spacing:2px;cursor:pointer;">♡ <span id="lbHeartCount">0</span></button>
+      <span style="color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;font-size:12px;">tap to heart — no sign-in needed</span>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:14px;">
+      <h4 style="font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:2px;color:var(--copper);margin:0 0 10px 0;">COMMENTS</h4>
+      <div id="lbComments" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
+      <div id="lbCommentSignedOut" style="color:rgba(245,241,232,0.6);font-family:'Special Elite',monospace;font-size:13px;">
+        <button class="btn-red" onclick="openModal()" style="padding:8px 16px;">SIGN IN TO COMMENT</button>
+      </div>
+      <form id="lbCommentForm" style="display:none;flex-direction:column;gap:8px;">
+        <textarea id="lbCommentInput" maxlength="500" rows="2" placeholder="Add a comment..." style="padding:8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;resize:vertical;"></textarea>
+        <button type="submit" class="btn-red" style="padding:8px 14px;align-self:flex-start;">POST COMMENT</button>
+        <p id="lbCommentStatus" style="color:var(--copper);font-size:12px;font-family:'Special Elite',monospace;min-height:1em;margin:0;"></p>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- ABOUT -->
 <section id="about">
@@ -1739,16 +1769,22 @@ const obs = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-let galleryFilter = 'wolf'; // 'wolf' | 'pack' - must match the default .active gallery tab (Wolf's Photos) so the first render and the first tab click agree
-let galleryCache = [];
+let galleryCache = { picks: [], pack: [] };
+let lightboxCurrent = null;
+const PROFANITY_WORDS = ['fuck','shit','bitch','cunt','asshole','dick','pussy','cock','bastard','damn','piss','fag','faggot','nigger','nigga','retard','retarded','whore','slut','jerkoff','jackoff','motherfucker','goddamn','bullshit','horseshit','dipshit','dumbass','jackass','dumbfuck','fuckface','fuckwit','fucker','fucking','fucked','shitface','shithead','shitty','bitchy','asshat','assclown','douchebag','douche','prick','twat','wanker','tosser','arsehole','arse','knob','knobhead','bollocks','wank','tit','tits','titties','boobs'];
 
-function switchGTab(btn, id) {
-  document.querySelectorAll('.gtab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if (id === 'wolfsphotos') galleryFilter = 'wolf';
-  else if (id === 'packphotos') galleryFilter = 'pack';
-  else galleryFilter = 'all';
-  renderGalleryFromCache();
+function censorText(s) {
+  if (!s) return '';
+  let out = s;
+  PROFANITY_WORDS.forEach(w => {
+    const re = new RegExp('\\b' + w + '\\b', 'gi');
+    out = out.replace(re, '*'.repeat(w.length));
+  });
+  return out;
+}
+
+function galleryEscape(s) {
+  return (s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 }
 
 function openModal() {
@@ -1948,14 +1984,7 @@ auth.onAuthStateChanged(function(user) {
   }
 });
 
-// --- Gallery: load photos from the Option B collections + render ---
-// Option B: wolf_photos (Wolf's photos, instant-live) and pack_photos
-// (community submissions, status-moderated) are the canonical collections.
-// The old single `gallery` collection is kept only as a cold backup and is
-// not read here. Query shapes mirror the community app so no composite
-// Firestore index is needed: a single-field orderBy on wolf_photos and a
-// single-field equality on pack_photos. Cross-collection ordering is done
-// client-side by galleryTime().
+// --- Gallery: Wolf's Picks (3 manually-pinned) + Recent from Pack (6 newest approved) ---
 function galleryTime(p) {
   const v = p.addedAt || p.submittedAt || p.createdAt;
   if (!v) return 0;
@@ -1966,52 +1995,217 @@ function galleryTime(p) {
 }
 
 async function loadGallery() {
-  const grid = document.getElementById('galleryGrid');
-  if (!grid) return;
+  const picksGrid = document.getElementById('wolfPicksGrid');
+  const packGrid = document.getElementById('packRecentGrid');
+  if (!picksGrid || !packGrid) return;
   try {
-    const [wolfSnap, packSnap] = await Promise.all([
-      db.collection('wolf_photos').orderBy('addedAt', 'desc').limit(60).get(),
-      db.collection('pack_photos').where('status', '==', 'approved').limit(60).get()
+    const [picksSnap, packSnap, allWolfSnap] = await Promise.all([
+      db.collection('wolf_photos').where('isPicked', '==', true).limit(10).get(),
+      db.collection('pack_photos').where('status', '==', 'approved').limit(40).get(),
+      db.collection('wolf_photos').orderBy('addedAt', 'desc').limit(12).get()
     ]);
-    const wolf = wolfSnap.docs.map(d => ({ id: d.id, source: 'wolf', ...d.data() }));
-    const pack = packSnap.docs.map(d => ({ id: d.id, source: 'pack', ...d.data() }));
-    galleryCache = wolf.concat(pack).sort((a, b) => galleryTime(b) - galleryTime(a));
-    renderGalleryFromCache();
+    let picks = picksSnap.docs.map(d => ({ id: d.id, source: 'wolf', ...d.data() }));
+    // If fewer than 3 are pinned, fall back to most recent wolf_photos so the row always renders
+    if (picks.length < 3) {
+      const fillers = allWolfSnap.docs
+        .map(d => ({ id: d.id, source: 'wolf', ...d.data() }))
+        .filter(p => !picks.find(x => x.id === p.id));
+      picks = picks.concat(fillers).slice(0, 3);
+    } else {
+      picks = picks.sort((a, b) => galleryTime(b) - galleryTime(a)).slice(0, 3);
+    }
+    const pack = packSnap.docs.map(d => ({ id: d.id, source: 'pack', ...d.data() }))
+      .sort((a, b) => galleryTime(b) - galleryTime(a))
+      .slice(0, 6);
+    galleryCache.picks = picks;
+    galleryCache.pack = pack;
+    renderGalleryGrid('wolfPicksGrid', picks, "No Wolf picks yet. Check back soon.");
+    renderGalleryGrid('packRecentGrid', pack, "No Pack photos yet. Sign in and post the first one.");
   } catch (err) {
     console.error('Gallery load error:', err);
-    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:40px 0;">Gallery is loading slow. Pull to refresh.</p>';
+    picksGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:20px 0;">Gallery is loading slow. Pull to refresh.</p>';
   }
 }
 
-function renderGalleryFromCache() {
-  const grid = document.getElementById('galleryGrid');
+function renderGalleryGrid(gridId, list, emptyMsg) {
+  const grid = document.getElementById(gridId);
   if (!grid) return;
-  let list = galleryCache;
-  if (galleryFilter === 'wolf') list = list.filter(p => p.source === 'wolf');
-  else if (galleryFilter === 'pack') list = list.filter(p => p.source === 'pack');
-
-  if (list.length === 0) {
-    const msg = galleryFilter === 'wolf'
-      ? "No Wolf photos posted yet. Check back soon."
-      : galleryFilter === 'pack'
-        ? "No Pack photos yet. Sign in and post the first one."
-        : "Gallery is empty. Sign in and post the first photo.";
-    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:40px 0;">' + msg + '</p>';
+  if (!list.length) {
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:20px 0;">' + emptyMsg + '</p>';
     return;
   }
-
   grid.innerHTML = list.map(p => {
-    const safeCaption = (p.caption || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+    const safeCaption = galleryEscape(p.caption || '');
     const verifiedBadge = p.source === 'wolf' ? '<span class="gphoto-verified">WOLF</span>' : '';
-    // Site photos store a Cloudinary imageUrl; community photos store a
-    // base64 imageData. Support either so both render.
     const imgSrc = p.imageUrl || p.imageData || '';
-    return '<div class="gphoto" style="background-image:url(\'' + imgSrc + '\');background-size:cover;background-position:center;">'
+    return '<div class="gphoto" onclick="openLightbox(\'' + p.source + '\',\'' + p.id + '\')" style="background-image:url(\'' + imgSrc + '\');background-size:cover;background-position:center;cursor:pointer;aspect-ratio:1;">'
          + verifiedBadge
          + '<span class="gphoto-label">' + safeCaption + '</span>'
          + '</div>';
   }).join('');
 }
+
+// --- LIGHTBOX: open, heart, comments ---
+window.openLightbox = async function(source, id) {
+  const list = source === 'wolf' ? galleryCache.picks : galleryCache.pack;
+  let photo = list.find(p => p.id === id);
+  if (!photo) {
+    // fallback: re-fetch from Firestore
+    try {
+      const col = source === 'wolf' ? 'wolf_photos' : 'pack_photos';
+      const doc = await db.collection(col).doc(id).get();
+      if (!doc.exists) return;
+      photo = { id: doc.id, source: source, ...doc.data() };
+    } catch (err) { console.warn('Lightbox fetch failed:', err); return; }
+  }
+  lightboxCurrent = { source: source, id: id, photo: photo };
+  document.getElementById('lbImage').src = photo.imageUrl || photo.imageData || '';
+  document.getElementById('lbCaption').textContent = photo.caption || '';
+  document.getElementById('lbBadge').innerHTML = source === 'wolf' ? '<span class="gphoto-verified" style="position:static;display:inline-block;">WOLF</span>' : '';
+  document.getElementById('galleryLightbox').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  await refreshHeartUI();
+  await refreshComments();
+  refreshCommentFormVisibility();
+};
+
+window.closeLightbox = function() {
+  document.getElementById('galleryLightbox').style.display = 'none';
+  document.body.style.overflow = '';
+  lightboxCurrent = null;
+};
+
+function lbStorageKey() {
+  if (!lightboxCurrent) return '';
+  return 'wgheart:' + lightboxCurrent.source + ':' + lightboxCurrent.id;
+}
+
+async function refreshHeartUI() {
+  if (!lightboxCurrent) return;
+  const col = lightboxCurrent.source === 'wolf' ? 'wolf_photos' : 'pack_photos';
+  try {
+    const doc = await db.collection(col).doc(lightboxCurrent.id).get();
+    const count = doc.exists ? (doc.data().heartCount || 0) : 0;
+    document.getElementById('lbHeartCount').textContent = count;
+  } catch (err) { console.warn('Heart count read failed:', err); }
+  const btn = document.getElementById('lbHeartBtn');
+  if (localStorage.getItem(lbStorageKey())) {
+    btn.innerHTML = '♥ <span id="lbHeartCount">' + (document.getElementById('lbHeartCount').textContent || '0') + '</span>';
+    btn.style.background = 'var(--red)';
+    btn.style.color = 'var(--bone)';
+  } else {
+    const c = document.getElementById('lbHeartCount').textContent || '0';
+    btn.innerHTML = '♡ <span id="lbHeartCount">' + c + '</span>';
+    btn.style.background = 'none';
+    btn.style.color = 'var(--red)';
+  }
+}
+
+window.toggleHeart = async function() {
+  if (!lightboxCurrent) return;
+  const key = lbStorageKey();
+  if (localStorage.getItem(key)) return; // already hearted; no un-heart per spec
+  // Ensure anonymous auth before write (so Firestore rules allow it)
+  try {
+    if (!auth.currentUser) await auth.signInAnonymously();
+  } catch (err) { console.warn('Anon auth failed:', err); return; }
+  const col = lightboxCurrent.source === 'wolf' ? 'wolf_photos' : 'pack_photos';
+  const uid = auth.currentUser ? auth.currentUser.uid : null;
+  if (!uid) return;
+  try {
+    // Use uid as the heart doc ID so Firestore enforces one-heart-per-auth-session server-side.
+    // localStorage check above also prevents double-tap on same device.
+    await db.collection(col).doc(lightboxCurrent.id).collection('hearts').doc(uid).set({
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await db.collection(col).doc(lightboxCurrent.id).update({
+      heartCount: firebase.firestore.FieldValue.increment(1)
+    });
+    localStorage.setItem(key, '1');
+    await refreshHeartUI();
+  } catch (err) {
+    console.warn('Heart write failed:', err);
+    // If the user already hearted in a previous anon session, mark client-side anyway
+    if (err.code === 'permission-denied' || err.code === 'already-exists') {
+      localStorage.setItem(key, '1');
+      await refreshHeartUI();
+    }
+  }
+};
+
+async function refreshComments() {
+  if (!lightboxCurrent) return;
+  const col = lightboxCurrent.source === 'wolf' ? 'wolf_photos' : 'pack_photos';
+  const wrap = document.getElementById('lbComments');
+  try {
+    const snap = await db.collection(col).doc(lightboxCurrent.id).collection('comments')
+      .orderBy('createdAt', 'asc').limit(100).get();
+    if (snap.empty) {
+      wrap.innerHTML = '<p style="color:rgba(245,241,232,0.4);font-family:\'Special Elite\',monospace;font-size:13px;margin:0;">No comments yet. Be the first.</p>';
+      return;
+    }
+    wrap.innerHTML = snap.docs.map(d => {
+      const c = d.data();
+      const who = galleryEscape((c.authorEmail || 'anon').split('@')[0]);
+      const when = c.createdAt && c.createdAt.toMillis ? new Date(c.createdAt.toMillis()).toLocaleDateString() : '';
+      return '<div style="border-left:2px solid var(--border);padding:6px 10px;">'
+        + '<div style="color:var(--copper);font-family:\'Oswald\',sans-serif;font-size:11px;letter-spacing:1.5px;">' + who + ' · ' + when + '</div>'
+        + '<div style="color:var(--bone);font-family:\'Work Sans\',sans-serif;font-size:14px;margin-top:2px;">' + galleryEscape(c.text || '') + '</div>'
+        + '</div>';
+    }).join('');
+  } catch (err) {
+    console.warn('Comments read failed:', err);
+    wrap.innerHTML = '<p style="color:rgba(245,241,232,0.4);font-family:\'Special Elite\',monospace;font-size:13px;margin:0;">Could not load comments.</p>';
+  }
+}
+
+function refreshCommentFormVisibility() {
+  const user = auth.currentUser;
+  const isAnon = user && user.isAnonymous;
+  const out = document.getElementById('lbCommentSignedOut');
+  const inn = document.getElementById('lbCommentForm');
+  if (user && !isAnon) {
+    out.style.display = 'none'; inn.style.display = 'flex';
+  } else {
+    out.style.display = 'block'; inn.style.display = 'none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('lbCommentForm');
+  if (!form) return;
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!lightboxCurrent) return;
+    const user = auth.currentUser;
+    const status = document.getElementById('lbCommentStatus');
+    if (!user || user.isAnonymous) { status.style.color = 'var(--red)'; status.textContent = 'Sign in to comment.'; return; }
+    const inp = document.getElementById('lbCommentInput');
+    const raw = (inp.value || '').trim();
+    if (!raw) return;
+    const censored = censorText(raw);
+    const col = lightboxCurrent.source === 'wolf' ? 'wolf_photos' : 'pack_photos';
+    status.style.color = 'var(--copper)'; status.textContent = 'Posting...';
+    try {
+      await db.collection(col).doc(lightboxCurrent.id).collection('comments').add({
+        text: censored,
+        authorEmail: user.email,
+        authorUid: user.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      inp.value = '';
+      status.textContent = '';
+      await refreshComments();
+    } catch (err) {
+      console.warn('Comment write failed:', err);
+      status.style.color = 'var(--red)';
+      status.textContent = 'Could not post: ' + err.message;
+    }
+  });
+});
+
+// Keep comment form visibility in sync with auth state
+auth.onAuthStateChanged(function() { if (lightboxCurrent) refreshCommentFormVisibility(); });
 
 // Initial load
 loadGallery();
