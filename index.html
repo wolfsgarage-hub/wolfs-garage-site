@@ -1336,6 +1336,18 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </section>
 
+<!-- EVENT DETAIL LIGHTBOX -->
+<div id="eventLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;overflow-y:auto;padding:20px;">
+  <div style="max-width:560px;margin:0 auto;background:#0A0A0A;border:1px solid var(--border-strong);padding:20px;position:relative;">
+    <button onclick="closeEventLightbox()" aria-label="Close" style="position:absolute;top:10px;right:10px;background:none;border:1px solid var(--border);color:var(--bone);width:36px;height:36px;cursor:pointer;font-size:18px;z-index:1;">✕</button>
+    <img id="evtLbFlyer" src="" alt="" style="display:block;max-width:100%;max-height:70vh;margin:0 auto 14px auto;border:1px solid var(--border);">
+    <h3 id="evtLbTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.06em;color:var(--bone);margin:0 0 8px 0;"></h3>
+    <p id="evtLbMeta" style="font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:0.1em;color:var(--copper);margin:0 0 12px 0;text-transform:uppercase;"></p>
+    <p id="evtLbDesc" style="font-family:'Work Sans',sans-serif;font-size:0.95rem;color:var(--bone);white-space:pre-wrap;margin:0 0 16px 0;line-height:1.5;"></p>
+    <a id="evtLbFlyerFull" href="#" target="_blank" rel="noopener" style="display:inline-block;color:var(--red);font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--red);padding:8px 14px;">Open flyer full size →</a>
+  </div>
+</div>
+
 <!-- GALLERY LIGHTBOX MODAL -->
 <div id="galleryLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;overflow-y:auto;padding:20px;">
   <div style="max-width:720px;margin:0 auto;background:#0A0A0A;border:1px solid var(--border-strong);padding:20px;position:relative;">
@@ -2187,36 +2199,62 @@ function renderEventsFromCache() {
   if (!grid) return;
   if (!eventsCache.length) { grid.innerHTML = ''; return; }
   const today = new Date().toISOString().slice(0, 10);
-  // Sort client-side by yyyy-mm-dd date string (avoids needing a new Firestore composite index)
   const sorted = eventsCache.slice().sort(function(a, b) {
     return (a.date || '').localeCompare(b.date || '');
   });
+  // Apply a grid layout to the container (multi-column on wider screens)
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr))';
+  grid.style.gap = '14px';
   grid.innerHTML = sorted.map(function(ev) {
     const isPast = ev.date && ev.date < today;
-    const parts = (ev.date || '').split('-');
-    const year = parts[0] || '';
-    const monthIdx = parts[1] ? parseInt(parts[1], 10) - 1 : -1;
-    const month = (monthIdx >= 0 && monthIdx < 12) ? EVENT_MONTHS[monthIdx] : '';
-    const day = parts[2] || '';
-    const timeSuffix = ev.time ? ' · ' + escapeHtml(ev.time) : '';
-    const flyerLink = ev.flyerUrl
-      ? '<a href="' + escapeHtml(ev.flyerUrl) + '" target="_blank" rel="noopener" class="event-flyer-link">View Flyer →</a>'
-      : '';
-    return '<div class="event-card' + (isPast ? ' past' : '') + '">'
-         +   '<div class="event-date">'
-         +     '<span class="month">' + month + '</span>'
-         +     '<span class="day">' + escapeHtml(day) + '</span>'
-         +     '<span class="year">' + escapeHtml(year) + '</span>'
-         +   '</div>'
-         +   '<div class="event-body">'
-         +     '<h4>' + escapeHtml(ev.title) + '</h4>'
-         +     '<p class="event-meta">' + escapeHtml(ev.location) + timeSuffix + '</p>'
-         +     '<p>' + escapeHtml(ev.description) + '</p>'
-         +     flyerLink
-         +   '</div>'
+    const flyer = ev.flyerUrl || ev.imageData || '';
+    const title = escapeHtml(ev.title || '(untitled event)');
+    const opacity = isPast ? '0.45' : '1';
+    const flyerBlock = flyer
+      ? '<div style="background-image:url(\'' + escapeHtml(flyer) + '\');background-size:cover;background-position:center;aspect-ratio:3/4;border:1px solid var(--border);"></div>'
+      : '<div style="display:flex;align-items:center;justify-content:center;background:var(--panel-2);border:1px dashed var(--border);aspect-ratio:3/4;color:rgba(245,241,232,0.4);font-family:\'Special Elite\',monospace;font-size:13px;text-align:center;padding:14px;">No flyer</div>';
+    return '<div onclick="openEventLightbox(\'' + ev.id + '\')" style="cursor:pointer;opacity:' + opacity + ';transition:transform 0.15s,opacity 0.15s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'translateY(0)\'">'
+         + flyerBlock
+         + '<h4 style="font-family:\'Bebas Neue\',sans-serif;font-size:1.05rem;letter-spacing:0.08em;color:var(--bone);margin:8px 0 0 0;text-align:center;line-height:1.15;">' + title + '</h4>'
          + '</div>';
   }).join('');
 }
+
+window.openEventLightbox = function(eventId) {
+  const ev = eventsCache.find(function(e) { return e.id === eventId; });
+  if (!ev) return;
+  const lb = document.getElementById('eventLightbox');
+  if (!lb) return;
+  const parts = (ev.date || '').split('-');
+  const year = parts[0] || '';
+  const monthIdx = parts[1] ? parseInt(parts[1], 10) - 1 : -1;
+  const month = (monthIdx >= 0 && monthIdx < 12) ? EVENT_MONTHS[monthIdx] : '';
+  const day = parts[2] || '';
+  const dateStr = (month && day && year) ? (month + ' ' + day + ', ' + year) : '';
+  const flyer = ev.flyerUrl || ev.imageData || '';
+  document.getElementById('evtLbFlyer').src = flyer;
+  document.getElementById('evtLbFlyer').style.display = flyer ? 'block' : 'none';
+  document.getElementById('evtLbTitle').textContent = ev.title || '';
+  const meta = [dateStr, ev.time, ev.location].filter(Boolean).join(' · ');
+  document.getElementById('evtLbMeta').textContent = meta;
+  document.getElementById('evtLbDesc').textContent = ev.description || '';
+  const fullLink = document.getElementById('evtLbFlyerFull');
+  if (flyer) {
+    fullLink.href = flyer;
+    fullLink.style.display = 'inline-block';
+  } else {
+    fullLink.style.display = 'none';
+  }
+  lb.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeEventLightbox = function() {
+  const lb = document.getElementById('eventLightbox');
+  if (lb) lb.style.display = 'none';
+  document.body.style.overflow = '';
+};
 
 async function loadEvents() {
   const grid = document.getElementById('eventsLiveGrid');
