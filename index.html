@@ -2211,11 +2211,24 @@ function renderEventsFromCache() {
     const flyer = ev.flyerUrl || ev.imageData || '';
     const title = escapeHtml(ev.title || '(untitled event)');
     const opacity = isPast ? '0.45' : '1';
+    const parts = (ev.date || '').split('-');
+    const year = parts[0] || '';
+    const monthIdx = parts[1] ? parseInt(parts[1], 10) - 1 : -1;
+    const month = (monthIdx >= 0 && monthIdx < 12) ? EVENT_MONTHS[monthIdx] : '';
+    const day = parts[2] || '';
+    const dateStack = '<div style="font-family:\'Bebas Neue\',sans-serif;text-align:center;line-height:1;display:flex;flex-direction:column;justify-content:center;gap:4px;">'
+                    +   '<span style="color:var(--red);font-size:0.95rem;letter-spacing:0.1em;">' + escapeHtml(month) + '</span>'
+                    +   '<span style="color:var(--bone);font-size:1.9rem;">' + escapeHtml(day) + '</span>'
+                    +   '<span style="color:var(--copper);font-size:0.7rem;letter-spacing:0.1em;">' + escapeHtml(year) + '</span>'
+                    + '</div>';
     const flyerBlock = flyer
       ? '<div style="background-image:url(\'' + escapeHtml(flyer) + '\');background-size:cover;background-position:center;aspect-ratio:3/4;border:1px solid var(--border);"></div>'
-      : '<div style="display:flex;align-items:center;justify-content:center;background:var(--panel-2);border:1px dashed var(--border);aspect-ratio:3/4;color:rgba(245,241,232,0.4);font-family:\'Special Elite\',monospace;font-size:13px;text-align:center;padding:14px;">No flyer</div>';
+      : '<div style="display:flex;align-items:center;justify-content:center;background:var(--panel-2);border:1px dashed var(--border);aspect-ratio:3/4;color:rgba(245,241,232,0.4);font-family:\'Special Elite\',monospace;font-size:12px;text-align:center;padding:10px;">No flyer</div>';
     return '<div onclick="openEventLightbox(\'' + ev.id + '\')" style="cursor:pointer;opacity:' + opacity + ';transition:transform 0.15s,opacity 0.15s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'translateY(0)\'">'
-         + flyerBlock
+         + '<div style="display:grid;grid-template-columns:50px 1fr;gap:10px;align-items:stretch;">'
+         +   dateStack
+         +   flyerBlock
+         + '</div>'
          + '<h4 style="font-family:\'Bebas Neue\',sans-serif;font-size:1.05rem;letter-spacing:0.08em;color:var(--bone);margin:8px 0 0 0;text-align:center;line-height:1.15;">' + title + '</h4>'
          + '</div>';
   }).join('');
