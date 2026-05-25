@@ -1350,7 +1350,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <h3 id="lbCaption" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin:8px 0;color:var(--bone);"></h3>
     <div style="display:flex;align-items:center;gap:14px;margin:10px 0 18px 0;">
       <button id="lbHeartBtn" onclick="toggleHeart()" style="background:none;border:1px solid var(--red);color:var(--red);padding:8px 14px;font-family:'Oswald',sans-serif;letter-spacing:2px;cursor:pointer;">♡ <span id="lbHeartCount">0</span></button>
-      <span style="color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;font-size:12px;">tap to heart — no sign-in needed</span>
+      <span id="lbHeartHint" style="color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;font-size:12px;">tap to heart</span>
     </div>
     <div style="border-top:1px solid var(--border);padding-top:14px;">
       <h4 style="font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:2px;color:var(--copper);margin:0 0 10px 0;">COMMENTS</h4>
@@ -2089,32 +2089,39 @@ async function refreshHeartUI() {
     document.getElementById('lbHeartCount').textContent = count;
   } catch (err) { console.warn('Heart count read failed:', err); }
   const btn = document.getElementById('lbHeartBtn');
+  const hint = document.getElementById('lbHeartHint');
+  const user = auth.currentUser;
+  const isAnon = user && user.isAnonymous;
+  const signedIn = user && !isAnon;
+  const c = document.getElementById('lbHeartCount').textContent || '0';
   if (localStorage.getItem(lbStorageKey())) {
-    btn.innerHTML = '♥ <span id="lbHeartCount">' + (document.getElementById('lbHeartCount').textContent || '0') + '</span>';
+    btn.innerHTML = '♥ <span id="lbHeartCount">' + c + '</span>';
     btn.style.background = 'var(--red)';
     btn.style.color = 'var(--bone)';
+    btn.style.cursor = 'default';
+    if (hint) hint.textContent = 'thanks for the love';
   } else {
-    const c = document.getElementById('lbHeartCount').textContent || '0';
     btn.innerHTML = '♡ <span id="lbHeartCount">' + c + '</span>';
     btn.style.background = 'none';
     btn.style.color = 'var(--red)';
+    btn.style.cursor = signedIn ? 'pointer' : 'not-allowed';
+    if (hint) hint.textContent = signedIn ? 'tap to heart' : 'sign in to heart';
   }
 }
 
 window.toggleHeart = async function() {
   if (!lightboxCurrent) return;
+  const user = auth.currentUser;
+  if (!user || user.isAnonymous) {
+    openModal();
+    return;
+  }
   const key = lbStorageKey();
   if (localStorage.getItem(key)) return; // already hearted; no un-heart per spec
-  // Ensure anonymous auth before write (so Firestore rules allow it)
-  try {
-    if (!auth.currentUser) await auth.signInAnonymously();
-  } catch (err) { console.warn('Anon auth failed:', err); return; }
   const col = lightboxCurrent.source === 'wolf' ? 'wolf_photos' : 'pack_photos';
-  const uid = auth.currentUser ? auth.currentUser.uid : null;
-  if (!uid) return;
+  const uid = user.uid;
   try {
-    // Use uid as the heart doc ID so Firestore enforces one-heart-per-auth-session server-side.
-    // localStorage check above also prevents double-tap on same device.
+    // Doc ID = uid → Firestore enforces one-heart-per-user server-side
     await db.collection(col).doc(lightboxCurrent.id).collection('hearts').doc(uid).set({
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -2125,7 +2132,6 @@ window.toggleHeart = async function() {
     await refreshHeartUI();
   } catch (err) {
     console.warn('Heart write failed:', err);
-    // If the user already hearted in a previous anon session, mark client-side anyway
     if (err.code === 'permission-denied' || err.code === 'already-exists') {
       localStorage.setItem(key, '1');
       await refreshHeartUI();
@@ -2204,8 +2210,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Keep comment form visibility in sync with auth state
-auth.onAuthStateChanged(function() { if (lightboxCurrent) refreshCommentFormVisibility(); });
+// Keep comment form visibility AND heart button state in sync with auth state
+auth.onAuthStateChanged(function() {
+  if (lightboxCurrent) {
+    refreshCommentFormVisibility();
+    refreshHeartUI();
+  }
+});
 
 // Initial load
 loadGallery();
