@@ -24,6 +24,11 @@
       "source": "/pack",
       "destination": "https://wolfs-garage-community.vercel.app",
       "permanent": false
+    },
+    {
+      "source": "/pages/join-the-list",
+      "destination": "/",
+      "permanent": false
     }
   ]
 }
