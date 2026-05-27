@@ -1145,6 +1145,10 @@ footer {
 }
 .modal-form input:focus, .modal-form textarea:focus { outline: none; border-color: var(--red); }
 .modal-form button { width: 100%; }
+.pw-wrap { position: relative; margin-bottom: 12px; }
+.pw-wrap .pw-input { margin-bottom: 0; padding-right: 48px; }
+.pw-toggle { position: absolute; top: 50%; right: 6px; transform: translateY(-50%); background: none; border: none; color: rgba(245,241,232,0.6); font-size: 18px; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+.pw-toggle:hover, .pw-toggle:active { color: var(--bone); }
 .modal-form label {
   display: flex; align-items: flex-start; gap: 10px;
   margin: 10px 0;
@@ -1713,7 +1717,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <form class="modal-form" id="authForm">
       <input type="text" id="authNickname" placeholder="Nickname or handle (shown publicly)" autocomplete="nickname" style="display:none;">
       <input type="email" id="authEmail" placeholder="Email" required autocomplete="email">
-      <input type="password" id="authPassword" placeholder="Password" required minlength="6" autocomplete="current-password">
+      <div class="pw-wrap"><input type="password" id="authPassword" class="pw-input" placeholder="Password" required minlength="6" autocomplete="current-password"><button type="button" class="pw-toggle" aria-label="Show password" onclick="togglePw('authPassword',this)">👁</button></div>
       <p class="small" id="nicknameHint" style="display:none;margin:4px 0 8px;color:rgba(245,241,232,0.55);font-size:0.78rem;">Optional. Leave blank to show your email on posts and comments.</p>
       <div class="modal-disclosure" id="disclosure" style="display:none;">
         <strong>Heads up:</strong> All new accounts are auto-added to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. Don't want them? <em>Unsubscribe anytime from any email</em>, one click, no hassle.
@@ -1752,6 +1756,20 @@ function censorText(s) {
 
 function galleryEscape(s) {
   return (s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+
+function togglePw(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+    btn.setAttribute('aria-label', 'Hide password');
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁';
+    btn.setAttribute('aria-label', 'Show password');
+  }
 }
 
 function openModal() {
