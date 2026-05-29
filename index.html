@@ -739,11 +739,12 @@ section { padding: 80px 24px; position: relative; }
   text-align: center;
   font-family: 'Special Elite', serif;
   color: var(--copper);
-  font-size: 0.9rem;
-  margin: 16px 0;
-  opacity: 0.7;
+  font-size: 1.05rem;
+  margin: 20px 0;
+  opacity: 1;
+  letter-spacing: 0.05em;
 }
-.scroll-up-hint::before { content: '↑ '; }
+.scroll-up-hint::before { content: '↑ '; font-size: 1.2em; }
 .event-card {
   background: var(--panel-2);
   border: 1px solid var(--border);
@@ -1575,8 +1576,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <div class="upload-zone" id="eventSubmitZone" style="margin-top:24px;">
       <div id="eventSubmitSignedOut">
-        <p><strong>SUBMIT AN EVENT:</strong> Sign in to submit. Events are reviewed by an admin within 24 hours before they post.</p>
-        <button class="btn-red" onclick="openModal()">SIGN IN TO SUBMIT</button>
+        <p><strong>SUBMIT AN EVENT:</strong> Events are free to submit and reviewed by an admin within 24 hours before they post.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0;">
+          <button class="btn-red" onclick="openModal()">SIGN IN</button>
+          <button class="btn-red" onclick="openModal('up')" style="background:transparent;color:var(--red);border:2px solid var(--red);">CREATE FREE ACCOUNT</button>
+        </div>
         <p class="typewriter">JPG/PNG flyer, max 10MB | Date, time, location, description required</p>
       </div>
       <div id="eventSubmitSignedIn" style="display:none;">
@@ -1630,7 +1634,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <input type="email" placeholder="your@email.com" required aria-label="Email">
       <button type="submit" class="btn-red">I'M IN</button>
     </form>
-    <p class="no-spam">NO SPAM, EVER · GET BACK IN THE GARAGE</p>
+    <p class="no-spam">Wolf's Garage uses your email only for events, new gear, shop drops, and community updates. No spam. No selling your info.</p>
     <p class="unsub-note">* By signing up or creating an account, you'll be added to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. Don't want them? Unsubscribe anytime from any email. One click, no hassle.</p>
   </div>
 </section>
@@ -1709,7 +1713,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
     <h3>JOIN THE PACK</h3>
-    <p class="small">Sign in to upload photos & video, register your business, post to the bulletin board, and submit events.</p>
+    <p class="small">Create a free Wolf's Garage account to upload photos, register your business, post to the bulletin board, and submit events. No spam. Listings are reviewed before going live.</p>
     <div class="modal-tabs">
       <button class="modal-tab active" id="tabIn" onclick="switchTab('in')">Sign In</button>
       <button class="modal-tab" id="tabUp" onclick="switchTab('up')">Create Account</button>
@@ -1772,9 +1776,9 @@ function togglePw(inputId, btn) {
   }
 }
 
-function openModal() {
+function openModal(tab) {
   document.getElementById('modal').classList.add('open');
-  switchTab('in');
+  switchTab(tab || 'in');
 }
 
 function haversineMiles(lat1, lon1, lat2, lon2) {
