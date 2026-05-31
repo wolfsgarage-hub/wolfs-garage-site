@@ -1083,7 +1083,7 @@ footer {
 .modal {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.85);
-  z-index: 200;
+  z-index: 10000;
   display: none;
   align-items: center;
   justify-content: center;
@@ -2093,21 +2093,25 @@ async function refreshHeartUI() {
     btn.innerHTML = '♡ <span id="lbHeartCount">' + c + '</span>';
     btn.style.background = 'none';
     btn.style.color = 'var(--red)';
-    btn.style.cursor = signedIn ? 'pointer' : 'not-allowed';
-    if (hint) hint.textContent = signedIn ? 'tap to heart' : 'sign in to heart';
+    btn.style.cursor = 'pointer';
+    if (hint) hint.textContent = 'tap to heart';
   }
 }
 
 window.toggleHeart = async function() {
   if (!lightboxCurrent) return;
-  const user = auth.currentUser;
-  if (!user || user.isAnonymous) {
-    openModal();
-    return;
-  }
   const key = lbStorageKey();
-  if (localStorage.getItem(key)) return; // already hearted; no un-heart per spec
+  if (localStorage.getItem(key)) return; // already hearted on this device
   const col = lightboxCurrent.source === 'wolf' ? 'wolf_photos' : 'pack_photos';
+  // No account needed to heart: get (or quietly create) an anonymous identity
+  let user = auth.currentUser;
+  if (!user) {
+    try { const cred = await auth.signInAnonymously(); user = cred.user; }
+    catch (err) {
+      console.warn('Anon sign-in failed (enable Anonymous provider in Firebase):', err);
+      localStorage.setItem(key, '1'); await refreshHeartUI(); return;
+    }
+  }
   const uid = user.uid;
   try {
     // Doc ID = uid → Firestore enforces one-heart-per-user server-side
