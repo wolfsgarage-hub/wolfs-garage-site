@@ -2,6 +2,40 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ Sister-repo sync contract (READ THIS FIRST)
+
+This site does **not** stand alone. It has a counterpart admin app —
+**`wolfsgarage-hub/Wolfs-admin`** (cloned locally alongside this repo at
+`../Wolfs-admin`) — and the two share a single backend:
+
+- the same Firebase project `wolfs-garage-directory` (Auth + Firestore);
+- the same Firestore collections and document shapes (`pack_photos`, `events`,
+  business listings, …) and their `status` workflow (`pending` → approved);
+- the same Cloudinary account/preset/folder (`dancaaglf` / `wolfs-garage`);
+- the same `ADMIN_EMAILS` allowlist and the same Mailchimp audience.
+
+The public **site** is the *producer / consumer* surface: visitors submit and
+view content. The **admin app** is the *control / moderation* surface: an admin
+reviews, approves, configures, and exports that same data.
+
+**THE RULE — site features and admin features ship together.**
+If a change here does any of the following, it almost certainly requires a
+matching change in `Wolfs-admin`:
+- introduces a new Firestore collection, field, or `status` value;
+- changes how submitted content is shaped, validated, or moderated;
+- adds a new content type (gallery / events / listings / etc.);
+- touches shared config (Cloudinary preset or folder, `ADMIN_EMAILS`,
+  Mailchimp wiring).
+The matching change is typically a moderation queue, an editor field, a pending
+counter, an export, or a config input on the admin side.
+
+**Required of every session:** before treating a feature change as done, open
+`../Wolfs-admin` and check whether it needs a corresponding change. If it does,
+say so explicitly and do **both** — never silently ship one half. (Past breakage
+came from exactly this: a change landed on one app and never reached the other.)
+If both halves can't be done in one session, leave an explicit written TODO in
+the other repo's commit message / CLAUDE.md naming the missing counterpart.
+
 ## Repository shape
 
 This is a **single-file static site**. Everything ships out of `index.html` (~2,100 lines): HTML markup, all CSS in a `<style>` block, all JS in trailing `<script>` blocks. There is no build step, no package manager, no test suite, no linter. To preview locally, open `index.html` in a browser or serve the directory with any static server (e.g. `python3 -m http.server`). Deployment is via Vercel; pushes to the deployed branch publish the site.
