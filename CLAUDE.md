@@ -1,61 +1,92 @@
-# CLAUDE.md
+# CLAUDE.md — Wolf's Garage Coding Agent Manual
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Drop this in the root of every Wolf's Garage repo (`wolfs-garage-site`, `wolfs-garage-community`, `Wolfs-admin`, `wolfsgarage-growth-engine`). Any agent that opens the repo reads this first. Full context lives in `WOLFS_GARAGE_KNOWLEDGE_BASE.md` (project knowledge base) — read it when you need brand, business, or history detail.
 
-## Repository shape
+---
 
-This is a **single-file static site**. Everything ships out of `index.html` (~2,100 lines): HTML markup, all CSS in a `<style>` block, all JS in trailing `<script>` blocks. There is no build step, no package manager, no test suite, no linter. To preview locally, open `index.html` in a browser or serve the directory with any static server (e.g. `python3 -m http.server`). Deployment is via Vercel; pushes to the deployed branch publish the site.
+## WHO / WHAT
 
-Other tracked files:
-- `vercel.json` — redirects only. `/directory`, `/directory/*`, `/pages/hot-rodder-directory`, `/pages/hot-rodder-directory/*`, and `/pack` all forward to `https://wolfs-garage-community.vercel.app` (a separate repo). These are the only wiring for inbound short URLs (incl. printed booth handouts) — edit carefully.
-- `assets/pistons.svg` — the only loose asset on disk. Appears to be **orphaned**: no reference from `index.html`. Don't assume deleting it is safe without checking, but don't assume it's live either.
-- `README.md` — one-line description.
+Wolf's Garage LLC — Portland OR hot rod brand. Owner: John ("Wolf" in public copy). Mobile-only (Samsung Galaxy, Chrome). Solo, ADHD, time-poor. **Lead with the action, no preamble.**
 
-## Verifying changes
+**Hard separation:** Wolf's Garage ≠ the buy/sell/trade side hustle ("Hustle & Flow"). Never mix code, data, or branding. If a task is side-hustle, stop and say so.
 
-There is no test suite, no linter, no type-check, and no preview build. The only way to verify a change is to open `index.html` in a browser (or `python3 -m http.server` + visit `localhost:8000`) and exercise the affected feature. After UI/asset changes, also sanity-check: favicon, hero wolf image, pin decorations on each section, gallery load (signed-out + signed-in), and the upload form. Vercel auto-deploys pushed branches; the production URL is `https://wolfsgarage.com`.
+---
 
-## How assets work (important)
+## SESSION-START AUDIT (run before any work)
 
-Images are **base64-inlined into a single JS object** named `WG_ASSETS` defined around line ~1222 of `index.html`. The HTML references them with sentinel strings like `WG_ASSET_WOLF`, `WG_ASSET_PIN01`, etc. This is why `index.html` is ~1.2 MB and why the `Read` tool will reject reading it whole — always use `offset`/`limit` or `grep`/`awk` line ranges, and filter out base64 noise (`grep -v "data:image\|base64"`) when searching.
+1. Confirm WHICH repo + file is actually live. Never assume from prior context.
+2. Vercel `list_deployments` → get the live deployment ID and version.
+3. Check the repo HEAD (`raw.githubusercontent.com` reads are more reliable than `api.github.com`).
+4. Post a one-line status: what exists, where it's deployed, what version, last change.
+5. If a version already exists, work on THAT one. Never start a parallel build without John confirming.
 
-Two swap scripts rewrite the sentinels at runtime:
-1. **Primary** (lines ~1223–1245, runs on `DOMContentLoaded`) — recursively walks `document.head` and `document.body`, swaps `src` / `href` / `content` attributes whose value equals a `WG_ASSET_*` token, and swaps inline `style.backgroundImage` containing one. This is what makes the favicon `<link rel="icon" href="WG_ASSET_WOLF">` work.
-2. **Secondary fallback** (lines ~1897–1910, near the bottom of `<body>`) — narrower; only re-checks `<img src>` and `<a href>`. Labeled "FIX" in a comment; treat it as a safety net, not the source of truth.
+---
 
-**CSS-rule limitation:** Neither script rewrites `url(WG_ASSET_*)` inside `<style>` blocks or stylesheets — only inline `style="background-image:..."` attributes. Putting a token in a CSS rule will silently 404. Use inline style or `<img>` instead.
+## DON'T-BREAK RULES
 
-To add a new image: add a new `WG_ASSET_<NAME>` key to the `WG_ASSETS` object (base64 data URI as the value), then reference `WG_ASSET_<NAME>` as an `<img src=...>` or in inline `style="background-image:url(WG_ASSET_<NAME>)"`. The OG/Twitter image is served from the Shopify CDN; loose image files generally should not be added.
+- **Smallest useful change.** Don't rewrite working pages. Don't rename storage keys, routes, files, or functions unless required.
+- **Bump the version every delivery.** Never ship the same version twice.
+- **No deploy before visual approval.** John reviews a real `https://` preview on phone Chrome first. Local screenshots don't count.
+- **Same task fails twice → stop.** Report what failed + which file/command, suggest the safer next move.
+- **Architecture-First (AFR-001):** if a feature needs infrastructure that doesn't exist, or the current architecture is the wrong foundation, stop and say so before writing code.
 
-**Favicon exception:** `<link rel="icon">` and `<link rel="apple-touch-icon">` (head, ~line 23–24) hold the **literal `data:image/png;base64,...` URI inline**, not a `WG_ASSET_*` token. Browsers request the favicon before `DOMContentLoaded` fires, so the swap script can't reach it in time — the token would 404 on first visit. If you ever regenerate the wolf logo, update `WG_ASSETS["WG_ASSET_WOLF"]` **and** both `<link>` hrefs together.
+---
 
-## Runtime integrations
+## JS SAFETY (HR-007) — before pushing any HTML
 
-Configured inline near line ~1916 of `index.html`:
-- **Firebase (compat SDK v10.7.1, CDN-loaded)** — Auth + Firestore. Shares the `wolfs-garage-directory` Firebase project with the community app. Used for pack gallery uploads, business listings, and the account modal. `auth.setPersistence(LOCAL)` keeps users signed in across sessions.
-- **Cloudinary** — unsigned uploads (`CLOUDINARY_CLOUD = "dancaaglf"`, preset `wolfs-garage`, folder `wolfs-garage-gallery`). Uploads happen client-side; Firestore stores only the resulting URL + metadata.
-- **Mailchimp** — newsletter signup form posts to `us2.list-manage.com`. Canonical email backend; do not reintroduce other providers.
-- **Shopify storefront** — the "wares" section (lines ~1453–1458) embeds product cards by hand: Shopify CDN image URLs and `shop.wolfsgarage.com/products/...` deep links, hard-coded inline. There is no API call; if a product is renamed, unlisted, or its image URL changes on Shopify, the card breaks silently. Treat this section as manually maintained.
-- `ADMIN_EMAILS` is a hard-coded allowlist that auto-approves gallery uploads (`isWolf: true`) and unlocks admin UI. Update both `ADMIN_EMAILS` and `ADMIN_EMAIL` together. Note: Firestore security rules and the Cloudinary upload preset live **outside this repo** — the client-side checks (`MAX_UPLOAD_SIZE`, mime allowlist, `status: pending`) are the only enforcement visible here, so treat the upload form as security-sensitive.
+Any file with `<script type="module">`: extract the module body to a `.mjs`, run `node --check`. Unescaped apostrophes in single-quoted JS strings silently abort the whole module. Run `node --check` on classic `<script>` blocks too.
 
-## Sections & layout
+---
 
-Section anchors inside `<main id="main">`: `hero` (`#top`), `directory`, `gallery`, `about`, `bulletin`, `tools`, `wares`, `calendar`, `social`, `join`, `archive`, then footer. Modals (`#bizModal`, `#modal`), search overlay, and toast live at the very end of the body. Nav links + footer links should match these IDs.
+## DEPLOY / PUSH
 
-## Versioning convention
+- **Vercel only.** Never suggest Netlify or GitHub Pages.
+- `Wolfs-admin` serves via `raw.githack.com` — after a push give a cache-busted URL (`?v=N`) and note ~60s CDN delay.
+- Supabase function URLs are NOT reachable from the sandbox — deploy those via a standalone deployer HTML John opens in Chrome.
 
-Bump the version in **all three** places on user-facing changes:
-1. `<meta name="site-version" content="1.XX">` near the top of `<head>`.
-2. The `console.log('%cWolf\'s Garage site v1.XX', ...)` line immediately after `<body>` opens (around line ~1221).
-3. The commit message prefix, e.g. `v1.33 - <short description>`. Look at `git log --oneline` for the pattern; commits are written in that exact style.
+**Git push pattern (agent pushes; John never touches GitHub):**
+```bash
+git remote set-url origin https://<PAT>@github.com/wolfsgarage-hub/[REPO].git
+git config user.email "claude@anthropic.com" && git config user.name "Claude"
+git add -A && git commit -m "vX.X - description" && git push origin main
+git remote set-url origin https://github.com/wolfsgarage-hub/[REPO].git   # scrub token
+echo "Token scrubbed."
+```
+`<PAT>` comes from the secrets store at push time. NEVER commit it to any file.
 
-## Editing this file with Claude tools
+---
 
-- Never `Read` `index.html` without `offset`/`limit` — the embedded base64 blows past the token limit.
-- To locate something: `grep -an "<pattern>" index.html | grep -v "data:image\|base64" | head`.
-- To view a range: `awk 'NR==<start>,NR==<end>' index.html` (or `Read` with `offset`+`limit`), and again filter out base64 lines if they fall inside the range.
-- Prefer `Edit` with enough surrounding context to make the `old_string` unique; the file has many repeated style fragments.
+## BRAND QUICK-REF (full system in knowledge base §4)
 
-## Working branch
+- Colors: bg black `#0A0A0A` · red `#CC0000` · bone `#F5F1E8` · copper `#C8922A` (**text/hairlines only**, never fills/badges/backgrounds).
+- Forbidden: orange, yellow, teal (except health blocks), sage, gold/light backgrounds.
+- Fonts: Bebas Neue / Oswald (headers), Work Sans (body), Special Elite (accents).
+- Logo: real wolf reference only, upper RIGHT in headers. Never AI-generate a substitute.
+- Pinstriping on every page (under header, between sections, above footer). Black bg → red + white. White bg → red + black.
 
-Development for Claude Code sessions happens on `claude/init-project-A3mQL` (per session config). Commit and push there; do not push to `main` or open PRs unless explicitly asked.
+---
+
+## REPO MAP
+
+| Repo | Serves | Host | Vercel project | Notes |
+|---|---|---|---|---|
+| `wolfs-garage-site` | wolfsgarage.com | Vercel `wolfsgarage` | `prj_xkSqPioBA9MnFkIOPt9A8ths2379` | Main marketing site. v1.41. |
+| `wolfs-garage-community` | Hot Rodder Directory | Vercel `wolfsgarage` | `prj_07ZQNcTf2xB0RmkPoYp1slYrydk6` | Directory live at /directory. v3.21.8. Firebase `wolfs-garage-directory`. |
+| `Wolfs-admin` | Admin + Quick Add | raw.githack.com | — | Daily-driver = `main/index.html` (NOT community/admin.html). Quick Add = `main/quick.html`. Post gen = `wg-post-generator-v6.3.html`. |
+| `wolfsgarage-growth-engine` | Growth Engine PWA | Vercel `wolfsgaragenw-9926` | `prj_4uKh5iqJeRauAFgPIdyXYbaIUTyO` | Branch `rebuild/growth-engine-core`. v2.13.0. Parallel actor pushes here — fetch HEAD before push, never force-push. |
+
+Stack notes: Firebase compat SDK (`wolfs-garage-directory`), Cloudinary (cloud `dancaaglf`, preset `wolfs-garage`), Supabase proxy "awarewolf" (`github-proxy` edge function), Shopify Basic (apparel, POD via Printful/Printify — edit variants there first, never in Shopify directly).
+
+---
+
+## BUILD REPORT FORMAT (every build, no exceptions)
+
+One copy/paste block, in order: LIVE VERSION · COMMIT · VERCEL DEPLOYMENT · BRANCH · FILES CHANGED · FEATURES COMPLETED · TESTS PASSED · BUGS FOUND · BUGS FIXED · WHAT WAS PRESERVED · NEEDS ANDROID TAP TESTING · EXACT ANDROID TEST STEPS · KNOWN LIMITS.
+
+Never say "All done," "Should work," or "Looks good." Use evidence: exact preview URL, device, flows clicked, command run.
+
+---
+
+## OUTPUT STYLE (John is on a phone)
+
+URLs = tappable markdown links. Copy/paste text = code blocks. Never swap them. Order: link → copy block → next action. Every reply referencing a versioned file or the live/preview site includes a tappable link to the current URL. Base64-image HTML won't render in Claude's preview iframe — tell John to open in Chrome.
