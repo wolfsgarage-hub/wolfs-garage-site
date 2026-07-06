@@ -1,10 +1,18 @@
 // Mailchimp subscriber export — streams audience as CSV
 // Reads API key from MAILCHIMP_API_KEY env var (set in Vercel project settings)
 // Audience ID is hardcoded — Wolf's Garage main list: b0d82514d3
+// Access requires EXPORT_TOKEN env var + matching ?key= param (or x-export-key header).
+// Fails closed: if EXPORT_TOKEN is unset, every request is rejected.
 
 const LIST_ID = 'b0d82514d3';
 
 export default async function handler(req, res) {
+  const token = process.env.EXPORT_TOKEN;
+  const provided = (req.query && req.query.key) || req.headers['x-export-key'];
+  if (!token || !provided || provided !== token) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
   const key = process.env.MAILCHIMP_API_KEY;
   if (!key) {
     res.status(500).send('MAILCHIMP_API_KEY env var not set in Vercel.');
