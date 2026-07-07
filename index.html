@@ -574,7 +574,7 @@ a.dirart{display:block}
 <div id="backtop" role="button" aria-label="Back to top" title="Back to top">&#8593;</div>
 <script>
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.49","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.50","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -804,7 +804,7 @@ auth.onAuthStateChanged(function(user) {
   }
 });
 
-// --- Gallery: Wolf's Picks (3 manually-pinned) + Recent from Pack (6 newest approved) ---
+// --- Gallery: Wolf's Picks (3 manually-pinned) + Recent from Pack (all approved, newest first) ---
 function galleryTime(p) {
   const v = p.addedAt || p.submittedAt || p.createdAt;
   if (!v) return 0;
@@ -821,7 +821,7 @@ async function loadGallery() {
   try {
     const [picksSnap, packSnap, allWolfSnap] = await Promise.all([
       db.collection('wolf_photos').where('isPicked', '==', true).limit(10).get(),
-      db.collection('pack_photos').where('status', '==', 'approved').limit(40).get(),
+      db.collection('pack_photos').where('status', '==', 'approved').limit(100).get(),
       db.collection('wolf_photos').orderBy('addedAt', 'desc').limit(12).get()
     ]);
     let picks = picksSnap.docs.map(d => ({ id: d.id, source: 'wolf', ...d.data() }));
@@ -836,7 +836,7 @@ async function loadGallery() {
     }
     const pack = packSnap.docs.map(d => ({ id: d.id, source: 'pack', ...d.data() }))
       .sort((a, b) => galleryTime(b) - galleryTime(a))
-      .slice(0, 6);
+      .slice(0, 100);
     galleryCache.picks = picks;
     galleryCache.pack = pack;
     renderGalleryGrid('wolfPicksGrid', picks, "No Wolf picks yet. Check back soon.");
