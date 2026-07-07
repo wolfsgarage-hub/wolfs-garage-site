@@ -574,7 +574,7 @@ a.dirart{display:block}
 <div id="backtop" role="button" aria-label="Back to top" title="Back to top">&#8593;</div>
 <script>
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.51","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.52","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -1429,7 +1429,7 @@ document.getElementById('authForm').addEventListener('submit', async function(e)
       if (nickname && cred.user) {
         try { await cred.user.updateProfile({ displayName: nickname }); } catch(_) {}
       }
-      try { mcSubscribe(email); } catch(_) {}
+      try { mcSubscribe(email, nickname); } catch(_) {}
       showToast('Account created. Welcome to the Pack.');
     } else {
       await auth.signInWithEmailAndPassword(email, password);
@@ -1456,12 +1456,14 @@ function signOut() {
 }
 
 // --- Mailchimp: add new-account emails to the Wolf's Garage audience (us2) ---
-function mcSubscribe(email) {
+function mcSubscribe(email, nickname) {
   if (!email) return;
   try {
     var cb = 'mc_cb_' + Date.now();
     window[cb] = function(res){ try { delete window[cb]; } catch(e){} };
-    var params = 'u=dc4fc447e326886743fcd078b&id=b0d82514d3&EMAIL=' + encodeURIComponent(email) + '&c=' + cb;
+    var params = 'u=dc4fc447e326886743fcd078b&id=b0d82514d3&EMAIL=' + encodeURIComponent(email);
+    if (nickname) params += '&FNAME=' + encodeURIComponent(nickname);
+    params += '&c=' + cb;
     var sc = document.createElement('script');
     sc.src = 'https://wolfsgarage.us2.list-manage.com/subscribe/post-json?' + params;
     sc.onload = function(){ if (sc.parentNode) sc.parentNode.removeChild(sc); };
