@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Portland, Oregon hot rod culture. Apparel, tools, free Hot Rodder Directory, community for working-class car and truck builders. Get Back in the Garage.">
 <meta name="version" content="1.48">
@@ -574,7 +574,7 @@ a.dirart{display:block}
 <div id="backtop" role="button" aria-label="Back to top" title="Back to top">&#8593;</div>
 <script>
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.48","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.49","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -1648,4 +1648,25 @@ window.lbNav = function(dir) {
 
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL36tbjsFEHLEQdU-Ny7-YH0SDcWtxmdw&libraries=places&callback=initWGMaps"></script>
+<script>
+/* Mobile keyboard fix: lift the focused field above the on-screen keyboard.
+   Backstop for browsers that ignore interactive-widget (older Chrome, iOS Safari). */
+(function(){
+  function isField(t){ return t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName); }
+  function bring(el){
+    if(!el) return;
+    try { el.scrollIntoView({block:"center", behavior:"smooth"}); }
+    catch(e){ try { el.scrollIntoView(); } catch(_){} }
+  }
+  document.addEventListener("focusin", function(e){
+    if(isField(e.target)){ setTimeout(function(){ bring(e.target); }, 300); }
+  });
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize", function(){
+      var a=document.activeElement;
+      if(isField(a)){ bring(a); }
+    });
+  }
+})();
+</script>
 </body></html>
