@@ -562,7 +562,7 @@ a.dirart{display:block}
  <div class="pw-wrap"><input type="password" id="authPassword" class="pw-input" placeholder="Password" required minlength="6" autocomplete="current-password"><button type="button" class="pw-toggle" aria-label="Show password" onclick="togglePw('authPassword',this)">👁</button></div>
  <p class="small" id="nicknameHint" style="display:none;margin:4px 0 8px;color:rgba(245,241,232,0.55);font-size:0.78rem;">Optional. Leave blank to show your email on posts and comments.</p>
  <div class="modal-disclosure" id="disclosure" style="display:none;">
- <strong>Heads up:</strong> All new accounts are auto-added to the Wolf's Garage mailing list for swag discounts, event updates, and inside scoops. Don't want them? <em>Unsubscribe anytime from any email</em>, one click, no hassle.
+ <strong>Heads up:</strong> All new accounts are auto-added to the Wolf's Garage mailing list. This is NOT for marketing. Maybe down the road i'll do monthly newsletters or something. Don't want them? <em>Unsubscribe anytime from any email</em>, one click, i won't even notice.🐺
  </div>
  <div id="authError" style="display:none;color:var(--red);font-size:0.85rem;margin:8px 0;text-align:center;"></div>
  <button type="submit" class="btn-red" id="authSubmitBtn">CONTINUE</button>
@@ -574,7 +574,7 @@ a.dirart{display:block}
 <div id="backtop" role="button" aria-label="Back to top" title="Back to top">&#8593;</div>
 <script>
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.50","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.51","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -1429,6 +1429,7 @@ document.getElementById('authForm').addEventListener('submit', async function(e)
       if (nickname && cred.user) {
         try { await cred.user.updateProfile({ displayName: nickname }); } catch(_) {}
       }
+      try { mcSubscribe(email); } catch(_) {}
       showToast('Account created. Welcome to the Pack.');
     } else {
       await auth.signInWithEmailAndPassword(email, password);
@@ -1452,6 +1453,21 @@ document.getElementById('authForm').addEventListener('submit', async function(e)
 
 function signOut() {
   auth.signOut();
+}
+
+// --- Mailchimp: add new-account emails to the Wolf's Garage audience (us2) ---
+function mcSubscribe(email) {
+  if (!email) return;
+  try {
+    var cb = 'mc_cb_' + Date.now();
+    window[cb] = function(res){ try { delete window[cb]; } catch(e){} };
+    var params = 'u=dc4fc447e326886743fcd078b&id=b0d82514d3&EMAIL=' + encodeURIComponent(email) + '&c=' + cb;
+    var sc = document.createElement('script');
+    sc.src = 'https://wolfsgarage.us2.list-manage.com/subscribe/post-json?' + params;
+    sc.onload = function(){ if (sc.parentNode) sc.parentNode.removeChild(sc); };
+    sc.onerror = function(){ try { delete window[cb]; } catch(e){} if (sc.parentNode) sc.parentNode.removeChild(sc); };
+    document.head.appendChild(sc);
+  } catch (e) { /* non-blocking */ }
 }
 
 async function sendPasswordReset() {
