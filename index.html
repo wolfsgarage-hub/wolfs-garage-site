@@ -574,7 +574,7 @@ a.dirart{display:block}
 <div id="backtop" role="button" aria-label="Back to top" title="Back to top">&#8593;</div>
 <script>
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.52","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.53","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -771,6 +771,14 @@ const ADMIN_EMAIL = ADMIN_EMAILS[0];
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+// iOS Safari / restrictive networks: default streaming transport can hang; auto-detect long-polling fixes it.
+try { db.settings({ experimentalAutoDetectLongPolling: true }); } catch(_) {}
+// Diagnostic: open any page with ?debug to surface the real Firestore result on-device (no console needed).
+if (location.search.indexOf('debug') > -1) {
+  db.collection('pack_photos').where('status','==','approved').limit(1).get()
+    .then(function(sn){ alert('FS OK: ' + sn.size + ' doc(s) read'); })
+    .catch(function(e){ alert('FS ERR: ' + (e.code || '') + ' ' + (e.message || e)); });
+}
 
 // --- Local persistence: stay signed in across refreshes and browser close (manual sign-out only) ---
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(err) {
