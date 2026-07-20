@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Automotive Events Near You — Wolf's Garage</title>
+<meta name="description" content="Find car shows, cruise-ins, swap meets, races, and automotive events near you. ZIP and radius search, starting with Oregon and Washington. Curated by Wolf's Garage, Portland.">
+<link rel="canonical" href="https://wolfsgarage.com/events">
+<meta property="og:title" content="Automotive Events Near You — Wolf's Garage">
+<meta property="og:description" content="Car shows, cruise-ins, swap meets, races. ZIP and radius search across Oregon and Washington — more states coming.">
+<meta property="og:url" content="https://wolfsgarage.com/events">
+<meta property="og:image" content="https://res.cloudinary.com/dancaaglf/image/upload/b_rgb:0A0A0A,c_pad,w_1200,h_630,q_auto,f_jpg/v1782974224/og-wolf-logo.jpg">
+<link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0A;--red:#CC0000;--bone:#F5F1E8;--copper:#C8922A;--panel:#141414;--panel-2:#1c1c1c;--border:rgba(245,241,232,.08);--border-strong:rgba(245,241,232,.18)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--bone);font-family:'Work Sans',sans-serif;line-height:1.55}
+a{color:var(--copper);text-decoration:none}a:hover{text-decoration:underline}
+.pin{height:3px;background:repeating-linear-gradient(90deg,var(--red) 0 16px,transparent 16px 20px,var(--bone) 20px 23px,transparent 23px 27px);opacity:.85}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;max-width:980px;margin:0 auto}
+.wordmark{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--bone)}
+.wordmark span{color:var(--red)}
+header img{width:44px;height:44px;border-radius:50%}
+main{max-width:980px;margin:0 auto;padding:26px 18px 60px}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,7vw,3.4rem);letter-spacing:.06em;line-height:1.02}
+.lead{color:rgba(245,241,232,.75);margin:8px 0 20px;max-width:640px}
+.lead .copper{color:var(--copper)}
+h2{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:1.05rem;margin:34px 0 12px}
+h2 i{color:var(--red);font-style:normal}
+.search-panel{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--red);padding:18px}
+.loc-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn-red{display:inline-block;background:var(--red);color:var(--bone);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;padding:12px 22px;border:none;cursor:pointer;font-size:.88rem}
+.btn-red:disabled{opacity:.5;cursor:default}
+.btn-ghost{display:inline-block;background:none;color:var(--bone);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;padding:11px 18px;border:1px solid var(--border-strong);cursor:pointer;font-size:.82rem}
+.or{font-family:'Special Elite',monospace;color:var(--copper);font-size:.85rem}
+input,select,textarea{padding:11px 12px;background:rgba(0,0,0,.5);border:1px solid var(--border-strong);color:var(--bone);font-family:'Work Sans',sans-serif;font-size:.95rem}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
+#zipInput{width:110px;letter-spacing:.1em}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font-family:'Oswald',sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;padding:8px 14px;border:1px solid var(--border-strong);background:none;color:var(--bone);cursor:pointer}
+.chip.on{background:var(--red);border-color:var(--red)}
+.custom-dates{display:none;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.custom-dates.show{display:flex}
+#locStatus{font-family:'Special Elite',monospace;font-size:.82rem;color:var(--copper);margin-top:10px;min-height:1.2em}
+#summary{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:.92rem;margin:22px 0 4px;color:var(--bone);min-height:1.3em}
+#summary b{color:var(--red)}
+.sort-row{display:flex;gap:10px;align-items:center;margin:8px 0 16px;font-size:.85rem;color:rgba(245,241,232,.6)}
+#results{display:flex;flex-direction:column;gap:12px}
+.ecard{background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);padding:18px;display:grid;grid-template-columns:64px 1fr;gap:16px}
+.ecard:hover{border-color:var(--red)}
+.dstack{font-family:'Bebas Neue',sans-serif;text-align:center;line-height:1.05}
+.dstack .m{color:var(--red);font-size:.95rem;letter-spacing:.1em;display:block}
+.dstack .d{color:var(--bone);font-size:1.9rem;display:block}
+.dstack .y{color:var(--copper);font-size:.7rem;letter-spacing:.1em;display:block}
+.et{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;line-height:1.1}
+.et a{color:var(--bone)}
+.em{font-family:'Oswald',sans-serif;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--copper);margin:4px 0}
+.es{font-size:.9rem;color:rgba(245,241,232,.75);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ef{margin-top:8px;font-size:.8rem;color:rgba(245,241,232,.55)}
+.ef a{margin-right:12px}
+.badge{display:inline-block;font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.12em;padding:2px 8px;border:1px solid var(--border-strong);margin:0 6px 4px 0;text-transform:uppercase}
+.badge-cancel{background:var(--red);border-color:var(--red)}
+.badge-warn{border-color:var(--copper);color:var(--copper)}
+.pager{display:flex;gap:10px;justify-content:center;margin:24px 0}
+.empty{background:var(--panel);border:1px dashed var(--border-strong);padding:26px;text-align:center;color:rgba(245,241,232,.7)}
+.empty .typewriter{margin-top:8px}
+.typewriter{font-family:'Special Elite',monospace;font-size:.82rem;color:var(--copper)}
+.submit-zone{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--red);padding:18px;margin-top:14px}
+.submit-zone label{display:block;font-family:'Oswald',sans-serif;font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;color:var(--copper);margin:12px 0 4px}
+.submit-zone input,.submit-zone select,.submit-zone textarea{width:100%}
+.frow{display:flex;gap:10px;flex-wrap:wrap}
+.frow>div{flex:1 1 150px}
+.hpfield{position:absolute;left:-5000px;opacity:0;height:1px;overflow:hidden}
+#submitMsg{margin-top:10px;font-size:.9rem;color:var(--copper);display:none}
+footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245,241,232,.5)}
+@media(max-width:560px){.ecard{grid-template-columns:52px 1fr;padding:14px}.dstack .d{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<header>
+  <a class="wordmark" href="/">WOLF&rsquo;S <span>GARAGE</span></a>
+  <a href="/"><img src="https://res.cloudinary.com/dancaaglf/image/upload/w_96,h_96,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png" alt="Wolf's Garage wolf logo"></a>
+</header>
+<div class="pin"></div>
+<main>
+  <h1>FIND AUTOMOTIVE EVENTS <span style="color:var(--red)">NEAR YOU</span></h1>
+  <p class="lead">Car shows, cruise-ins, swap meets, drag nights, meets and more — gathered from official public sources and the community, reviewed before they post. <span class="copper">Starting with Oregon &amp; Washington. More states on the way.</span></p>
+
+  <div class="search-panel">
+    <div class="loc-row">
+      <button class="btn-red" id="geoBtn" type="button">USE MY CURRENT LOCATION</button>
+      <span class="or">— or —</span>
+      <input id="zipInput" inputmode="numeric" maxlength="5" placeholder="ZIP code" aria-label="ZIP code">
+      <button class="btn-ghost" id="zipGo" type="button">SEARCH</button>
+    </div>
+    <div id="locStatus"></div>
+    <div class="filters">
+      <select id="radiusSel" aria-label="Search radius">
+        <option value="25">Within 25 miles</option>
+        <option value="50" selected>Within 50 miles</option>
+        <option value="100">Within 100 miles</option>
+        <option value="250">Within 250 miles</option>
+        <option value="state">Statewide</option>
+      </select>
+      <select id="stateSel" aria-label="State" style="display:none">
+        <option value="OR" selected>Oregon</option>
+        <option value="WA">Washington</option>
+      </select>
+      <select id="catSel" aria-label="Event category"><option value="">All categories</option></select>
+    </div>
+    <div class="chips" id="dateChips">
+      <button class="chip" data-when="today" type="button">Today</button>
+      <button class="chip" data-when="tomorrow" type="button">Tomorrow</button>
+      <button class="chip" data-when="weekend" type="button">This weekend</button>
+      <button class="chip" data-when="next-weekend" type="button">Next weekend</button>
+      <button class="chip" data-when="7d" type="button">Next 7 days</button>
+      <button class="chip on" data-when="30d" type="button">Next 30 days</button>
+      <button class="chip" data-when="custom" type="button">Custom</button>
+    </div>
+    <div class="custom-dates" id="customDates">
+      <input type="date" id="fromDate" aria-label="From date">
+      <span class="or">to</span>
+      <input type="date" id="toDate" aria-label="To date">
+      <button class="btn-ghost" id="customGo" type="button">APPLY</button>
+    </div>
+  </div>
+
+  <div id="summary"></div>
+  <div class="sort-row" id="sortRow" style="display:none">
+    <span>Sort:</span>
+    <select id="sortSel" aria-label="Sort results">
+      <option value="soonest">Soonest</option>
+      <option value="closest">Closest</option>
+      <option value="newest">Recently added</option>
+    </select>
+  </div>
+  <div id="results"></div>
+  <div class="pager" id="pager" style="display:none">
+    <button class="btn-ghost" id="prevBtn" type="button">&larr; PREV</button>
+    <button class="btn-ghost" id="nextBtn" type="button">NEXT &rarr;</button>
+  </div>
+
+  <h2>GOT AN EVENT? <i>PUT IT ON THE MAP.</i></h2>
+  <div class="submit-zone">
+    <p style="font-size:.92rem;color:rgba(245,241,232,.75)">Paste a link to the official page, Facebook event, Eventbrite, or club post — or fill in the details yourself. Free to submit. Wolf reviews every listing before it posts.</p>
+    <form id="submitForm">
+      <label>Event link (optional, but it helps)</label>
+      <input name="link" maxlength="500" placeholder="https://">
+      <label>Event title</label>
+      <input name="title" maxlength="120" required placeholder="e.g. ROSE CITY ROUND-UP">
+      <div class="frow">
+        <div><label>Date</label><input name="date" type="date" required></div>
+        <div><label>Time (as advertised)</label><input name="time_text" maxlength="60" placeholder="e.g. 9 AM – 3 PM"></div>
+      </div>
+      <div class="frow">
+        <div><label>Venue</label><input name="venue" maxlength="150" placeholder="e.g. Jubitz Truck Stop"></div>
+        <div><label>City</label><input name="city" maxlength="80" placeholder="Portland"></div>
+        <div><label>State</label>
+          <select name="state">
+            <option value="OR" selected>OR</option><option value="WA">WA</option>
+            <option value="ID">ID</option><option value="CA">CA</option><option value="NV">NV</option>
+            <option value="MT">MT</option><option value="UT">UT</option><option value="AZ">AZ</option>
+            <option value="">Other</option>
+          </select>
+        </div>
+      </div>
+      <label>Short description (host, vibe, what to expect)</label>
+      <textarea name="description" rows="3" maxlength="1000"></textarea>
+      <label>Your email (for questions — never published)</label>
+      <input name="email" type="email" maxlength="200">
+      <div class="hpfield"><label>Leave this field empty</label><input name="hp" tabindex="-1" autocomplete="off"></div>
+      <p style="margin-top:14px"><button class="btn-red" type="submit">SUBMIT FOR REVIEW</button></p>
+      <p id="submitMsg"></p>
+    </form>
+  </div>
+
+  <p class="typewriter" style="margin-top:30px">Listings are fact-based summaries with links to the official source. Always confirm with the organizer before making the drive. Organizers: open any event page to claim it.</p>
+</main>
+<div class="pin"></div>
+<footer>Wolf&rsquo;s Garage &middot; Portland, OR &middot; <a href="/">Home</a> &middot; <a href="/directory">Hot Rodder Directory</a></footer>
+
+<script>
+(function () {
+  'use strict';
+  var state = { mode: null, zip: null, lat: null, lng: null, radius: 50, st: 'OR', when: '30d', from: null, to: null, category: '', sort: 'soonest', page: 1 };
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  var MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+  function dateRange(when) {
+    var now = new Date(); var from = new Date(now); var to = new Date(now);
+    if (when === 'today') { }
+    else if (when === 'tomorrow') { from.setDate(now.getDate() + 1); to = new Date(from); }
+    else if (when === 'weekend' || when === 'next-weekend') {
+      var dow = now.getDay();
+      var sat = new Date(now);
+      if (dow === 0) sat.setDate(now.getDate() - 1); else sat.setDate(now.getDate() + (6 - dow));
+      if (when === 'next-weekend') sat.setDate(sat.getDate() + 7);
+      var sun = new Date(sat); sun.setDate(sat.getDate() + 1);
+      from = (when === 'weekend' && (dow === 0 || dow === 6)) ? now : sat;
+      to = sun;
+    }
+    else if (when === '7d') { to.setDate(now.getDate() + 7); }
+    else { to.setDate(now.getDate() + 30); }
+    return [iso(from), iso(to)];
+  }
+  function whenLabel(when) {
+    return { today: 'today', tomorrow: 'tomorrow', weekend: 'this weekend', 'next-weekend': 'next weekend', '7d': 'in the next 7 days', '30d': 'in the next 30 days', custom: 'in your date range' }[when] || '';
+  }
+
+  function savePrefs() {
+    try {
+      if (state.zip) localStorage.setItem('wgEvPrefs', JSON.stringify({ zip: state.zip, radius: state.radius, st: state.st }));
+    } catch (e) {}
+  }
+  function loadPrefs() {
+    try { return JSON.parse(localStorage.getItem('wgEvPrefs') || 'null'); } catch (e) { return null; }
+  }
+
+  function setStatus(msg) { $('locStatus').textContent = msg || ''; }
+
+  function badgeHtml(ev) {
+    var h = '';
+    if (ev.event_status === 'canceled' || ev.occ_status === 'canceled') h += '<span class="badge badge-cancel">CANCELED</span>';
+    else if (ev.event_status === 'postponed' || ev.occ_status === 'postponed') h += '<span class="badge badge-cancel">POSTPONED</span>';
+    if (ev.occ_status === 'sold_out') h += '<span class="badge badge-warn">SOLD OUT</span>';
+    if (ev.verification === 'organizer_verified') h += '<span class="badge">ORGANIZER VERIFIED</span>';
+    if (ev.claimed) h += '<span class="badge">CLAIMED</span>';
+    if (ev.is_recurring) h += '<span class="badge">RECURRING</span>';
+    if (ev.access_type === 'public_free') h += '<span class="badge badge-warn">FREE</span>';
+    if (ev.access_type === 'public_registration') h += '<span class="badge">REGISTRATION</span>';
+    return h;
+  }
+
+  function render(data) {
+    var r = $('results'); r.innerHTML = '';
+    var list = (data && data.results) || [];
+    var total = (data && data.total) || 0;
+    var locBit = state.mode === 'geo' ? 'your location' : state.mode === 'zip' ? state.zip : (state.st === 'WA' ? 'Washington' : 'Oregon');
+    var radiusBit = state.mode === 'state' ? 'across ' + locBit : 'within ' + state.radius + ' miles of ' + locBit;
+    $('summary').innerHTML = total === 0
+      ? 'No events found ' + esc(radiusBit) + ' ' + esc(whenLabel(state.when))
+      : '<b>' + total + (data.capped ? '+' : '') + '</b> event' + (total === 1 ? '' : 's') + ' ' + esc(radiusBit) + ' ' + esc(whenLabel(state.when));
+    $('sortRow').style.display = total > 0 ? 'flex' : 'none';
+
+    if (!list.length) {
+      r.innerHTML = '<div class="empty">Nothing on the calendar for that search — yet.<div class="typewriter">Try a bigger radius or a longer date range. Know an event we missed? Submit it below.</div></div>';
+      $('pager').style.display = 'none';
+      return;
+    }
+    list.forEach(function (ev) {
+      var p = (ev.local_date || '').split('-');
+      var mo = p[1] ? MONTHS[parseInt(p[1], 10) - 1] : '';
+      var meta = [];
+      if (ev.city || ev.state) meta.push([ev.city, ev.state].filter(Boolean).join(', '));
+      if (ev.distance_miles != null) meta.push(ev.distance_miles + ' mi');
+      if (ev.local_time_text) meta.push(ev.local_time_text);
+      var card = document.createElement('div'); card.className = 'ecard';
+      card.innerHTML =
+        '<div class="dstack"><span class="m">' + esc(mo) + '</span><span class="d">' + esc(p[2] || '') + '</span><span class="y">' + esc(p[0] || '') + '</span></div>' +
+        '<div><div class="et"><a href="/events/' + esc(ev.slug) + '">' + esc(ev.title) + '</a></div>' +
+        '<div class="em">' + esc(meta.join(' · ')) + '</div>' +
+        '<div>' + badgeHtml(ev) + '</div>' +
+        (ev.summary ? '<div class="es">' + esc(ev.summary) + '</div>' : '') +
+        '<div class="ef"><a href="/events/' + esc(ev.slug) + '">Details &rarr;</a>' +
+        (ev.source_url ? '<a href="' + esc(ev.source_url) + '" target="_blank" rel="noopener">Source: ' + esc(ev.source_name || 'official') + '</a>' : '') +
+        (ev.admission ? '<span>' + esc(ev.admission) + '</span>' : '') +
+        '</div></div>';
+      r.appendChild(card);
+    });
+    var pages = Math.min(Math.ceil(total / 20), 10);
+    $('pager').style.display = pages > 1 ? 'flex' : 'none';
+    $('prevBtn').disabled = state.page <= 1;
+    $('nextBtn').disabled = state.page >= pages;
+  }
+
+  var inFlight = false;
+  function search() {
+    if (inFlight) return;
+    if (!state.mode) return;
+    inFlight = true;
+    $('summary').textContent = 'Searching...';
+    var range = state.when === 'custom' ? [state.from, state.to] : dateRange(state.when);
+    var done = function (data) { inFlight = false; render(data); };
+    var fail = function (status) {
+      inFlight = false;
+      $('summary').textContent = status === 429 ? 'Easy on the throttle — too many searches. Give it a minute.' : 'Search hiccup. Try again.';
+      $('results').innerHTML = '';
+    };
+    if (state.mode === 'geo') {
+      fetch('/api/events', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ lat: state.lat, lng: state.lng, radius: state.radius, from: range[0], to: range[1], category: state.category || undefined, sort: state.sort, page: state.page })
+      }).then(function (r) { if (!r.ok) { fail(r.status); return null; } return r.json(); })
+        .then(function (d) { if (d) done(d); }).catch(function () { fail(0); });
+    } else {
+      var qs = new URLSearchParams();
+      if (state.mode === 'zip') { qs.set('zip', state.zip); qs.set('radius', state.radius); }
+      else { qs.set('state', state.st); }
+      qs.set('from', range[0]); qs.set('to', range[1]);
+      if (state.category) qs.set('category', state.category);
+      qs.set('sort', state.sort); qs.set('page', state.page);
+      fetch('/api/events?' + qs.toString())
+        .then(function (r) { if (!r.ok) { fail(r.status); return null; } return r.json(); })
+        .then(function (d) {
+          if (!d) return;
+          if (d.ok === false && d.error === 'zip_not_found') { inFlight = false; setStatus('Could not find that ZIP. Double-check it?'); $('summary').textContent = ''; return; }
+          done(d);
+        }).catch(function () { fail(0); });
+    }
+  }
+
+  // Location: only on explicit click. One-shot, coords rounded to ~1 km, never stored.
+  $('geoBtn').addEventListener('click', function () {
+    if (!navigator.geolocation) { setStatus('Location not supported on this browser — use your ZIP instead.'); $('zipInput').focus(); return; }
+    setStatus('Asking your browser for location...');
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      state.mode = 'geo';
+      state.lat = Math.round(pos.coords.latitude * 100) / 100;
+      state.lng = Math.round(pos.coords.longitude * 100) / 100;
+      state.page = 1;
+      setStatus('Using your current location (approximate — never saved).');
+      search();
+    }, function () {
+      setStatus('No problem — location denied or unavailable. Enter your ZIP instead.');
+      $('zipInput').focus();
+    }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
+  });
+
+  function zipSearch() {
+    var z = $('zipInput').value.trim();
+    if (!/^\d{5}$/.test(z)) { setStatus('Enter a 5-digit US ZIP code.'); return; }
+    state.mode = ($('radiusSel').value === 'state') ? 'state' : 'zip';
+    state.zip = z; state.page = 1;
+    setStatus('');
+    savePrefs();
+    search();
+  }
+  $('zipGo').addEventListener('click', zipSearch);
+  $('zipInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') zipSearch(); });
+
+  $('radiusSel').addEventListener('change', function () {
+    var v = this.value;
+    $('stateSel').style.display = v === 'state' ? '' : 'none';
+    if (v === 'state') { state.mode = 'state'; state.st = $('stateSel').value; }
+    else {
+      state.radius = parseInt(v, 10);
+      if (state.mode === 'state') state.mode = state.zip ? 'zip' : (state.lat != null ? 'geo' : null);
+    }
+    state.page = 1; savePrefs(); search();
+  });
+  $('stateSel').addEventListener('change', function () { state.st = this.value; state.mode = 'state'; state.page = 1; search(); });
+  $('catSel').addEventListener('change', function () { state.category = this.value; state.page = 1; search(); });
+  $('sortSel').addEventListener('change', function () { state.sort = this.value; state.page = 1; search(); });
+  $('prevBtn').addEventListener('click', function () { if (state.page > 1) { state.page--; search(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+  $('nextBtn').addEventListener('click', function () { state.page++; search(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  document.querySelectorAll('#dateChips .chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('#dateChips .chip').forEach(function (c) { c.classList.remove('on'); });
+      chip.classList.add('on');
+      var when = chip.getAttribute('data-when');
+      if (when === 'custom') { $('customDates').classList.add('show'); return; }
+      $('customDates').classList.remove('show');
+      state.when = when; state.page = 1; search();
+    });
+  });
+  $('customGo').addEventListener('click', function () {
+    var f = $('fromDate').value, t = $('toDate').value;
+    if (!f || !t) { setStatus('Pick both dates for a custom range.'); return; }
+    state.when = 'custom'; state.from = f; state.to = t; state.page = 1; setStatus(''); search();
+  });
+
+  // Submission form
+  $('submitForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var fd = new FormData(ev.target); var body = { action: 'submit' };
+    fd.forEach(function (v, k) { body[k] = v; });
+    var m = $('submitMsg'); m.style.display = 'block'; m.textContent = 'Sending...';
+    fetch('/api/event-action', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
+      .then(function (x) {
+        if (x.d && x.d.ok) { m.textContent = 'Got it. Wolf reviews every submission — it posts within about 24 hours if it checks out.'; ev.target.reset(); }
+        else if (x.s === 429) { m.textContent = 'Too many submissions from this connection — try again later.'; }
+        else if (x.d && x.d.error === 'bad_date') { m.textContent = 'Check the date — it needs to be today or later.'; }
+        else if (x.d && x.d.error === 'bad_title') { m.textContent = 'Give the event a real title (4+ characters).'; }
+        else { m.textContent = 'Could not submit. Check the required fields and try again.'; }
+      }).catch(function () { m.textContent = 'Network hiccup — try again.'; });
+  });
+
+  // Categories
+  fetch('/api/events?categories=1').then(function (r) { return r.json(); }).then(function (d) {
+    if (d && d.ok && Array.isArray(d.categories)) {
+      d.categories.forEach(function (c) {
+        var o = document.createElement('option'); o.value = c.slug; o.textContent = c.label; $('catSel').appendChild(o);
+      });
+    }
+  }).catch(function () {});
+
+  // Boot: URL params > saved prefs > wait for user
+  var qp = new URLSearchParams(location.search);
+  var prefs = loadPrefs();
+  if (qp.get('when')) {
+    var w = qp.get('when');
+    var chip = document.querySelector('#dateChips .chip[data-when="' + w.replace(/[^a-z0-9-]/g, '') + '"]');
+    if (chip) { document.querySelectorAll('#dateChips .chip').forEach(function (c) { c.classList.remove('on'); }); chip.classList.add('on'); state.when = w; }
+  }
+  if (/^\d{5}$/.test(qp.get('zip') || '')) {
+    $('zipInput').value = qp.get('zip'); zipSearch();
+  } else if (prefs && /^\d{5}$/.test(prefs.zip || '')) {
+    $('zipInput').value = prefs.zip;
+    if ([25, 50, 100, 250].indexOf(prefs.radius) >= 0) { state.radius = prefs.radius; $('radiusSel').value = String(prefs.radius); }
+    zipSearch();
+  }
+  console.log('WG Events v1.0');
+})();
+</script>
+</body>
+</html>

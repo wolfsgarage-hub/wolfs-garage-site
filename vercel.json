@@ -30,5 +30,19 @@
       "destination": "/",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    { "source": "/events", "destination": "/events.html" },
+    { "source": "/events/", "destination": "/events.html" },
+    { "source": "/events/:slug", "destination": "/api/event-page?slug=:slug" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    }
   ]
 }
