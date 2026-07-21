@@ -51,31 +51,25 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
 #results{display:flex;flex-direction:column;gap:12px}
 .ecard{background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);padding:18px;display:grid;grid-template-columns:64px 1fr;gap:16px}
 .ecard:hover{border-color:var(--red)}
-/* Flyer column. Only added when the event actually has a flyer, so events
-   without one keep the original two-column layout and no empty gap. */
+/* Flyer column, desktop/tablet only. Real flyers earn poster space; the
+   no-flyer placeholder is a compact strip so it never dominates a card. */
 .ecard.hasflyer{grid-template-columns:64px 132px 1fr}
 .eflyer{display:block;align-self:start;border:1px solid var(--border);background:var(--panel);overflow:hidden}
 .eflyer img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;display:block}
 .eflyer:hover{border-color:var(--red)}
-/* Option A: branded placeholder when an event genuinely has no flyer. Says so
-   plainly - it is not pretending to be one. Keeps the grid even. */
-.eph{position:relative;aspect-ratio:3/4;border:1px solid var(--border);background:linear-gradient(180deg,#111,#0c0c0c);
-     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:8px;overflow:hidden}
-.eph::before,.eph::after{content:'';position:absolute;left:0;right:0;height:2px;
-     background:repeating-linear-gradient(90deg,var(--red) 0 12px,transparent 12px 15px,var(--bone) 15px 16px,transparent 16px 19px)}
-.eph::before{top:9px}.eph::after{bottom:9px}
-.eph img{width:36px;height:36px;opacity:.85;aspect-ratio:auto}
-.eph span{font-family:'Special Elite',monospace;font-size:.57rem;letter-spacing:.05em;color:var(--copper);line-height:1.35}
+/* Option A placeholder - deliberately SMALL. It marks the absence of a flyer,
+   it is not standing in for one, so it must not take poster-sized space. */
+.eph{align-self:start;border:1px solid var(--border);background:linear-gradient(180deg,#141414,#0d0d0d);
+     display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 10px;text-align:left;
+     border-left:2px solid var(--red)}
+.eph img{width:22px;height:22px;opacity:.9;flex:none}
+.eph span{font-family:'Special Elite',monospace;font-size:.58rem;letter-spacing:.05em;color:var(--copper);line-height:1.25}
 /* flag control */
 .eflag{background:none;border:0;color:rgba(245,241,232,.42);font-family:'Oswald',sans-serif;font-size:.68rem;
-       letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:2px 0}
+       letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:6px 0;min-height:32px}
 .eflag:hover{color:var(--red)}
 .eflag[disabled]{color:var(--copper);cursor:default}
-@media(max-width:560px){
-  /* stack the flyer above the text on phones so it stays big and readable */
-  .ecard.hasflyer{grid-template-columns:52px 1fr}
-  .ecard.hasflyer .eflyer{grid-column:1 / -1;grid-row:2;max-width:260px}
-}
+
 .dstack{font-family:'Bebas Neue',sans-serif;text-align:center;line-height:1.05}
 .dstack .m{color:var(--red);font-size:.95rem;letter-spacing:.1em;display:block}
 .dstack .d{color:var(--bone);font-size:1.9rem;display:block}
@@ -89,6 +83,21 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
 .badge{display:inline-block;font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.12em;padding:2px 8px;border:1px solid var(--border-strong);margin:0 6px 4px 0;text-transform:uppercase}
 .badge-cancel{background:var(--red);border-color:var(--red)}
 .badge-warn{border-color:var(--copper);color:var(--copper)}
+/* PHONES: no side rail, no columns. Date reads as one line, everything else is
+   full width. Tested at 412px and at 1.3x font scaling, not just 375px. */
+@media(max-width:620px){
+  .ecard,.ecard.hasflyer{display:block;padding:14px}
+  .dstack{display:flex;align-items:baseline;gap:7px;text-align:left;margin-bottom:9px;line-height:1.1}
+  .dstack .m,.dstack .d,.dstack .y{display:inline-block}
+  .dstack .m{font-size:1.05rem}
+  .dstack .d{font-size:1.35rem}
+  .dstack .y{font-size:.8rem}
+  .eflyer{margin:0 0 11px;max-width:100%}
+  .eflyer img{aspect-ratio:4/5;max-height:58vh;object-fit:cover}
+  .eph{margin:0 0 11px;width:100%}
+  .es{-webkit-line-clamp:3}
+}
+
 .pager{display:flex;gap:10px;justify-content:center;margin:24px 0}
 .empty{background:var(--panel);border:1px dashed var(--border-strong);padding:26px;text-align:center;color:rgba(245,241,232,.7)}
 .empty .typewriter{margin-top:8px}
@@ -296,6 +305,36 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
       .catch(function () { btn.disabled = false; btn.textContent = 'Report a problem'; });
   };
 
+  /* PREVIEW ONLY: ?demo=1 pulls John's five real flyer events to the top of the
+     first page so the mixed layout (real flyers + compact placeholders) can be
+     judged. These are genuine published events with genuine flyers - nothing is
+     invented and nothing is written. Remove this block before production. */
+  var WG_DEMO = /[?&]demo=1/.test(location.search);
+  function wgDemoMerge(data) {
+    if (!WG_DEMO || !data || !data.results || state.page > 1) return data;
+    var have = {};
+    data.results.forEach(function (e) { have[e.slug] = true; });
+    var picks = [
+      'majestics-portland-car-show-hop-at-oaks-park-2026',
+      'pistons-and-pints-pdx-2026',
+      'c10s-on-the-capital-2026',
+      'windhaven-ride-for-veterans-2026',
+      'grant-county-motor-madness-2026'
+    ];
+    return fetch('/api/events?state=OR&from=2026-08-01&to=2026-09-30')
+      .then(function (r) { return r.json(); })
+      .then(function (or) {
+        return fetch('/api/events?state=WA&from=2026-08-01&to=2026-09-30')
+          .then(function (r) { return r.json(); })
+          .then(function (wa) {
+            var pool = (or.results || []).concat(wa.results || []);
+            var extra = pool.filter(function (e) { return picks.indexOf(e.slug) > -1 && !have[e.slug]; });
+            data.results = extra.concat(data.results);
+            return data;
+          });
+      }).catch(function () { return data; });
+  }
+
   function render(data) {
     var r = $('results'); r.innerHTML = '';
     var list = (data && data.results) || [];
@@ -355,7 +394,9 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
     inFlight = true;
     $('summary').textContent = 'Searching...';
     var range = state.when === 'custom' ? [state.from, state.to] : dateRange(state.when);
-    var done = function (data) { inFlight = false; render(data); };
+    var done = function (data) {
+      Promise.resolve(wgDemoMerge(data)).then(function (d) { inFlight = false; render(d || data); });
+    };
     var fail = function (status) {
       inFlight = false;
       $('summary').textContent = status === 429 ? 'Easy on the throttle — too many searches. Give it a minute.' : 'Search hiccup. Try again.';
