@@ -1,0 +1,165 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flyer fallback — pick one · Wolf's Garage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Work+Sans:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0A0A0A;--panel:#141414;--panel-2:#1A1A1A;--bone:#F5F1E8;--red:#CC0000;--red-dark:#990000;--copper:#C8922A;--border:rgba(245,241,232,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--black);color:var(--bone);font-family:'Work Sans',sans-serif;padding:0 0 60px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header{border-bottom:3px solid var(--red);padding:18px 0;margin-bottom:22px}
+h1{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.06em}
+.kick{font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--copper)}
+.lead{font-size:.95rem;color:rgba(245,241,232,.8);margin:12px 0 6px;line-height:1.5}
+.pin{height:3px;background:repeating-linear-gradient(90deg,var(--red) 0 26px,transparent 26px 32px,var(--bone) 32px 34px,transparent 34px 40px);margin:22px 0}
+h2{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:.05em;margin-bottom:4px}
+.note{font-family:'Special Elite',monospace;font-size:.8rem;color:var(--copper);margin-bottom:14px}
+.cols{display:grid;grid-template-columns:1fr;gap:30px}
+@media(min-width:820px){.cols{grid-template-columns:1fr 1fr;gap:26px}}
+.opt{border:1px solid var(--border);background:var(--panel);padding:16px;border-radius:2px}
+.opt.pick{border-color:var(--red)}
+.optlbl{font-family:'Oswald',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bone);background:var(--red);display:inline-block;padding:5px 12px;margin-bottom:12px}
+.pros{font-size:.82rem;color:rgba(245,241,232,.72);line-height:1.55;margin-bottom:14px}
+.pros b{color:var(--bone)}
+
+/* shared card chrome, mirrors the real /events cards */
+.ecard{background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);padding:14px;display:grid;gap:12px;margin-bottom:12px}
+.dstack{font-family:'Bebas Neue',sans-serif;text-align:center;line-height:1.05}
+.dstack .m{color:var(--red);font-size:.9rem;letter-spacing:.1em;display:block}
+.dstack .d{color:var(--bone);font-size:1.7rem;display:block}
+.dstack .y{color:var(--copper);font-size:.65rem;letter-spacing:.1em;display:block}
+.et{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.04em;line-height:1.15}
+.em{font-family:'Oswald',sans-serif;font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--copper);margin:3px 0 5px}
+.es{font-size:.82rem;color:rgba(245,241,232,.7);line-height:1.45}
+
+/* ---- OPTION A: branded placeholder tile ---- */
+.a .ecard{grid-template-columns:52px 108px 1fr;align-items:start}
+.ph{position:relative;aspect-ratio:3/4;border:1px solid var(--border);background:
+     linear-gradient(180deg,#111 0%,#0c0c0c 100%);display:flex;flex-direction:column;
+     align-items:center;justify-content:center;gap:8px;overflow:hidden;text-align:center;padding:8px}
+.ph::before,.ph::after{content:'';position:absolute;left:0;right:0;height:2px;
+     background:repeating-linear-gradient(90deg,var(--red) 0 12px,transparent 12px 15px,var(--bone) 15px 16px,transparent 16px 19px)}
+.ph::before{top:9px}.ph::after{bottom:9px}
+.ph img{width:38px;height:38px;opacity:.85}
+.ph .noflyer{font-family:'Special Elite',monospace;font-size:.58rem;letter-spacing:.06em;color:var(--copper);line-height:1.35}
+
+/* ---- OPTION B: text-only, no image slot ---- */
+.b .ecard{grid-template-columns:52px 1fr}
+.b .tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:.62rem;letter-spacing:.12em;
+     text-transform:uppercase;color:var(--copper);border:1px solid var(--copper);padding:2px 7px;margin-top:7px}
+
+.real{border:1px dashed var(--copper);padding:12px;margin-top:8px}
+.real .ecard{grid-template-columns:52px 108px 1fr;margin-bottom:0}
+.real img.fly{width:100%;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--border);display:block}
+.smallcap{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);margin-bottom:8px}
+.facts{border:1px solid var(--border);padding:14px;margin:18px 0;background:var(--panel)}
+.facts li{margin:6px 0 6px 18px;font-size:.88rem;color:rgba(245,241,232,.8);line-height:1.5}
+.warn{border-left:4px solid var(--red);padding-left:12px;margin:14px 0;font-size:.9rem;line-height:1.55}
+</style></head><body>
+
+<header><div class="wrap">
+  <div class="kick">Wolf's Garage · decision needed</div>
+  <h1>Event flyers — pick the fallback</h1>
+</div></header>
+
+<div class="wrap">
+
+  <p class="lead">Most scraped events <b>do not have a flyer anywhere to fetch</b>. Their source pages are shared calendar
+  listings, so the only image available is the website's own logo, banner, or a sponsor's advert. Attaching those
+  would be inventing a flyer, so we don't.</p>
+
+  <div class="warn">
+    Example: four of your events all point at <i>woodburndragstrip.com</i>, whose page image is
+    <i>WoodburnDragStrip-banner-fbOG.jpg</i> — the site's banner. Another four point at a calendar page whose image is
+    an advert for <i>StreetRod Warehouse</i>. Scraping those would put a banner or someone else's ad on your events
+    and call it their flyer.
+  </div>
+
+  <div class="facts"><div class="smallcap">Where real flyers DO come from</div>
+    <ul>
+      <li><b>Community submissions</b> — the new upload box on the submit form. Real flyer every time.</li>
+      <li><b>Your 5 carried-over events</b> — Majestics, Pistons &amp; Pints, C10s on the Capital, Windhaven, Grant County. Real flyers already in hand.</li>
+      <li><b>Occasional per-event pages</b> — a genuine event poster, fetched only when the page is that event's own page, never a shared listing.</li>
+    </ul>
+  </div>
+
+  <div class="pin"></div>
+  <h2>So how should a no-flyer event look?</h2>
+  <div class="note">Same real events from your queue in both. Pick A or B.</div>
+
+  <div class="cols">
+
+    <div class="opt a">
+      <div class="optlbl">Option A — branded placeholder</div>
+      <p class="pros">Every card keeps the same shape, so the grid stays even and flyer events don't tower over the rest.
+      The tile is plainly <b>not</b> a flyer — it says so — and uses your pinstripe and real wolf mark.
+      <br><b>Trade-off:</b> a lot of near-identical tiles if most events have no flyer.</p>
+
+      <div class="ecard">
+        <div class="dstack"><span class="m">JUL</span><span class="d">22</span><span class="y">2026</span></div>
+        <div class="ph"><img src="https://res.cloudinary.com/dancaaglf/image/upload/w_120,h_120,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png" alt="Wolf's Garage"><span class="noflyer">NO FLYER<br>POSTED</span></div>
+        <div><div class="et">Indian Trail Cruisers Weekly Meet</div>
+          <div class="em">Spokane, WA · 4 mi</div>
+          <div class="es">Weekly cruise-in meet.</div></div>
+      </div>
+
+      <div class="ecard">
+        <div class="dstack"><span class="m">JUL</span><span class="d">24</span><span class="y">2026</span></div>
+        <div class="ph"><img src="https://res.cloudinary.com/dancaaglf/image/upload/w_120,h_120,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png" alt="Wolf's Garage"><span class="noflyer">NO FLYER<br>POSTED</span></div>
+        <div><div class="et">Monster Slam 26 at Grays Harbor Raceway</div>
+          <div class="em">Elma, WA · Grays Harbor Raceway</div>
+          <div class="es">Monster trucks and racing.</div></div>
+      </div>
+
+      <div class="real"><div class="smallcap">next to a real flyer</div>
+        <div class="ecard">
+          <div class="dstack"><span class="m">AUG</span><span class="d">08</span><span class="y">2026</span></div>
+          <img class="fly" src="https://res.cloudinary.com/dancaaglf/image/upload/v1783377269/wolfs-garage-events/w4jfqhi07q2sy8dfawgy.jpg" alt="Pistons and Pints PDX flyer">
+          <div><div class="et">Pistons and Pints PDX</div>
+            <div class="em">Portland, OR · Level Beer</div>
+            <div class="es">Vehicle registration open now.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opt b">
+      <div class="optlbl">Option B — text only</div>
+      <p class="pros">No image box at all when there's no flyer. The words get the full width, so the listing reads like a
+      calendar. Real flyers stand out hard because they're the only pictures on the page.
+      <br><b>Trade-off:</b> the grid is uneven — flyer cards are much taller than text cards.</p>
+
+      <div class="ecard">
+        <div class="dstack"><span class="m">JUL</span><span class="d">22</span><span class="y">2026</span></div>
+        <div><div class="et">Indian Trail Cruisers Weekly Meet</div>
+          <div class="em">Spokane, WA · 4 mi</div>
+          <div class="es">Weekly cruise-in meet.</div>
+          <span class="tag">No flyer posted</span></div>
+      </div>
+
+      <div class="ecard">
+        <div class="dstack"><span class="m">JUL</span><span class="d">24</span><span class="y">2026</span></div>
+        <div><div class="et">Monster Slam 26 at Grays Harbor Raceway</div>
+          <div class="em">Elma, WA · Grays Harbor Raceway</div>
+          <div class="es">Monster trucks and racing.</div>
+          <span class="tag">No flyer posted</span></div>
+      </div>
+
+      <div class="real"><div class="smallcap">next to a real flyer</div>
+        <div class="ecard" style="grid-template-columns:52px 108px 1fr">
+          <div class="dstack"><span class="m">AUG</span><span class="d">08</span><span class="y">2026</span></div>
+          <img class="fly" src="https://res.cloudinary.com/dancaaglf/image/upload/v1783377269/wolfs-garage-events/w4jfqhi07q2sy8dfawgy.jpg" alt="Pistons and Pints PDX flyer">
+          <div><div class="et">Pistons and Pints PDX</div>
+            <div class="em">Portland, OR · Level Beer</div>
+            <div class="es">Vehicle registration open now.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pin"></div>
+  <p class="lead">Tell me <b>A</b> or <b>B</b> and I'll build it into /events, along with the flyer upload box,
+  the flag button, and switching discovery over to auto-publish.</p>
+</div>
+</body></html>
