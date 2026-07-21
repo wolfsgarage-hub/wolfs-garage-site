@@ -30,6 +30,14 @@ export default async function handler(req, res) {
         p_description: s(b.description, 1000) || null,
         p_link: s(b.link, 500) || null,
         p_email: s(b.email, 200) || null,
+        p_hp: s(b.hp, 50) || null,
+        p_flyer_url: s(b.flyer_url, 500) || null
+      }, ip);
+    } else if (b.action === 'flag') {
+      data = await rpc('wg_flag_event', {
+        p_slug: s(b.slug, 120),
+        p_reason: s(b.reason, 30),
+        p_detail: s(b.detail, 500) || null,
         p_hp: s(b.hp, 50) || null
       }, ip);
     } else if (b.action === 'correction') {
