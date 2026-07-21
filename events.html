@@ -51,6 +51,17 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
 #results{display:flex;flex-direction:column;gap:12px}
 .ecard{background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);padding:18px;display:grid;grid-template-columns:64px 1fr;gap:16px}
 .ecard:hover{border-color:var(--red)}
+/* Flyer column. Only added when the event actually has a flyer, so events
+   without one keep the original two-column layout and no empty gap. */
+.ecard.hasflyer{grid-template-columns:64px 132px 1fr}
+.eflyer{display:block;align-self:start;border:1px solid var(--border);background:var(--panel);overflow:hidden}
+.eflyer img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;display:block}
+.eflyer:hover{border-color:var(--red)}
+@media(max-width:560px){
+  /* stack the flyer above the text on phones so it stays big and readable */
+  .ecard.hasflyer{grid-template-columns:52px 1fr}
+  .ecard.hasflyer .eflyer{grid-column:1 / -1;grid-row:2;max-width:260px}
+}
 .dstack{font-family:'Bebas Neue',sans-serif;text-align:center;line-height:1.05}
 .dstack .m{color:var(--red);font-size:.95rem;letter-spacing:.1em;display:block}
 .dstack .d{color:var(--bone);font-size:1.9rem;display:block}
@@ -259,9 +270,16 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
       if (ev.city || ev.state) meta.push([ev.city, ev.state].filter(Boolean).join(', '));
       if (ev.distance_miles != null) meta.push(ev.distance_miles + ' mi');
       if (ev.local_time_text) meta.push(ev.local_time_text);
-      var card = document.createElement('div'); card.className = 'ecard';
+      var card = document.createElement('div'); card.className = 'ecard' + (ev.flyer_url ? ' hasflyer' : '');
+      var flyerHtml = ev.flyer_url
+        ? '<a class="eflyer" href="/events/' + esc(ev.slug) + '" aria-label="' + esc(ev.title) + ' flyer">' +
+            '<img src="' + esc(ev.flyer_url) + '" alt="Flyer for ' + esc(ev.title) + '" loading="lazy" decoding="async"' +
+            ' onerror="this.closest(\'.ecard\').classList.remove(\'hasflyer\');this.closest(\'.eflyer\').remove();">' +
+          '</a>'
+        : '';
       card.innerHTML =
         '<div class="dstack"><span class="m">' + esc(mo) + '</span><span class="d">' + esc(p[2] || '') + '</span><span class="y">' + esc(p[0] || '') + '</span></div>' +
+        flyerHtml +
         '<div><div class="et"><a href="/events/' + esc(ev.slug) + '">' + esc(ev.title) + '</a></div>' +
         '<div class="em">' + esc(meta.join(' · ')) + '</div>' +
         '<div>' + badgeHtml(ev) + '</div>' +
