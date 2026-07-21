@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Portland, Oregon hot rod culture. Apparel, tools, free Hot Rodder Directory, community for working-class car and truck builders. Get Back in the Garage.">
-<meta name="version" content="1.56">
+<meta name="version" content="1.57">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -208,7 +208,6 @@ a.dirart{display:block}
 .upload-zone{margin-top:24px;border:2px dashed var(--border-strong);border-radius:14px;padding:40px 24px;text-align:center;background:var(--panel)}
 .upload-zone p{color:rgba(245,241,232,.7);margin-bottom:16px}
 .upload-zone .typewriter{color:var(--copper);font-size:.92rem;margin-top:14px}
-.calendar-controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px}
 .calendar-filter{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .calendar-filter input,.calendar-filter select{padding:9px 12px;background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:8px;color:var(--bone);font-family:'Work Sans';font-size:.9rem;min-width:110px}
 .calendar-filter input:focus,.calendar-filter select:focus{outline:none;border-color:var(--red)}
@@ -217,11 +216,6 @@ a.dirart{display:block}
 .calendar-filter .filter-clear:hover{border-color:var(--copper);color:var(--copper)}
 .filter-status{width:100%;margin:6px 0 0;color:var(--copper);font-family:'Special Elite';font-size:.88rem}
 @media(max-width:640px){.calendar-filter{width:100%}.calendar-filter input,.calendar-filter select{flex:1 1 140px}}
-.scroll-up-hint{text-align:center;font-family:'Special Elite';color:var(--copper);font-size:1.05rem;margin:20px 0;letter-spacing:.05em}
-.scroll-up-hint::before{content:'\2191  ';font-size:1.2em}
-.event-card{background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);padding:24px;margin-bottom:12px;display:grid;grid-template-columns:90px 1fr auto;gap:20px;align-items:center;transition:border-color .2s}
-.event-card:hover{border-color:var(--red)}
-@media(max-width:700px){.event-card{grid-template-columns:70px 1fr}}
 .bulletin-post{background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:0 12px 12px 0;padding:28px;margin-bottom:14px;position:relative}
 .bulletin-post .meta{display:flex;justify-content:space-between;font-family:'Oswald';text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:var(--copper);margin-bottom:8px;flex-wrap:wrap;gap:8px}
 .bulletin-post h4{font-family:'Bebas Neue';font-size:1.7rem;letter-spacing:.04em;margin-bottom:8px}
@@ -288,65 +282,17 @@ a.dirart{display:block}
  <div class="wrap">
  <div class="reveal"><div class="kick">What's Happening</div>
  <h2>Event <i>Calendar</i></h2></div>
- <p class="lead" style="margin-bottom:26px">Car shows, swap meets, builds, meetups. Past events ghost out at the top. Scroll up to see history. Have an event? Submit it.</p>
+  <p class="lead" style="margin-bottom:26px">Car shows, cruise-ins, swap meets and meets across Oregon and Washington, searchable by ZIP and distance.</p>
 
  <div style="background:var(--panel-2);border:1px solid var(--border);border-left:4px solid var(--red);padding:20px;margin:0 0 26px 0;text-align:center;">
- <div style="font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:0.14em;font-size:0.85rem;color:var(--copper);margin-bottom:6px;">NEW &mdash; THE EVENT FINDER</div>
- <p style="font-size:0.95rem;color:rgba(245,241,232,0.8);margin:0 0 14px 0;">What's coming up near you: ZIP + radius search across Oregon &amp; Washington. Dates, categories, distance &mdash; the whole scene, one page.</p>
+ <div style="font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:0.14em;font-size:0.85rem;color:var(--copper);margin-bottom:6px;">THE EVENT FINDER</div>
+ <p style="font-size:0.95rem;color:rgba(245,241,232,0.8);margin:0 0 14px 0;">What is coming up near you: ZIP + radius search across Oregon &amp; Washington. Dates, categories, distance, the whole scene on one page.</p>
  <a href="/events?when=30d" class="btn-red" style="display:inline-block;padding:13px 30px;font-size:0.95rem;letter-spacing:0.12em;">FIND EVENTS NEAR YOU</a>
  </div>
 
- <div style="text-align:center;margin:0 0 28px 0;">
- <a href="#eventSubmitZone" class="btn-red" onclick="event.preventDefault();var z=document.getElementById('eventSubmitZone');if(z)z.scrollIntoView({behavior:'smooth',block:'start'});" style="display:inline-block;padding:14px 32px;font-size:1rem;letter-spacing:0.12em;">LIST YOUR EVENT</a>
- </div>
-
- <div class="calendar-controls">
- <p class="scroll-up-hint">Scroll up to see past events</p>
- <div class="calendar-filter">
- <input type="text" id="filterZip" inputmode="numeric" pattern="\d{5}" maxlength="5" placeholder="ZIP code" aria-label="Your ZIP code">
- <select id="filterRange" aria-label="Distance">
- <option value="">Any distance</option>
- <option value="10">Within 10 mi</option>
- <option value="25">Within 25 mi</option>
- <option value="50">Within 50 mi</option>
- <option value="100">Within 100 mi</option>
- </select>
- <button type="button" class="btn-red filter-apply" onclick="filterEvents()">FILTER</button>
- <button type="button" class="filter-clear" onclick="clearEventFilter()">Clear</button>
- </div>
- <p id="filterStatus" class="filter-status" style="display:none;"></p>
- </div>
-
- <!-- Approved community-submitted events render here (loadEvents in script block below) -->
- <div id="eventsLiveGrid"></div>
-
- <div class="upload-zone" id="eventSubmitZone" style="margin-top:24px;">
- <div id="eventSubmitSignedOut">
- <p><strong>SUBMIT AN EVENT:</strong> Events are free to submit and reviewed by an admin within 24 hours before they post.</p>
- <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0;">
- <button class="btn-red" onclick="openModal()">SIGN IN</button>
- <button class="btn-red" onclick="openModal('up')" style="background:transparent;color:var(--red);border:2px solid var(--red);">CREATE FREE ACCOUNT</button>
- </div>
- <p class="typewriter">JPG/PNG flyer, max 10MB | Date, time, location, description required</p>
- </div>
- <div id="eventSubmitSignedIn" style="display:none;">
- <p id="eventSubmitHello" style="margin-bottom:14px;">Signed in. Submit your event for review.</p>
- <form id="eventForm" style="display:flex;flex-direction:column;gap:12px;max-width:520px;margin:0 auto;">
- <input type="text" id="eventTitle" placeholder="Event title (e.g. ROSE CITY ROUND-UP)" maxlength="80" required style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
- <div style="display:flex;gap:10px;flex-wrap:wrap;">
- <input type="date" id="eventDate" required style="flex:1 1 160px;padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
- <input type="text" id="eventTime" placeholder="Time (e.g. 9 AM or 11AM-4:30PM)" maxlength="40" style="flex:1 1 160px;padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
- </div>
- <input type="text" id="eventLocation" placeholder="Location (e.g. Jubitz Truck Stop, Portland)" maxlength="120" required style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;">
- <textarea id="eventDescription" placeholder="Short description (host, vibe, what to expect)" maxlength="400" rows="3" required style="padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:var(--bone);font-family:'Work Sans',sans-serif;resize:vertical;"></textarea>
- <label style="font-family:'Special Elite',monospace;font-size:0.85rem;color:var(--copper);">Flyer image (JPG or PNG, max 10MB)</label>
- <input type="file" id="eventFlyer" accept="image/jpeg,image/png" required style="color:var(--bone);font-family:'Work Sans',sans-serif;font-size:0.9rem;">
- <div id="eventSubmitProgress" style="display:none;color:var(--copper);font-size:0.85rem;text-align:center;"></div>
- <button type="submit" class="btn-red" id="eventSubmitBtn">SUBMIT FOR REVIEW</button>
- <button type="button" onclick="signOut()" style="background:none;border:none;color:var(--copper);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:0.1em;font-size:0.8rem;cursor:pointer;margin-top:4px;">Sign Out</button>
- </form>
- <p class="typewriter" style="margin-top:14px;">Submitted events are not auto-posted. Wolf reviews within 24 hrs.</p>
- </div>
+ <div style="text-align:center;">
+ <a href="/events#submitForm" class="btn-red" style="display:inline-block;padding:13px 30px;font-size:0.95rem;letter-spacing:0.12em;background:transparent;color:var(--red);border:2px solid var(--red);">LIST YOUR EVENT</a>
+ <p class="typewriter" style="margin-top:14px;">Free to submit. Wolf reviews every event before it posts.</p>
  </div>
  </div>
 </section>
@@ -543,16 +489,6 @@ a.dirart{display:block}
  </div>
  </div>
 </div>
-<div id="eventLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;overflow-y:auto;padding:20px;">
- <div style="max-width:560px;margin:0 auto;background:#0A0A0A;border:1px solid var(--border-strong);padding:20px;position:relative;">
- <button onclick="closeEventLightbox()" aria-label="Close" style="position:absolute;top:10px;right:10px;background:none;border:1px solid var(--border);color:var(--bone);width:36px;height:36px;cursor:pointer;font-size:18px;z-index:1;">✕</button>
- <img id="evtLbFlyer" alt="" style="display:block;max-width:100%;max-height:70vh;margin:0 auto 14px auto;border:1px solid var(--border);">
- <h3 id="evtLbTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.06em;color:var(--bone);margin:0 0 8px 0;"></h3>
- <p id="evtLbMeta" style="font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:0.1em;color:var(--copper);margin:0 0 12px 0;text-transform:uppercase;"></p>
- <p id="evtLbDesc" style="font-family:'Work Sans',sans-serif;font-size:0.95rem;color:var(--bone);white-space:pre-wrap;margin:0 0 16px 0;line-height:1.5;"></p>
- <a id="evtLbFlyerFull" href="#" target="_blank" rel="noopener" style="display:inline-block;color:var(--red);font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--red);padding:8px 14px;">Open flyer full size →</a>
- </div>
-</div>
 <div class="modal" id="modal" role="dialog" aria-modal="true">
  <div class="modal-box">
  <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
@@ -580,7 +516,7 @@ a.dirart{display:block}
 <div id="backtop" role="button" aria-label="Back to top" title="Back to top">&#8593;</div>
 <script>
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.56","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.57","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -636,72 +572,6 @@ function openModal(tab) {
   switchTab(tab || 'in');
 }
 
-function haversineMiles(lat1, lon1, lat2, lon2) {
-  const toRad = d => d * Math.PI / 180;
-  const R = 3958.8;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a = Math.sin(dLat / 2) ** 2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
-}
-async function filterEvents() {
-  const zipEl = document.getElementById('filterZip');
-  const rangeEl = document.getElementById('filterRange');
-  const statusEl = document.getElementById('filterStatus');
-  const zip = zipEl.value.trim();
-  const range = parseFloat(rangeEl.value);
-  const cards = document.querySelectorAll('#calendar .event-card');
-  statusEl.style.display = 'block';
-  if (!zip && !range) { clearEventFilter(); return; }
-  if (!zip || !/^\d{5}$/.test(zip)) {
-    statusEl.textContent = 'Enter a 5-digit US ZIP code.';
-    return;
-  }
-  if (!range) {
-    cards.forEach(c => { c.style.display = ''; });
-    statusEl.textContent = 'Pick a distance to filter.';
-    return;
-  }
-  statusEl.textContent = 'Looking up ZIP...';
-  let userLat, userLon, placeName;
-  try {
-    const resp = await fetch('https://api.zippopotam.us/us/' + zip);
-    if (!resp.ok) throw new Error('zip lookup failed');
-    const data = await resp.json();
-    const place = data.places && data.places[0];
-    if (!place) throw new Error('no place');
-    userLat = parseFloat(place.latitude);
-    userLon = parseFloat(place.longitude);
-    placeName = (place['place name'] || '') + (place['state abbreviation'] ? ', ' + place['state abbreviation'] : '');
-  } catch (err) {
-    cards.forEach(c => { c.style.display = ''; });
-    statusEl.textContent = 'Could not look up that ZIP. Showing all events.';
-    return;
-  }
-  let shown = 0;
-  cards.forEach(c => {
-    const lat = parseFloat(c.dataset.lat);
-    const lon = parseFloat(c.dataset.lon);
-    if (Number.isNaN(lat) || Number.isNaN(lon)) { c.style.display = ''; shown++; return; }
-    const dist = haversineMiles(userLat, userLon, lat, lon);
-    const visible = dist <= range;
-    c.style.display = visible ? '' : 'none';
-    if (visible) shown++;
-  });
-  statusEl.textContent = shown === 0
-    ? 'No events within ' + range + ' mi of ' + (placeName || zip) + '.'
-    : 'Showing ' + shown + ' event' + (shown === 1 ? '' : 's') + ' within ' + range + ' mi of ' + (placeName || zip) + '.';
-}
-function clearEventFilter() {
-  document.querySelectorAll('#calendar .event-card').forEach(c => { c.style.display = ''; });
-  const z = document.getElementById('filterZip');
-  const r = document.getElementById('filterRange');
-  const s = document.getElementById('filterStatus');
-  if (z) z.value = '';
-  if (r) r.value = '';
-  if (s) { s.textContent = ''; s.style.display = 'none'; }
-}
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
 function switchTab(t) {
   document.getElementById('tabIn').classList.toggle('active', t === 'in');
@@ -796,24 +666,16 @@ auth.onAuthStateChanged(function(user) {
   const signedOut = document.getElementById('uploadSignedOut');
   const signedIn = document.getElementById('uploadSignedIn');
   const hello = document.getElementById('uploadHello');
-  const evSignedOut = document.getElementById('eventSubmitSignedOut');
-  const evSignedIn = document.getElementById('eventSubmitSignedIn');
-  const evHello = document.getElementById('eventSubmitHello');
   const footSignOutLi = document.getElementById('footSignOutLi');
   if (user) {
     if (signedOut) signedOut.style.display = 'none';
     if (signedIn) signedIn.style.display = 'block';
-    if (evSignedOut) evSignedOut.style.display = 'none';
-    if (evSignedIn) evSignedIn.style.display = 'block';
     if (footSignOutLi) footSignOutLi.style.display = '';
     const who = user.displayName || user.email;
     if (hello) hello.textContent = 'Signed in as ' + who + '. Post pics.';
-    if (evHello) evHello.textContent = 'Signed in as ' + who + '. Submit your event for review.';
   } else {
     if (signedOut) signedOut.style.display = 'block';
     if (signedIn) signedIn.style.display = 'none';
-    if (evSignedOut) evSignedOut.style.display = 'block';
-    if (evSignedIn) evSignedIn.style.display = 'none';
     if (footSignOutLi) footSignOutLi.style.display = 'none';
   }
 });
@@ -1059,9 +921,6 @@ auth.onAuthStateChanged(function() {
 // Initial load
 loadGallery();
 
-// --- Events: load approved submissions from Firestore + render below hardcoded cards ---
-let eventsCache = [];
-const EVENT_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
 function escapeHtml(s) {
   return (s || '').replace(/[<>&"]/g, function(c) {
@@ -1069,96 +928,7 @@ function escapeHtml(s) {
   });
 }
 
-function renderEventsFromCache() {
-  const grid = document.getElementById('eventsLiveGrid');
-  if (!grid) return;
-  if (!eventsCache.length) { grid.innerHTML = ''; return; }
-  const today = new Date().toISOString().slice(0, 10);
-  const sorted = eventsCache.slice().sort(function(a, b) {
-    return (a.date || '').localeCompare(b.date || '');
-  });
-  // Apply a grid layout to the container (multi-column on wider screens)
-  grid.style.display = 'grid';
-  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr))';
-  grid.style.gap = '14px';
-  grid.innerHTML = sorted.map(function(ev) {
-    const isPast = ev.date && ev.date < today;
-    const flyer = ev.flyerUrl || ev.imageData || '';
-    const title = escapeHtml(ev.title || '(untitled event)');
-    const opacity = isPast ? '0.45' : '1';
-    const parts = (ev.date || '').split('-');
-    const year = parts[0] || '';
-    const monthIdx = parts[1] ? parseInt(parts[1], 10) - 1 : -1;
-    const month = (monthIdx >= 0 && monthIdx < 12) ? EVENT_MONTHS[monthIdx] : '';
-    const day = parts[2] || '';
-    const dateStack = '<div style="font-family:\'Bebas Neue\',sans-serif;text-align:center;line-height:1;display:flex;flex-direction:column;justify-content:center;gap:4px;">'
-                    +   '<span style="color:var(--red);font-size:0.95rem;letter-spacing:0.1em;">' + escapeHtml(month) + '</span>'
-                    +   '<span style="color:var(--bone);font-size:1.9rem;">' + escapeHtml(day) + '</span>'
-                    +   '<span style="color:var(--copper);font-size:0.7rem;letter-spacing:0.1em;">' + escapeHtml(year) + '</span>'
-                    + '</div>';
-    const flyerBlock = flyer
-      ? '<div style="background-image:url(\'' + escapeHtml(flyer) + '\');background-size:cover;background-position:center;aspect-ratio:3/4;border:1px solid var(--border);"></div>'
-      : '<div style="display:flex;align-items:center;justify-content:center;background:var(--panel-2);border:1px dashed var(--border);aspect-ratio:3/4;color:rgba(245,241,232,0.4);font-family:\'Special Elite\',monospace;font-size:12px;text-align:center;padding:10px;">No flyer</div>';
-    return '<div onclick="openEventLightbox(\'' + ev.id + '\')" style="cursor:pointer;opacity:' + opacity + ';transition:transform 0.15s,opacity 0.15s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'translateY(0)\'">'
-         + '<div style="display:grid;grid-template-columns:50px 1fr;gap:10px;align-items:stretch;">'
-         +   dateStack
-         +   flyerBlock
-         + '</div>'
-         + '<h4 style="font-family:\'Bebas Neue\',sans-serif;font-size:1.05rem;letter-spacing:0.08em;color:var(--bone);margin:8px 0 0 0;text-align:center;line-height:1.15;">' + title + '</h4>'
-         + '</div>';
-  }).join('');
-}
 
-window.openEventLightbox = function(eventId) {
-  const ev = eventsCache.find(function(e) { return e.id === eventId; });
-  if (!ev) return;
-  const lb = document.getElementById('eventLightbox');
-  if (!lb) return;
-  const parts = (ev.date || '').split('-');
-  const year = parts[0] || '';
-  const monthIdx = parts[1] ? parseInt(parts[1], 10) - 1 : -1;
-  const month = (monthIdx >= 0 && monthIdx < 12) ? EVENT_MONTHS[monthIdx] : '';
-  const day = parts[2] || '';
-  const dateStr = (month && day && year) ? (month + ' ' + day + ', ' + year) : '';
-  const flyer = ev.flyerUrl || ev.imageData || '';
-  document.getElementById('evtLbFlyer').src = flyer;
-  document.getElementById('evtLbFlyer').style.display = flyer ? 'block' : 'none';
-  document.getElementById('evtLbTitle').textContent = ev.title || '';
-  const meta = [dateStr, ev.time, ev.location].filter(Boolean).join(' · ');
-  document.getElementById('evtLbMeta').textContent = meta;
-  document.getElementById('evtLbDesc').textContent = ev.description || '';
-  const fullLink = document.getElementById('evtLbFlyerFull');
-  if (flyer) {
-    fullLink.href = flyer;
-    fullLink.style.display = 'inline-block';
-  } else {
-    fullLink.style.display = 'none';
-  }
-  lb.style.display = 'block';
-  document.body.style.overflow = 'hidden';
-};
-
-window.closeEventLightbox = function() {
-  const lb = document.getElementById('eventLightbox');
-  if (lb) lb.style.display = 'none';
-  document.body.style.overflow = '';
-};
-
-async function loadEvents() {
-  const grid = document.getElementById('eventsLiveGrid');
-  if (!grid) return;
-  try {
-    const snap = await db.collection('events')
-      .where('status', '==', 'approved')
-      .get();
-    eventsCache = snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
-    renderEventsFromCache();
-  } catch (err) {
-    console.error('Events load error:', err);
-  }
-}
-
-loadEvents();
 
 // --- BULLETIN: filter, render, submit, geocode ---
 const BLT_DEFAULT_ZIP = '97217';
@@ -1571,70 +1341,6 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
   }
 });
 
-// --- Event submission: Cloudinary flyer upload + Firestore write to `events` collection ---
-document.getElementById('eventForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const user = auth.currentUser;
-  if (!user) { showToast('Sign in first.'); return; }
-  const title = document.getElementById('eventTitle').value.trim();
-  const date = document.getElementById('eventDate').value;
-  const time = document.getElementById('eventTime').value.trim();
-  const location = document.getElementById('eventLocation').value.trim();
-  const description = document.getElementById('eventDescription').value.trim();
-  const flyerFile = document.getElementById('eventFlyer').files[0];
-  const progress = document.getElementById('eventSubmitProgress');
-  const btn = document.getElementById('eventSubmitBtn');
-
-  if (!title || !date || !location || !description) { showToast('Fill in every required field.'); return; }
-  if (!flyerFile) { showToast('Pick a flyer image.'); return; }
-  if (flyerFile.size > MAX_UPLOAD_SIZE) { showToast('Flyer too big. Max 10MB.'); return; }
-  if (!['image/jpeg','image/png'].includes(flyerFile.type)) { showToast('JPG or PNG only.'); return; }
-
-  btn.disabled = true;
-  btn.textContent = 'UPLOADING...';
-  progress.style.display = 'block';
-  progress.textContent = 'Uploading flyer...';
-
-  try {
-    const cloudFormData = new FormData();
-    cloudFormData.append('file', flyerFile);
-    cloudFormData.append('upload_preset', CLOUDINARY_PRESET);
-    cloudFormData.append('folder', 'wolfs-garage-events');
-    const cloudRes = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', {
-      method: 'POST',
-      body: cloudFormData
-    });
-    if (!cloudRes.ok) throw new Error('Cloudinary upload failed.');
-    const cloudData = await cloudRes.json();
-
-    progress.textContent = 'Submitting for review...';
-    const isWolf = ADMIN_EMAILS.includes(user.email);
-    await db.collection('events').add({
-      userId: user.uid,
-      userEmail: user.email,
-      title: title,
-      date: date,
-      time: time,
-      location: location,
-      description: description,
-      flyerUrl: cloudData.secure_url,
-      cloudinaryPublicId: cloudData.public_id,
-      status: isWolf ? 'approved' : 'pending',
-      isWolf: isWolf,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    showToast(isWolf ? 'Event approved & saved.' : 'Submitted. Wolf reviews within 24 hrs.');
-    document.getElementById('eventForm').reset();
-  } catch (err) {
-    console.error('Event submit error:', err);
-    showToast('Submit failed: ' + (err.message || 'Try again.'));
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'SUBMIT FOR REVIEW';
-    progress.style.display = 'none';
-  }
-});
 
 
 // v1.46: browse the whole gallery from the lightbox (prev/next through picks + pack)
@@ -1650,8 +1356,8 @@ window.lbNav = function(dir) {
 
 (function(){"use strict";try{
   var doc=document;
-  var TRACK=["modal","galleryLightbox","eventLightbox","disclosure","authError"];
-  var CARDS=["galleryLightbox","eventLightbox","modal"]; // get a visible Back button
+  var TRACK=["modal","galleryLightbox","disclosure","authError"];
+  var CARDS=["galleryLightbox","modal"]; // get a visible Back button
   function el(id){return doc.getElementById(id);}
   function shown(e){return e && getComputedStyle(e).display!=="none";}
   function anyOpen(){return TRACK.some(function(id){return shown(el(id));});}
