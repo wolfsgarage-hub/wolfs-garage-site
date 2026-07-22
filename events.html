@@ -224,6 +224,8 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
 <footer>Wolf&rsquo;s Garage &middot; Portland, OR &middot; <a href="/">Home</a> &middot; <a href="/directory">Hot Rodder Directory</a></footer>
 
 <script>
+// Privacy-conscious analytics: event NAME only, never search terms, form contents, or coordinates.
+window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);var b=JSON.stringify({e:String(n).slice(0,40),v:"1.60"});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};
 (function () {
   'use strict';
   var state = { mode: null, zip: null, lat: null, lng: null, radius: 50, st: 'OR', when: '30d', from: null, to: null, category: '', sort: 'soonest', page: 1 };
@@ -392,6 +394,7 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
     if (inFlight) return;
     if (!state.mode) return;
     inFlight = true;
+    try { wgTrack('event_search'); } catch (e) {}
     $('summary').textContent = 'Searching...';
     var range = state.when === 'custom' ? [state.from, state.to] : dateRange(state.when);
     var done = function (data) {
@@ -525,6 +528,7 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
 
   $('submitForm').addEventListener('submit', function (ev) {
     ev.preventDefault();
+    try { wgTrack('event_submission_start'); } catch (e) {}
     var fd = new FormData(ev.target); var body = { action: 'submit' };
     fd.forEach(function (v, k) { if (k !== 'flyer') body[k] = v; });
     var m = $('submitMsg'); m.style.display = 'block'; m.textContent = 'Sending...';
@@ -538,7 +542,7 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
     return fetch('/api/event-action', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
       .then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
       .then(function (x) {
-        if (x.d && x.d.ok) { m.textContent = 'Got it. Wolf reviews every submission — it posts within about 24 hours if it checks out.'; ev.target.reset(); }
+        if (x.d && x.d.ok) { try { wgTrack('event_submission_complete'); } catch (e) {} m.textContent = 'Got it. Wolf reviews every submission — it posts within about 24 hours if it checks out.'; ev.target.reset(); }
         else if (x.s === 429) { m.textContent = 'Too many submissions from this connection — try again later.'; }
         else if (x.d && x.d.error === 'bad_date') { m.textContent = 'Check the date — it needs to be today or later.'; }
         else if (x.d && x.d.error === 'bad_title') { m.textContent = 'Give the event a real title (4+ characters).'; }
