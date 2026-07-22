@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="1.60">
+<meta name="version" content="1.61">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -260,6 +260,11 @@ a.dirart{display:block}
 .cta-minor a{font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--copper);border-bottom:1px solid rgba(200,146,42,.35);padding-bottom:2px;transition:color .25s}
 .cta-minor a:hover{color:var(--bone)}
 a.phase{display:block;color:inherit}
+/* card counts differ per section, so the 3-col default would leave holes */
+#tools .phases{grid-template-columns:repeat(2,1fr)}
+#participate .phases{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1024px){#participate .phases{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){#tools .phases,#participate .phases{grid-template-columns:1fr}}
 .modal-consent{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:12px 14px;background:rgba(200,146,42,.08);border-left:3px solid var(--copper);font-size:.82rem;font-family:'Special Elite';color:var(--copper);cursor:pointer;text-align:left}
 .modal-consent input{margin-top:3px;accent-color:var(--red);width:16px;height:16px;flex:0 0 16px}
 </style><noscript><style>.reveal,.entr,.gal .gt{opacity:1;transform:none}</style></noscript></head><body>
@@ -448,11 +453,10 @@ a.phase{display:block;color:inherit}
 <div class="pin"></div>
 
 <section class="sec" id="tools"><div class="wrap">
-<div class="reveal"><div class="kick">The Road Ahead</div><h2>What We&rsquo;re <i>Building Toward</i></h2><p class="lead" style="margin:12px auto 0">Everything starts with the people, not the product. The honest roadmap &mdash; what&rsquo;s live, what&rsquo;s in progress, and what comes when the community&rsquo;s ready.</p></div>
+<div class="reveal"><div class="kick">The Road Ahead</div><h2>What We&rsquo;re <i>Building Toward</i></h2><p class="lead" style="margin:12px auto 0">Everything starts with the people, not the product. The honest roadmap &mdash; what&rsquo;s live now, and what comes when the community&rsquo;s ready.</p></div>
 <div class="phases">
 <div class="phase reveal"><div class="pnum">01</div><h3>The Apparel</h3><p>Live now. Shirts, stickers, goods. Every dollar funds the next step &mdash; the website, the data, the lights.</p></div>
-<div class="phase reveal"><div class="pnum">02</div><h3>The Tool Line</h3><p>Coming Summer 2027. Honest tools worth owning. Still figuring out what&rsquo;s actually worth building. No rush &mdash; good stuff takes time.</p></div>
-<div class="phase reveal"><div class="pnum">03</div><h3>The Shop Space</h3><p>The one that matters: a real space. Youth &amp; adult workshops, summer camps, guided practice for anyone who wants to build with their hands. When it&rsquo;s real, you&rsquo;ll hear it here first.</p></div>
+<div class="phase reveal"><div class="pnum">02</div><h3>The Shop Space</h3><p>The one that matters: a real space. Youth &amp; adult workshops, summer camps, guided practice for anyone who wants to build with their hands. When it&rsquo;s real, you&rsquo;ll hear it here first.</p></div>
 </div>
 </div></section>
 <div class="pin"></div>
@@ -542,7 +546,7 @@ a.phase{display:block;color:inherit}
 // Privacy-conscious analytics: event NAME only, never form contents, emails, or names.
 window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);var b=JSON.stringify({e:String(n).slice(0,40),v:"1.60"});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.60","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.61","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
