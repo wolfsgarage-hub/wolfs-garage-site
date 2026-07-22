@@ -125,6 +125,7 @@ export default async function handler(req, res) {
   }
   if (e.organizer_name) ld.organizer = { '@type': 'Organization', name: e.organizer_name, url: e.organizer_website || undefined };
   if (e.registration_url) ld.offers = { '@type': 'Offer', url: e.registration_url };
+  if (e.flyer_url) ld.image = e.flyer_url;
 
   const meta = '<meta name="description" content="' + esc(desc) + '">'
     + '<link rel="canonical" href="https://wolfsgarage.com/events/' + esc(e.slug) + '">'
@@ -160,6 +161,12 @@ export default async function handler(req, res) {
     + (e.claimed ? '<span class="badge badge-ok">CLAIMED</span>' : '')
     + (e.is_recurring ? '<span class="badge badge-ok">RECURRING</span>' : '') + '</p>'
     + (e.summary ? '<div class="panel"><p>' + esc(e.summary) + '</p></div>' : '')
+    + (e.flyer_url
+      ? '<div class="panel" style="padding:0;overflow:hidden">'
+        + '<a href="' + esc(e.official_url || e.source_url || ('/events/' + e.slug)) + '" target="_blank" rel="noopener">'
+        + '<img src="' + esc(e.flyer_url) + '" alt="Event flyer for ' + esc(e.title) + '" style="width:100%;display:block" loading="lazy" decoding="async"></a>'
+        + '<p class="typewriter" style="padding:8px 14px">Flyer from the organizer&rsquo;s public event promotion. Organizer and want it changed or removed? Use the correction form below.</p></div>'
+      : '')
     + '<div class="panel"><h2>When</h2>' + occHtml
     + (e.series_rule ? '<p class="typewriter" style="margin-top:8px">Series: ' + esc(e.series_rule) + '</p>' : '')
     + '<p class="typewriter" style="margin-top:8px">Times shown in venue local time (' + esc(e.timezone || 'America/Los_Angeles') + ')</p></div>'
