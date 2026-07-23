@@ -34,6 +34,7 @@
   "rewrites": [
     { "source": "/events", "destination": "/events.html" },
     { "source": "/events/", "destination": "/events.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/events/:slug", "destination": "/api/event-page?slug=:slug" }
   ],
   "headers": [
