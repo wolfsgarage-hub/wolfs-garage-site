@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     try {
       await rpc('wg_track_hit', { p_event: name, p_version: version });
     } catch (e) {
-      console.log('[wg-analytics] store_failed');
+      console.log('[wg-analytics] store_failed: ' + (e && e.message ? e.message : 'unknown'));
     }
   }
   res.status(204).end();
