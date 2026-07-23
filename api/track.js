@@ -2,7 +2,7 @@
 // nothing else: no form contents, emails, names, search terms, or coordinates.
 // Counts land in analytics.hits via the wg_track_hit RPC (and in the function
 // log stream as [wg-analytics] lines for spot checks).
-import { rpc } from './_wg.js';
+import { rpc, clientIp, localLimit } from './_wg.js';
 
 const ALLOWED = new Set([
   'hero_find_event_click',
@@ -23,6 +23,14 @@ const ALLOWED = new Set([
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false });
+    return;
+  }
+  // Flood backstop, matching the sibling endpoints. The IP is used in-process as a
+  // bucket key only: it is never stored, never sent to the database, never logged.
+  // Over the cap we still answer 204 - the contract is unconditional, and a flooder
+  // gets no signal that anything was dropped.
+  if (!localLimit(clientIp(req), 120)) {
+    res.status(204).end();
     return;
   }
   let name = '';
