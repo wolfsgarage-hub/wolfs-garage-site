@@ -12,7 +12,7 @@ const ACCESS_LABEL = {
   public_paid: 'Open to the public · admission applies',
   public_registration: 'Open to the public · registration required',
   public_waitlist: 'Open to the public · sold out / waitlist',
-  unknown: 'See official source for attendance details',
+  unknown: 'Check with the organizer for attendance details',
   private: 'Private event'
 };
 
@@ -110,7 +110,18 @@ export default async function handler(req, res) {
   const e = data.event, occ = data.occurrences || [], rel = data.related || [];
   const nextOcc = occ.find(function (o) { return o.local_date >= new Date().toISOString().slice(0, 10); }) || occ[occ.length - 1] || null;
   const cityState = [e.city, e.state].filter(Boolean).join(', ');
-  const desc = (e.summary || ('Automotive event in ' + cityState + '.')).slice(0, 300);
+  // A stored summary can end with a sentence naming where the listing was
+  // found. Visitors never see that. Two tiers: the ingest boilerplate
+  // ("...; confirm details ..."), then any trailing attribution sentence.
+  // A period followed by a non-space is treated as intra-token, so a domain
+  // like carshowsc.com is not mistaken for the end of the sentence.
+  // Applies to the body copy, meta description, og:description, and JSON-LD.
+  const SENT = '(?:[^.]|\\.(?=\\S))*';
+  const T1 = new RegExp('(?:^|\\s)(?:listed|posted|found)\\s+(?:on|at|via)\\b' + SENT + ';\\s*confirm details' + SENT + '\\.(?=\\s|$)\\s*', 'gi');
+  const T2 = new RegExp('(?:^|\\s)(?:listed|posted|found)\\s+(?:on|at|via)\\s' + SENT + '\\.\\s*$', 'gi');
+  const clean = (s) => (s ? String(s).replace(T1, ' ').replace(T2, ' ').replace(/\s{2,}/g, ' ').trim() : '');
+  const summary = clean(e.summary);
+  const desc = (summary || ('Automotive event in ' + cityState + '.')).slice(0, 300);
 
   const ld = {
     '@context': 'https://schema.org', '@type': 'Event',
@@ -144,7 +155,7 @@ export default async function handler(req, res) {
           + ' ' + statusBadge(null, o.status)
           + (o.note ? '<div class="typewriter">' + esc(o.note) + '</div>' : '') + '</div>';
       }).join('')
-    : '<div class="occ">Dates listed at the official source.</div>';
+    : '<div class="occ">Dates to be confirmed with the organizer.</div>';
 
   const relHtml = rel.length
     ? '<div class="panel"><h2>More events nearby</h2>' + rel.map(function (r) {
@@ -160,10 +171,10 @@ export default async function handler(req, res) {
     + (e.verification === 'organizer_verified' ? '<span class="badge badge-ok">ORGANIZER VERIFIED</span>' : e.verification === 'source_verified' ? '<span class="badge badge-ok">SOURCE VERIFIED</span>' : '')
     + (e.claimed ? '<span class="badge badge-ok">CLAIMED</span>' : '')
     + (e.is_recurring ? '<span class="badge badge-ok">RECURRING</span>' : '') + '</p>'
-    + (e.summary ? '<div class="panel"><p>' + esc(e.summary) + '</p></div>' : '')
+    + (summary ? '<div class="panel"><p>' + esc(summary) + '</p></div>' : '')
     + (e.flyer_url
       ? '<div class="panel" style="padding:0;overflow:hidden">'
-        + '<a href="' + esc(e.official_url || e.source_url || ('/events/' + e.slug)) + '" target="_blank" rel="noopener">'
+        + '<a href="' + esc(e.official_url || ('/events/' + e.slug)) + '" target="_blank" rel="noopener">'
         + '<img src="' + esc(e.flyer_url) + '" alt="Event flyer for ' + esc(e.title) + '" style="width:100%;display:block" loading="lazy" decoding="async"></a>'
         + '<p class="typewriter" style="padding:8px 14px">Flyer from the organizer&rsquo;s public event promotion. Organizer and want it changed or removed? Use the correction form below.</p></div>'
       : '')
@@ -183,11 +194,9 @@ export default async function handler(req, res) {
     + '</dl>'
     + (e.registration_url ? '<p style="margin-top:12px"><a class="btn-red" href="' + esc(e.registration_url) + '" target="_blank" rel="noopener">TICKETS / REGISTRATION</a></p>' : '')
     + '</div>'
-    + '<div class="panel"><h2>Source</h2>'
-    + '<p>' + (e.source_url ? 'Facts gathered from <a href="' + esc(e.source_url) + '" target="_blank" rel="noopener">' + esc(e.source_name || 'the official source') + '</a>.' : 'Community-submitted listing.')
-    + (e.official_url && e.official_url !== e.source_url ? ' Official page: <a href="' + esc(e.official_url) + '" target="_blank" rel="noopener">link</a>.' : '') + '</p>'
-    + (e.last_verified_at ? '<p class="typewriter" style="margin-top:6px">Last verified ' + esc(String(e.last_verified_at).slice(0, 10)) + '</p>' : '')
-    + '<p class="typewriter" style="margin-top:6px">Always confirm with the organizer before making the drive.</p></div>'
+    + '<div class="panel">'
+    + (e.official_url ? '<p>Official event page: <a href="' + esc(e.official_url) + '" target="_blank" rel="noopener">link</a>.</p>' : '')
+    + '<p class="typewriter">Always confirm with the organizer before making the drive.</p></div>'
     + '<div class="panel"><h2>Are you the organizer?</h2>'
     + '<p>Claim this event to correct details, add official links, update registration, or mark it canceled or postponed.</p>'
     + '<form id="claimForm" style="margin-top:6px">'
