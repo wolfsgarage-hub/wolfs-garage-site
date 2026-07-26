@@ -131,6 +131,12 @@ export default async function handler(req, res) {
     return out;
   };
   const summary = clean(e.summary);
+  // Most listings inherited the aggregator's URL as official_url (the importer
+  // fell back to the source link), so linking it unlabelled would put the source
+  // straight back on the page. Only link one that lives somewhere else.
+  const host = (u) => { try { return new URL(u).host.replace(/^www\./, ''); } catch { return null; } };
+  const officialUrl = e.official_url && host(e.official_url)
+    && host(e.official_url) !== host(e.source_url) ? e.official_url : null;
   const desc = (summary || ('Automotive event in ' + cityState + '.')).slice(0, 300);
 
   const ld = {
@@ -184,7 +190,7 @@ export default async function handler(req, res) {
     + (summary ? '<div class="panel"><p>' + esc(summary) + '</p></div>' : '')
     + (e.flyer_url
       ? '<div class="panel" style="padding:0;overflow:hidden">'
-        + '<a href="' + esc(e.official_url || ('/events/' + e.slug)) + '" target="_blank" rel="noopener">'
+        + '<a href="' + esc(officialUrl || ('/events/' + e.slug)) + '" target="_blank" rel="noopener">'
         + '<img src="' + esc(e.flyer_url) + '" alt="Event flyer for ' + esc(e.title) + '" style="width:100%;display:block" loading="lazy" decoding="async"></a>'
         + '<p class="typewriter" style="padding:8px 14px">Flyer from the organizer&rsquo;s public event promotion. Organizer and want it changed or removed? Use the correction form below.</p></div>'
       : '')
@@ -205,7 +211,7 @@ export default async function handler(req, res) {
     + (e.registration_url ? '<p style="margin-top:12px"><a class="btn-red" href="' + esc(e.registration_url) + '" target="_blank" rel="noopener">TICKETS / REGISTRATION</a></p>' : '')
     + '</div>'
     + '<div class="panel">'
-    + (e.official_url ? '<p>Official event page: <a href="' + esc(e.official_url) + '" target="_blank" rel="noopener">link</a>.</p>' : '')
+    + (officialUrl ? '<p>Official event page: <a href="' + esc(officialUrl) + '" target="_blank" rel="noopener">link</a>.</p>' : '')
     + '<p class="typewriter">Always confirm with the organizer before making the drive.</p></div>'
     + '<div class="panel"><h2>Are you the organizer?</h2>'
     + '<p>Claim this event to correct details, add official links, update registration, or mark it canceled or postponed.</p>'
