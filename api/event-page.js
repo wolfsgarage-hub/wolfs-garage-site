@@ -117,9 +117,19 @@ export default async function handler(req, res) {
   // like carshowsc.com is not mistaken for the end of the sentence.
   // Applies to the body copy, meta description, og:description, and JSON-LD.
   const SENT = '(?:[^.]|\\.(?=\\S))*';
+  const CLAUSE = '(?:[^.;]|\\.(?=\\S))*';
   const T1 = new RegExp('(?:^|\\s)(?:listed|posted|found)\\s+(?:on|at|via)\\b' + SENT + ';\\s*confirm details' + SENT + '\\.(?=\\s|$)\\s*', 'gi');
   const T2 = new RegExp('(?:^|\\s)(?:listed|posted|found)\\s+(?:on|at|via)\\s' + SENT + '\\.\\s*$', 'gi');
-  const clean = (s) => (s ? String(s).replace(T1, ' ').replace(T2, ' ').replace(/\s{2,}/g, ' ').trim() : '');
+  const T3 = new RegExp(',\\s*(?:(?:listed|posted|found)\\s+(?:on|at|via)|per\\s+the)\\b' + CLAUSE, 'gi');
+  // Order matters: boilerplate, then the comma clause (so the comma leaves with
+  // the clause it introduces), then any trailing sentence. Then tidy the seam.
+  const clean = (s) => {
+    if (!s) return '';
+    let out = String(s).replace(T1, ' ').replace(T3, '').replace(T2, ' ');
+    out = out.replace(/\s+([.;,])/g, '$1').replace(/\s{2,}/g, ' ').trim().replace(/[\s,;]+$/, '');
+    if (out && !/[.!?]$/.test(out)) out += '.';
+    return out;
+  };
   const summary = clean(e.summary);
   const desc = (summary || ('Automotive event in ' + cityState + '.')).slice(0, 300);
 

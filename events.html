@@ -295,11 +295,18 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
   // A period followed by a non-space is treated as intra-token, so a domain
   // like carshowsc.com is not mistaken for the end of the sentence.
   var WG_SENT = '(?:[^.]|\\.(?=\\S))*';
+  var WG_CLAUSE = '(?:[^.;]|\\.(?=\\S))*';
   var WG_T1 = new RegExp('(?:^|\\s)(?:listed|posted|found)\\s+(?:on|at|via)\\b' + WG_SENT + ';\\s*confirm details' + WG_SENT + '\\.(?=\\s|$)\\s*', 'gi');
   var WG_T2 = new RegExp('(?:^|\\s)(?:listed|posted|found)\\s+(?:on|at|via)\\s' + WG_SENT + '\\.\\s*$', 'gi');
+  var WG_T3 = new RegExp(',\\s*(?:(?:listed|posted|found)\\s+(?:on|at|via)|per\\s+the)\\b' + WG_CLAUSE, 'gi');
+  // Order matters: boilerplate, then the comma clause (so the comma leaves with
+  // the clause it introduces), then any trailing sentence. Then tidy the seam.
   function wgClean(s) {
     if (!s) return '';
-    return String(s).replace(WG_T1, ' ').replace(WG_T2, ' ').replace(/\s{2,}/g, ' ').trim();
+    var out = String(s).replace(WG_T1, ' ').replace(WG_T3, '').replace(WG_T2, ' ');
+    out = out.replace(/\s+([.;,])/g, '$1').replace(/\s{2,}/g, ' ').trim().replace(/[\s,;]+$/, '');
+    if (out && !/[.!?]$/.test(out)) out += '.';
+    return out;
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
