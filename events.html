@@ -39,10 +39,20 @@ h2 i{color:var(--red);font-style:normal}
 input,select,textarea{padding:11px 12px;background:rgba(0,0,0,.5);border:1px solid var(--border-strong);color:var(--bone);font-family:'Work Sans',sans-serif;font-size:.95rem}
 input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
 #zipInput{width:110px;letter-spacing:.1em}
-.filters{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chip{font-family:'Oswald',sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;padding:8px 14px;border:1px solid var(--border-strong);background:none;color:var(--bone);cursor:pointer}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+/* One swipeable row, never three stacked. Seven wrapped chips were pushing the
+   first event ~700px down the page on a phone. */
+.chips{display:flex;flex-wrap:nowrap;gap:8px;margin-top:12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;scroll-snap-align:start;font-family:'Oswald',sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;padding:8px 14px;border:1px solid var(--border-strong);background:none;color:var(--bone);cursor:pointer}
 .chip.on{background:var(--red);border-color:var(--red)}
+/* Radius / state / category start folded away. They are refinements, not the
+   front door — the front door is "where are you" plus a date. */
+.adv-toggle{display:flex;width:100%;align-items:center;gap:10px;margin-top:12px;padding:9px 0 0;background:none;border:none;border-top:1px solid var(--border);color:var(--bone);cursor:pointer;font-family:'Oswald',sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;text-align:left}
+.adv-sum{margin-left:auto;font-family:'Special Elite',monospace;font-size:.78rem;letter-spacing:0;text-transform:none;color:var(--copper)}
+.adv-caret{color:var(--red);font-size:1rem;line-height:1}
+.adv{display:none;margin-top:12px}
+.adv.open{display:block}
 .custom-dates{display:none;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:center}
 .custom-dates.show{display:flex}
 #locStatus{font-family:'Special Elite',monospace;font-size:.82rem;color:var(--copper);margin-top:10px;min-height:1.2em}
@@ -129,12 +139,31 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
 
   <div class="search-panel">
     <div class="loc-row">
-      <button class="btn-red" id="geoBtn" type="button">USE MY CURRENT LOCATION</button>
-      <span class="or">— or —</span>
+      <button class="btn-red" id="geoBtn" type="button">NEAR ME</button>
+      <span class="or">or</span>
       <input id="zipInput" inputmode="numeric" maxlength="5" placeholder="ZIP code" aria-label="ZIP code">
-      <button class="btn-ghost" id="zipGo" type="button">SEARCH</button>
+      <button class="btn-ghost" id="zipGo" type="button">GO</button>
     </div>
     <div id="locStatus"></div>
+    <div class="chips" id="dateChips">
+      <button class="chip" data-when="today" type="button">Today</button>
+      <button class="chip" data-when="tomorrow" type="button">Tomorrow</button>
+      <button class="chip" data-when="weekend" type="button">This weekend</button>
+      <button class="chip" data-when="next-weekend" type="button">Next weekend</button>
+      <button class="chip" data-when="7d" type="button">Next 7 days</button>
+      <button class="chip on" data-when="30d" type="button">Next 30 days</button>
+      <button class="chip" data-when="custom" type="button">Custom</button>
+    </div>
+    <div class="custom-dates" id="customDates">
+      <input type="date" id="fromDate" aria-label="From date">
+      <span class="or">to</span>
+      <input type="date" id="toDate" aria-label="To date">
+      <button class="btn-ghost" id="customGo" type="button">APPLY</button>
+    </div>
+    <button class="adv-toggle" id="advToggle" type="button" aria-expanded="false" aria-controls="advPanel">
+      <span>Filters</span><span class="adv-sum" id="advSum"></span><span class="adv-caret" id="advCaret">+</span>
+    </button>
+    <div class="adv" id="advPanel">
     <div class="filters">
       <select id="radiusSel" aria-label="Search radius">
         <option value="25">Within 25 miles</option>
@@ -198,20 +227,6 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
       </select>
       <select id="catSel" aria-label="Event category"><option value="">All categories</option></select>
     </div>
-    <div class="chips" id="dateChips">
-      <button class="chip" data-when="today" type="button">Today</button>
-      <button class="chip" data-when="tomorrow" type="button">Tomorrow</button>
-      <button class="chip" data-when="weekend" type="button">This weekend</button>
-      <button class="chip" data-when="next-weekend" type="button">Next weekend</button>
-      <button class="chip" data-when="7d" type="button">Next 7 days</button>
-      <button class="chip on" data-when="30d" type="button">Next 30 days</button>
-      <button class="chip" data-when="custom" type="button">Custom</button>
-    </div>
-    <div class="custom-dates" id="customDates">
-      <input type="date" id="fromDate" aria-label="From date">
-      <span class="or">to</span>
-      <input type="date" id="toDate" aria-label="To date">
-      <button class="btn-ghost" id="customGo" type="button">APPLY</button>
     </div>
   </div>
 
@@ -534,6 +549,22 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
   $('zipGo').addEventListener('click', zipSearch);
   $('zipInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') zipSearch(); });
 
+  // The folded panel has to say what it is hiding, or people will not trust it
+  // and will open it every time just to check.
+  function advSum() {
+    var r = $('radiusSel'), c = $('catSel');
+    var where = r.value === 'state'
+      ? ($('stateSel').options[$('stateSel').selectedIndex] || {}).text || 'Statewide'
+      : r.value + ' mi';
+    var cat = c.value ? (c.options[c.selectedIndex] || {}).text : 'All categories';
+    $('advSum').textContent = where + ' · ' + cat;
+  }
+  $('advToggle').addEventListener('click', function () {
+    var open = $('advPanel').classList.toggle('open');
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    $('advCaret').textContent = open ? '−' : '+';
+  });
+
   $('radiusSel').addEventListener('change', function () {
     var v = this.value;
     $('stateSel').style.display = v === 'state' ? '' : 'none';
@@ -542,10 +573,10 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
       state.radius = parseInt(v, 10);
       if (state.mode === 'state') state.mode = state.zip ? 'zip' : (state.lat != null ? 'geo' : null);
     }
-    state.page = 1; savePrefs(); search();
+    state.page = 1; advSum(); savePrefs(); search();
   });
-  $('stateSel').addEventListener('change', function () { state.st = this.value; state.mode = 'state'; state.page = 1; search(); });
-  $('catSel').addEventListener('change', function () { state.category = this.value; state.page = 1; search(); });
+  $('stateSel').addEventListener('change', function () { state.st = this.value; state.mode = 'state'; state.page = 1; advSum(); search(); });
+  $('catSel').addEventListener('change', function () { state.category = this.value; state.page = 1; advSum(); search(); });
   $('sortSel').addEventListener('change', function () { state.sort = this.value; state.page = 1; search(); });
   $('prevBtn').addEventListener('click', function () { if (state.page > 1) { state.page--; search(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
   $('nextBtn').addEventListener('click', function () { state.page++; search(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
@@ -638,6 +669,7 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
       d.categories.forEach(function (c) {
         var o = document.createElement('option'); o.value = c.slug; o.textContent = c.label; $('catSel').appendChild(o);
       });
+      advSum();
     }
   }).catch(function () {});
 
@@ -656,7 +688,8 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
     if ([25, 50, 100, 250].indexOf(prefs.radius) >= 0) { state.radius = prefs.radius; $('radiusSel').value = String(prefs.radius); }
     zipSearch();
   }
-  console.log('WG Events v1.0');
+  advSum();
+  console.log('WG Events v1.65');
 })();
 </script>
 </body>
