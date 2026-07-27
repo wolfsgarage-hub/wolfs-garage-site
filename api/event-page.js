@@ -108,7 +108,18 @@ export default async function handler(req, res) {
   }
 
   const e = data.event, occ = data.occurrences || [], rel = data.related || [];
-  const nextOcc = occ.find(function (o) { return o.local_date >= new Date().toISOString().slice(0, 10); }) || occ[occ.length - 1] || null;
+  // A date that has passed in the EVENT's own timezone is history — never render
+  // it. Rows linger in the store for a one-day purge grace, and this page used
+  // to show them (and even fell back to a PAST date for the headline when every
+  // date had gone by). "Today" must be the venue's today: UTC would mark a
+  // Hawaii show as passed while cars are still arriving.
+  let today;
+  try {
+    today = new Intl.DateTimeFormat('en-CA', { timeZone: e.timezone || 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch { today = new Date().toISOString().slice(0, 10); }
+  const upcoming = occ.filter(function (o) { return o.local_date >= today; });
+  const passed = occ.length > 0 && upcoming.length === 0;
+  const nextOcc = upcoming[0] || null;
   const cityState = [e.city, e.state].filter(Boolean).join(', ');
   // A stored summary can end with a sentence naming where the listing was
   // found. Visitors never see that. Two tiers: the ingest boilerplate
@@ -154,7 +165,8 @@ export default async function handler(req, res) {
   if (e.registration_url) ld.offers = { '@type': 'Offer', url: e.registration_url };
   if (e.flyer_url) ld.image = e.flyer_url;
 
-  const meta = '<meta name="description" content="' + esc(desc) + '">'
+  const meta = (passed ? '<meta name="robots" content="noindex">' : '')
+    + '<meta name="description" content="' + esc(desc) + '">'
     + '<link rel="canonical" href="https://wolfsgarage.com/events/' + esc(e.slug) + '">'
     + '<meta property="og:title" content="' + esc(e.title) + '">'
     + '<meta property="og:description" content="' + esc(desc) + '">'
@@ -164,14 +176,16 @@ export default async function handler(req, res) {
     + '<script type="application/ld+json">' + JSON.stringify(ld).replace(/</g, '\\u003c') + '</script>';
 
   const mapsQ = encodeURIComponent([e.venue_name, e.venue_address, e.venue_city || e.city, e.venue_state || e.state, e.venue_zip].filter(Boolean).join(', '));
-  const occHtml = occ.length
-    ? occ.map(function (o) {
-        return '<div class="occ">' + fmtDate(o.local_date)
-          + (o.local_time_text ? ' · ' + esc(o.local_time_text) : '')
-          + ' ' + statusBadge(null, o.status)
-          + (o.note ? '<div class="typewriter">' + esc(o.note) + '</div>' : '') + '</div>';
-      }).join('')
-    : '<div class="occ">Dates to be confirmed with the organizer.</div>';
+  const occHtml = passed
+    ? '<div class="occ">This event has passed.</div>'
+    : upcoming.length
+      ? upcoming.map(function (o) {
+          return '<div class="occ">' + fmtDate(o.local_date)
+            + (o.local_time_text ? ' · ' + esc(o.local_time_text) : '')
+            + ' ' + statusBadge(null, o.status)
+            + (o.note ? '<div class="typewriter">' + esc(o.note) + '</div>' : '') + '</div>';
+        }).join('')
+      : '<div class="occ">Dates to be confirmed with the organizer.</div>';
 
   const relHtml = rel.length
     ? '<div class="panel"><h2>More events nearby</h2>' + rel.map(function (r) {
@@ -182,7 +196,7 @@ export default async function handler(req, res) {
   const body =
     '<p class="meta-line"><a href="/events" style="color:var(--red)">← ALL EVENTS</a></p>'
     + '<h1>' + esc(e.title) + '</h1>'
-    + '<p class="meta-line">' + (nextOcc ? fmtDate(nextOcc.local_date) : '') + (cityState ? ' · <span class="copper">' + esc(cityState) + '</span>' : '') + '</p>'
+    + '<p class="meta-line">' + (nextOcc ? fmtDate(nextOcc.local_date) : passed ? 'This event has passed' : '') + (cityState ? ' · <span class="copper">' + esc(cityState) + '</span>' : '') + '</p>'
     + '<p>' + statusBadge(e.event_status, nextOcc && nextOcc.status)
     + (e.verification === 'organizer_verified' ? '<span class="badge badge-ok">ORGANIZER VERIFIED</span>' : e.verification === 'source_verified' ? '<span class="badge badge-ok">SOURCE VERIFIED</span>' : '')
     + (e.claimed ? '<span class="badge badge-ok">CLAIMED</span>' : '')
