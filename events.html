@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Automotive Events Near You — Wolf's Garage</title>
-<meta name="version" content="1.66">
+<meta name="version" content="1.67">
 <meta name="description" content="Find car shows, cruise-ins, swap meets, races, and automotive events near you. ZIP and radius search, all 50 states. Curated by Wolf's Garage, Portland.">
 <link rel="canonical" href="https://wolfsgarage.com/events">
 <meta property="og:title" content="Automotive Events Near You — Wolf's Garage">
@@ -299,7 +299,7 @@ footer{max-width:980px;margin:0 auto;padding:18px;font-size:.8rem;color:rgba(245
 
 <script>
 // Privacy-conscious analytics: event NAME only, never search terms, form contents, or coordinates.
-window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};
+window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};try{wgTrack('page_view');}catch(e){}
 (function () {
   'use strict';
   var state = { mode: null, zip: null, lat: null, lng: null, radius: 50, st: 'OR', when: '30d', from: null, to: null, category: '', sort: 'soonest', page: 1 };
@@ -689,7 +689,7 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
     zipSearch();
   }
   advSum();
-  console.log('WG Events v1.66');
+  console.log('WG Events v1.67');
 })();
 </script>
 </body>
