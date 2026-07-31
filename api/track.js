@@ -17,7 +17,8 @@ const ALLOWED = new Set([
   'account_created',
   'newsletter_opt_in',
   'community_submission_start',
-  'community_submission_complete'
+  'community_submission_complete',
+  'page_view'
 ]);
 
 export default async function handler(req, res) {
