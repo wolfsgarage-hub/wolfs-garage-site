@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Automotive Events Near You — Wolf's Garage</title>
-<meta name="version" content="1.67">
+<meta name="version" content="1.68">
 <meta name="description" content="Find car shows, cruise-ins, swap meets, races, and automotive events near you. ZIP and radius search, all 50 states. Curated by Wolf's Garage, Portland.">
 <link rel="canonical" href="https://wolfsgarage.com/events">
 <meta property="og:title" content="Automotive Events Near You — Wolf's Garage">
@@ -65,8 +65,12 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
 /* Flyer column, desktop/tablet only. Real flyers earn poster space; the
    no-flyer placeholder is a compact strip so it never dominates a card. */
 .ecard.hasflyer{grid-template-columns:64px 132px 1fr}
-.eflyer{display:block;align-self:start;border:1px solid var(--border);background:var(--panel);overflow:hidden}
-.eflyer img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;display:block}
+/* Flyers are documents - show the WHOLE flyer, never crop. No fixed aspect-ratio
+   and no object-fit:cover; width fills the column and height follows the image's
+   real proportions, so no edge is ever sliced. Dark letterbox only where the
+   image is narrower than the column. */
+.eflyer{display:flex;align-self:start;justify-content:center;border:1px solid var(--border);background:#0d0d0d;overflow:hidden}
+.eflyer img{max-width:100%;width:auto;height:auto;object-fit:contain;display:block}
 .eflyer:hover{border-color:var(--red)}
 /* Option A placeholder - deliberately SMALL. It marks the absence of a flyer,
    it is not standing in for one, so it must not take poster-sized space. */
@@ -104,7 +108,7 @@ input:focus,select:focus,textarea:focus{outline:1px solid var(--red)}
   .dstack .d{font-size:1.35rem}
   .dstack .y{font-size:.8rem}
   .eflyer{margin:0 0 11px;max-width:100%}
-  .eflyer img{aspect-ratio:4/5;max-height:58vh;object-fit:cover}
+  .eflyer img{max-width:100%;width:auto;height:auto;object-fit:contain;max-height:none}
   .eph{margin:0 0 11px;width:100%}
   .es{-webkit-line-clamp:3}
 }
@@ -689,7 +693,7 @@ window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);
     zipSearch();
   }
   advSum();
-  console.log('WG Events v1.67');
+  console.log('WG Events v1.68');
 })();
 </script>
 </body>
