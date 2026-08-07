@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="1.67">
+<meta name="version" content="1.68">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -110,13 +110,6 @@ h2{font-family:'Bebas Neue';font-size:clamp(40px,6vw,80px);line-height:.86;lette
 .prod .pbtn{font-family:'Oswald';font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--bone);display:inline-block;margin-top:8px;transition:transform .2s}
 .prod:hover .pbtn{transform:translateX(4px)}
 @media(max-width:860px){.shop{grid-template-columns:1fr 1fr}}@media(max-width:520px){.shop{grid-template-columns:1fr}}
-/* tool line */
-#tools{background:#080808;text-align:center}
-.toolgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
-.tool{background:rgba(16,16,16,.7);border:1px dashed rgba(245,241,232,.18);border-radius:12px;padding:26px 12px;font-family:'Bebas Neue';font-size:22px;color:rgba(245,241,232,.25);position:relative;overflow:hidden}
-.tool span{position:absolute;top:8px;left:10px;font-family:'Oswald';font-size:11px;letter-spacing:1px;color:var(--red)}
-.soon{display:inline-block;margin-top:30px;font-family:'Special Elite';font-size:13px;letter-spacing:3px;color:var(--copper);border:1px solid rgba(200,146,42,.4);border-radius:30px;padding:8px 18px}
-@media(max-width:700px){.toolgrid{grid-template-columns:1fr 1fr}}
 /* connect */
 .social{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
 .soc{font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--line);border-radius:12px;padding:14px 20px;transition:.2s;display:flex;gap:10px;align-items:center}
@@ -150,14 +143,9 @@ footer{border-top:1px solid var(--line);padding:50px 0 40px;margin-top:20px}
 @keyframes sweep{0%{transform:translateX(-160%) skewX(-14deg)}20%,100%{transform:translateX(430%) skewX(-14deg)}}
 h2::after{content:"";display:block;width:0;height:4px;background:var(--red);margin-top:12px;transition:width .9s .25s cubic-bezier(.2,.7,.2,1)}
 .reveal.in h2::after{width:76px}
-#tools h2::after{margin-left:auto;margin-right:auto}
 @keyframes blink{0%,55%{opacity:1}56%,100%{opacity:0}}
 .eyebrow::after,.kick::after{content:"_";color:var(--copper);animation:blink 1.2s infinite}
-.tool::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 32%,rgba(245,241,232,.07) 50%,transparent 68%);transform:translateX(-110%);animation:scan 3.6s ease-in-out infinite}
 @keyframes scan{55%,100%{transform:translateX(110%)}}
-.tool:nth-child(4n+2)::after{animation-delay:.3s}
-.tool:nth-child(4n+3)::after{animation-delay:.6s}
-.tool:nth-child(4n)::after{animation-delay:.9s}
 @keyframes cue{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
 .scrollcue{animation:cue 2.2s ease-in-out infinite}
 .news button.btn{border:0;cursor:pointer}
@@ -191,10 +179,6 @@ a.dirart{display:block}
 .qsplit{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;align-items:center;padding:56px 30px}
 .qart{display:block;width:100%;aspect-ratio:2/3;max-height:560px;object-fit:contain;border:1px solid var(--line);border-radius:14px;background:#000}
 @media(max-width:860px){.qsplit{grid-template-columns:1fr}.qart{max-height:70vh}}
-/* tool line status labels */
-.tool{font-size:19px;letter-spacing:2px;color:rgba(245,241,232,.35)}
-.tool.live{border-style:solid;border-color:rgba(204,0,0,.5);color:var(--bone)}
-.tool.live span{color:var(--red)}
 /* ported components (from live v1.42, adapted) */
 .typewriter{font-family:'Special Elite';letter-spacing:.02em}
 .btn-red{background:var(--red);color:var(--bone);border:none;padding:14px 24px;font-family:'Oswald';text-transform:uppercase;letter-spacing:.12em;font-weight:700;font-size:.9rem;cursor:pointer;border-radius:6px;transition:background .15s,transform .15s;text-decoration:none;display:inline-block}
@@ -261,10 +245,9 @@ a.dirart{display:block}
 .cta-minor a:hover{color:var(--bone)}
 a.phase{display:block;color:inherit}
 /* card counts differ per section, so the 3-col default would leave holes */
-#tools .phases{grid-template-columns:repeat(2,1fr)}
 #participate .phases{grid-template-columns:repeat(4,1fr)}
 @media(max-width:1024px){#participate .phases{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:860px){#tools .phases,#participate .phases{grid-template-columns:1fr}}
+@media(max-width:860px){#participate .phases{grid-template-columns:1fr}}
 .modal-consent{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:12px 14px;background:rgba(200,146,42,.08);border-left:3px solid var(--copper);font-size:.82rem;font-family:'Special Elite';color:var(--copper);cursor:pointer;text-align:left}
 .modal-consent input{margin-top:3px;accent-color:var(--red);width:16px;height:16px;flex:0 0 16px}
 </style><noscript><style>.reveal,.entr,.gal .gt{opacity:1;transform:none}</style></noscript>
@@ -274,7 +257,7 @@ a.phase{display:block;color:inherit}
 </head><body>
 <div id="prog"></div>
 <nav id="nav"><img class="seal" src="https://res.cloudinary.com/dancaaglf/image/upload/f_auto,q_auto/v1785040960/wg-site-seal.jpg" alt="Wolf's Garage"><span class="nm">WOLF'S GARAGE</span>
-<div class="lk"><a href="#calendar">Events</a><a href="#directory">Directory</a><a href="#gallery">Garage Stories</a><a href="#shop">Shop</a><a href="#mission">About</a><a class="navcta" href="/events?when=30d">Find Events</a></div><div class="nav-strip" id="navLinks"><a href="#calendar">Events</a><a href="#directory">Directory</a><a href="#gallery">Garage Stories</a><a href="#shop">Shop</a><a href="#mission">About</a><a href="#bulletin">Bulletin</a><a href="#tools">Road Ahead</a><a href="#connect">Join</a><a href="#archive">Archive</a></div></nav>
+<div class="lk"><a href="#calendar">Events</a><a href="#directory">Directory</a><a href="#gallery">Garage Stories</a><a href="#shop">Shop</a><a href="#mission">About</a><a class="navcta" href="/events?when=30d">Find Events</a></div><div class="nav-strip" id="navLinks"><a href="#calendar">Events</a><a href="#directory">Directory</a><a href="#gallery">Garage Stories</a><a href="#shop">Shop</a><a href="#mission">About</a><a href="#bulletin">Bulletin</a><a href="#connect">Join</a><a href="#archive">Archive</a></div></nav>
 
 <header class="hero" id="top"><div class="scene" id="scene"></div><div class="scrim"></div>
 <div class="in"><div class="wrap">
@@ -456,13 +439,7 @@ a.phase{display:block;color:inherit}
 </div></section>
 <div class="pin"></div>
 
-<section class="sec" id="tools"><div class="wrap">
-<div class="reveal"><div class="kick">The Road Ahead</div><h2>What We&rsquo;re <i>Building Toward</i></h2><p class="lead" style="margin:12px auto 0">Everything starts with the people, not the product. The honest roadmap &mdash; what&rsquo;s live now, and what comes when the community&rsquo;s ready.</p></div>
-<div class="phases">
-<div class="phase reveal"><div class="pnum">01</div><h3>The Apparel</h3><p>Live now. Shirts, stickers, goods. Every dollar funds the next step &mdash; the website, the data, the lights.</p></div>
-<div class="phase reveal"><div class="pnum">02</div><h3>The Shop Space</h3><p>The one that matters: a real space. Youth &amp; adult workshops, summer camps, guided practice for anyone who wants to build with their hands. When it&rsquo;s real, you&rsquo;ll hear it here first.</p></div>
-</div>
-</div></section>
+
 <div class="pin"></div>
 
 <section class="sec" id="connect"><div class="wrap">
@@ -489,7 +466,7 @@ a.phase{display:block;color:inherit}
 
 <footer><div class="wrap"><div class="fgrid">
 <div class="fbrand"><img class="seal" src="https://res.cloudinary.com/dancaaglf/image/upload/f_auto,q_auto/v1785040960/wg-site-seal.jpg" alt=""><div class="slog">Wolf&rsquo;s Garage</div><p>A Portland, Oregon LLC built for the working-class hot rod community. Apparel. Tools. Network. Training.</p></div>
-<div class="fcol"><h4>Shop</h4><a href="#shop">All Wares</a><a href="#tools">Road Ahead</a><a onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/collections/all">Live Store</a></div>
+<div class="fcol"><h4>Shop</h4><a href="#shop">All Wares</a><a onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/collections/all">Live Store</a></div>
 <div class="fcol"><h4>Community</h4><a href="/events">Events</a><a href="/directory">Directory</a><a href="#gallery">Pack Gallery</a><a href="#connect">Join The Pack</a></div>
 <div class="fcol"><h4>Connect</h4><a href="https://instagram.com/_wolfsgarage" target="_blank" rel="noopener">Instagram</a><a href="https://facebook.com/wolfsgaragenw" target="_blank" rel="noopener">Facebook</a><a href="mailto:wolfsgaragenw@gmail.com">Email</a><a href="/privacy">Privacy Policy</a></div>
 </div><div class="fbot">&copy; 2026 WOLF'S GARAGE LLC &middot; PORTLAND, OREGON &middot; GET BACK IN THE GARAGE</div></div></footer>
@@ -550,7 +527,7 @@ a.phase{display:block;color:inherit}
 // Privacy-conscious analytics: event NAME only, never form contents, emails, or names.
 window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};try{wgTrack('page_view');}catch(e){}
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.67","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.68","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
