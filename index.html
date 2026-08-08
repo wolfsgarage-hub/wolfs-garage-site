@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="1.69">
+<meta name="version" content="1.70">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -324,8 +324,6 @@ a.phase{display:block;color:inherit}
 <h2>Pack <i>Gallery</i></h2>
 <p class="lead">Wolf&rsquo;s shots and Pack-submitted photos. Heart what you love. Post your own. Sign in required to post.</p>
 </div>
-<h3 class="gallery-h3">WOLF'S PICKS</h3>
-<div class="gallery-grid" id="wolfPicksGrid"><p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;padding:20px 0;">Loading Wolf's picks...</p></div>
 <h3 class="gallery-h3">RECENT FROM THE PACK</h3>
 <div class="gallery-grid" id="packRecentGrid"><p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:'Special Elite',monospace;padding:20px 0;">Loading the pack...</p></div>
 <div class="upload-zone" id="uploadZone">
@@ -550,7 +548,7 @@ a.phase{display:block;color:inherit}
 // Privacy-conscious analytics: event NAME only, never form contents, emails, or names.
 window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};try{wgTrack('page_view');}catch(e){}
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.69","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.70","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
@@ -727,7 +725,7 @@ function galleryTime(p) {
 async function loadGallery() {
   const picksGrid = document.getElementById('wolfPicksGrid');
   const packGrid = document.getElementById('packRecentGrid');
-  if (!picksGrid || !packGrid) return;
+  if (!packGrid) return;  // Wolf's Picks removed for now; only the pack grid is required
   try {
     const [picksSnap, packSnap, allWolfSnap] = await Promise.all([
       db.collection('wolf_photos').where('isPicked', '==', true).limit(10).get(),
@@ -753,7 +751,7 @@ async function loadGallery() {
     renderGalleryGrid('packRecentGrid', pack, "No Pack photos yet. Sign in and post the first one.");
   } catch (err) {
     console.error('Gallery load error:', err);
-    picksGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:20px 0;">Gallery is loading slow. Pull to refresh.</p>';
+    packGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(245,241,232,0.5);font-family:\'Special Elite\',monospace;padding:20px 0;">Gallery is loading slow. Pull to refresh.</p>';
   }
 }
 
