@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="1.70">
+<meta name="version" content="1.71">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -78,8 +78,6 @@ h2{font-family:'Bebas Neue';font-size:clamp(40px,6vw,80px);line-height:.86;lette
 .dirpts li::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 9px var(--red);flex:none}
 .dirart{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);aspect-ratio:4/3;background:#000}
 .dirart .im{position:absolute;inset:-8% 0;background-image:url("https://res.cloudinary.com/dancaaglf/image/upload/f_auto,q_auto/v1785040959/wg-site-dirart.jpg");background-size:cover;background-position:center;filter:brightness(.6) saturate(1.05);will-change:transform}
-.dirart .pinlbl{position:absolute;left:20px;bottom:18px;z-index:2;font-family:'Bebas Neue';font-size:26px;color:var(--bone)}
-.dirart .pinlbl b{color:var(--red)}
 .dirart::after{content:"◉";position:absolute;top:40%;left:46%;color:var(--red);font-size:26px;filter:drop-shadow(0 0 8px var(--red));animation:ping 2s infinite}
 @keyframes ping{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.6}}
 @media(max-width:860px){.dir{grid-template-columns:1fr}}
@@ -313,7 +311,7 @@ a.phase{display:block;color:inherit}
 <div class="reveal"><p class="lead">A free map of locally-owned businesses &mdash; flower shops to fabricators. Keep money local, and connect with petrol people who&rsquo;d never have crossed paths otherwise.</p>
 <ul class="dirpts"><li>Directory is live. Listings are open.</li><li>Browse the map. Find a shop. Add your business.</li><li>Free to list, always.</li></ul>
 </div>
-<a class="dirart reveal" href="/directory" aria-label="Enter the Hot Rodder Directory"><div class="im" id="dirim"></div><div class="dirhdr">ENTER THE <b>DIRECTORY</b></div><div class="pinlbl"><b>6</b> shops live &middot; Portland metro</div><div class="dirgo">Enter &#8594;</div></a>
+<a class="dirart reveal" href="/directory" aria-label="Enter the Hot Rodder Directory"><div class="im" id="dirim"></div><div class="dirhdr">ENTER THE <b>DIRECTORY</b></div><div class="dirgo">Enter &#8594;</div></a>
 </div></div></section>
 <div class="pin"></div>
 
@@ -548,7 +546,7 @@ a.phase{display:block;color:inherit}
 // Privacy-conscious analytics: event NAME only, never form contents, emails, or names.
 window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};try{wgTrack('page_view');}catch(e){}
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.70","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.71","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
