@@ -3,6 +3,8 @@
 # This file is advisory; the event API enforces its own server-side
 # rate limits, pagination caps, and query bounds regardless.
 
+Sitemap: https://www.wolfsgarage.com/sitemap.xml
+
 User-agent: *
 Disallow: /api/
 Allow: /

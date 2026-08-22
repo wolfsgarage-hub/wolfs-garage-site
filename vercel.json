@@ -1,16 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/directory",
-      "destination": "https://wolfs-garage-community.vercel.app",
-      "permanent": false
-    },
-    {
-      "source": "/directory/(.*)",
-      "destination": "https://wolfs-garage-community.vercel.app/$1",
-      "permanent": false
-    },
-    {
       "source": "/pages/hot-rodder-directory",
       "destination": "https://wolfs-garage-community.vercel.app",
       "permanent": false
@@ -32,6 +22,8 @@
     }
   ],
   "rewrites": [
+    { "source": "/directory", "destination": "https://wolfs-garage-community.vercel.app/" },
+    { "source": "/directory/:path*", "destination": "https://wolfs-garage-community.vercel.app/:path*" },
     { "source": "/events", "destination": "/events.html" },
     { "source": "/events/", "destination": "/events.html" },
     { "source": "/privacy", "destination": "/privacy.html" },

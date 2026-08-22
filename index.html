@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="1.71">
+<meta name="version" content="1.73">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -110,11 +110,6 @@ h2{font-family:'Bebas Neue';font-size:clamp(40px,6vw,80px);line-height:.86;lette
 @media(max-width:860px){.shop{grid-template-columns:1fr 1fr}}@media(max-width:520px){.shop{grid-template-columns:1fr}}
 /* tool line */
 #tools{background:#080808;text-align:center}
-.toolgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
-.tool{background:rgba(16,16,16,.7);border:1px dashed rgba(245,241,232,.18);border-radius:12px;padding:26px 12px;font-family:'Bebas Neue';font-size:22px;color:rgba(245,241,232,.25);position:relative;overflow:hidden}
-.tool span{position:absolute;top:8px;left:10px;font-family:'Oswald';font-size:11px;letter-spacing:1px;color:var(--red)}
-.soon{display:inline-block;margin-top:30px;font-family:'Special Elite';font-size:13px;letter-spacing:3px;color:var(--copper);border:1px solid rgba(200,146,42,.4);border-radius:30px;padding:8px 18px}
-@media(max-width:700px){.toolgrid{grid-template-columns:1fr 1fr}}
 /* connect */
 .social{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
 .soc{font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--line);border-radius:12px;padding:14px 20px;transition:.2s;display:flex;gap:10px;align-items:center}
@@ -133,7 +128,7 @@ footer{border-top:1px solid var(--line);padding:50px 0 40px;margin-top:20px}
 .fbrand .slog{font-family:'Bebas Neue';font-size:28px}
 .fbrand p{font-family:'Work Sans';font-size:12px;color:rgba(245,241,232,.5);margin-top:8px;max-width:280px;line-height:1.5}
 .fcol h4{font-family:'Oswald';font-weight:600;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--copper);margin-bottom:12px}
-.fcol a{display:block;font-family:'Work Sans';font-size:13px;color:rgba(245,241,232,.62);padding:4px 0;transition:.2s}.fcol a:hover{color:var(--bone)}
+.fcol a{display:block;font-family:'Work Sans';font-size:13px;color:rgba(245,241,232,.62);padding:9px 0;transition:.2s}.fcol a:hover{color:var(--bone)}
 .fbot{text-align:center;font-family:'Special Elite';font-size:11px;letter-spacing:2px;color:rgba(245,241,232,.4);margin-top:40px}
 @media(max-width:860px){.fgrid{grid-template-columns:1fr 1fr}}
 
@@ -176,7 +171,7 @@ section#bulletin{background:#080808}
 nav{flex-wrap:wrap}
 .nav-strip{flex-basis:100%;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:8px 0 2px;justify-content:flex-start}
 .nav-strip::-webkit-scrollbar{display:none}
-.nav-strip a{font-family:'Oswald';text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:600;color:rgba(245,241,232,.85);padding:5px 11px;border:1px solid rgba(245,241,232,.14);border-radius:30px;background:rgba(204,0,0,.05);white-space:nowrap;transition:all .15s;flex:none}
+.nav-strip a{font-family:'Oswald';text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:600;color:rgba(245,241,232,.85);padding:9px 14px;border:1px solid rgba(245,241,232,.14);border-radius:30px;background:rgba(204,0,0,.05);white-space:nowrap;transition:all .15s;flex:none}
 .nav-strip a:hover,.nav-strip a.active{border-color:var(--red);color:var(--red);background:rgba(204,0,0,.12)}
 @media(min-width:900px){.nav-strip{justify-content:center}}
 /* directory art card as link */
@@ -441,7 +436,7 @@ a.phase{display:block;color:inherit}
 
 <section class="sec" id="shop"><div class="wrap">
 <div class="reveal"><div class="kick">The Shop</div><h2>Wolf <i>Wares</i></h2><p class="lead">Tees, gear, and goods built for the garage. Every dollar funds the next phase.</p></div>
-<div class="shop"><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/for-the-haters-hot-rod-graphic-tee"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/unisex-classic-tee-black-front-and-back-69b1a8fbed487.jpg?v=1773250832')"></div><div class="pinfo"><div class="pn">For the Haters</div><div class="pr">$24.99</div><span class="pbtn">Shop Now &#8594;</span></div></a><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/get-some-hot-rod-graphic-tee"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/unisex-classic-tee-graphite-heather-front-6998fd1a63418.jpg?v=1771633969')"></div><div class="pinfo"><div class="pn">Get Some Tee</div><div class="pr">$24.99</div><span class="pbtn">Shop Now &#8594;</span></div></a><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/wolf-pup-baby-bodysuit-mechanic-dad-garage-outfit"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/baby-jersey-bodysuit-black-front-69a9d634dae6d.jpg?v=1772738123')"></div><div class="pinfo"><div class="pn">Wolf Pup Bodysuit</div><div class="pr">$22.99</div><span class="pbtn">Shop Now &#8594;</span></div></a><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/funny-aluminum-vanity-plate-wolfs-garage"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/vanity-plate-white-glossy-front-699bf6f874f7c.jpg?v=1771829000')"></div><div class="pinfo"><div class="pn">It's Exactly What It Looks Like</div><div class="pr">$14.99</div><span class="pbtn">Shop Now &#8594;</span></div></a></div>
+<div class="shop" id="shopGrid"><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/for-the-haters-hot-rod-graphic-tee"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/unisex-classic-tee-black-front-and-back-69b1a8fbed487.jpg?v=1773250832')"></div><div class="pinfo"><div class="pn">For the Haters</div><div class="pr">$24.99</div><span class="pbtn">Shop Now &#8594;</span></div></a><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/get-some-hot-rod-graphic-tee"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/unisex-classic-tee-graphite-heather-front-6998fd1a63418.jpg?v=1771633969')"></div><div class="pinfo"><div class="pn">Get Some Tee</div><div class="pr">$24.99</div><span class="pbtn">Shop Now &#8594;</span></div></a><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/wolf-pup-baby-bodysuit-mechanic-dad-garage-outfit"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/baby-jersey-bodysuit-black-front-69a9d634dae6d.jpg?v=1772738123')"></div><div class="pinfo"><div class="pn">Wolf Pup Bodysuit</div><div class="pr">$22.99</div><span class="pbtn">Shop Now &#8594;</span></div></a><a class="prod reveal" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/products/funny-aluminum-vanity-plate-wolfs-garage"><div class="pimg" style="background-image:url('https://cdn.shopify.com/s/files/1/0741/2904/7719/files/vanity-plate-white-glossy-front-699bf6f874f7c.jpg?v=1771829000')"></div><div class="pinfo"><div class="pn">It's Exactly What It Looks Like</div><div class="pr">$14.99</div><span class="pbtn">Shop Now &#8594;</span></div></a></div>
 <div class="reveal" style="margin-top:30px"><a class="btn line" onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/collections/all">Shop All Wares <span class="ar">&#8594;</span></a></div>
 </div></section>
 <div class="pin"></div>
@@ -463,7 +458,7 @@ a.phase{display:block;color:inherit}
 
 <section class="sec" id="connect"><div class="wrap">
 <div class="reveal"><div class="kick">Connect</div><h2>Find <i>The Wolf</i></h2><p class="lead">Follow along. Reach out direct. We answer.</p></div>
-<div class="social reveal"><a class="soc" href="https://instagram.com/_wolfsgarage" target="_blank" rel="noopener"><b>IG</b> @_wolfsgarage</a><a class="soc" href="https://facebook.com/wolfsgaragenw" target="_blank" rel="noopener"><b>FB</b> Wolf&rsquo;s Garage</a><a class="soc" href="mailto:wolfsgaragenw@gmail.com"><b>@</b> wolfsgaragenw@gmail.com</a><div class="soc"><b>YT</b> Coming Soon</div></div>
+<div class="social reveal"><a class="soc" href="https://instagram.com/_wolfsgarage" target="_blank" rel="noopener"><b>IG</b> @_wolfsgarage</a><a class="soc" href="https://facebook.com/wolfsgaragenw" target="_blank" rel="noopener"><b>FB</b> Wolf&rsquo;s Garage</a><a class="soc" href="mailto:wolfsgaragenw@gmail.com"><b>@</b> wolfsgaragenw@gmail.com</a></div>
 <div class="news reveal"><h3>Join The Pack</h3><p class="lead" style="margin-top:6px">First dibs on drops, event reminders, community news. One or two emails a month. Nothing else.</p>
 <form class="row" action="https://wolfsgarage.us2.list-manage.com/subscribe/post?u=dc4fc447e326886743fcd078b&amp;id=b0d82514d3&amp;f_id=003196e3f0" method="post" target="_blank" onsubmit="wgTrack('newsletter_opt_in')"><input type="email" name="EMAIL" placeholder="your@email.com" required aria-label="Email"><div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_dc4fc447e326886743fcd078b_b0d82514d3" tabindex="-1" value=""></div><button class="btn fill" type="submit">I&rsquo;m In <span class="ar">&#8594;</span></button></form></div>
 </div></section>
@@ -475,22 +470,19 @@ a.phase{display:block;color:inherit}
  <h2>Newsletter <i>Archive</i></h2>
  <p class="lead">Missed an email? Catch up. Every Wolf's Garage drop, event reminder, and behind-the-scenes update, archived.</p>
  <div class="archive-list">
- <a class="archive-item" href="https://us2.campaign-archive.com/home/?u=dc4fc447e326886743fcd078b&amp;id=b0d82514d3" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit"><div class="date">May 6, 2026</div><h4>BOOTH BUILD SNEAK PEEK</h4></a>
- <a class="archive-item" href="https://us2.campaign-archive.com/home/?u=dc4fc447e326886743fcd078b&amp;id=b0d82514d3" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit"><div class="date">Apr 18, 2026</div><h4>THANKS FOR BEING PART OF THE PACK</h4></a>
- <a class="archive-item" href="https://us2.campaign-archive.com/home/?u=dc4fc447e326886743fcd078b&amp;id=b0d82514d3" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit"><div class="date">Apr 4, 2026</div><h4>PIR SWAP MEET RECAP</h4></a>
+ <a class="archive-item" href="https://us2.campaign-archive.com/home/?u=dc4fc447e326886743fcd078b&amp;id=b0d82514d3" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit"><div class="date">The whole stack</div><h4>BROWSE EVERY PAST EMAIL &#8594;</h4></a>
  </div>
  </div>
 </section>
 <div class="pin"></div>
 
 <footer><div class="wrap"><div class="fgrid">
-<div class="fbrand"><img class="seal" src="https://res.cloudinary.com/dancaaglf/image/upload/f_auto,q_auto/v1785040960/wg-site-seal.jpg" alt=""><div class="slog">Wolf&rsquo;s Garage</div><p>A Portland, Oregon LLC built for the working-class hot rod community. Apparel. Tools. Network. Training.</p></div>
+<div class="fbrand"><img class="seal" src="https://res.cloudinary.com/dancaaglf/image/upload/f_auto,q_auto/v1785040960/wg-site-seal.jpg" alt="Wolf's Garage seal"><div class="slog">Wolf&rsquo;s Garage</div><p>A Portland, Oregon LLC built for the working-class hot rod community. Apparel. Network. Training.</p></div>
 <div class="fcol"><h4>Shop</h4><a href="#shop">All Wares</a><a href="#tools">Road Ahead</a><a onclick="wgTrack('shop_outbound_click')" href="https://shop.wolfsgarage.com/collections/all">Live Store</a></div>
 <div class="fcol"><h4>Community</h4><a href="/events">Events</a><a href="/directory">Directory</a><a href="#gallery">Pack Gallery</a><a href="#connect">Join The Pack</a></div>
 <div class="fcol"><h4>Connect</h4><a href="https://instagram.com/_wolfsgarage" target="_blank" rel="noopener">Instagram</a><a href="https://facebook.com/wolfsgaragenw" target="_blank" rel="noopener">Facebook</a><a href="mailto:wolfsgaragenw@gmail.com">Email</a><a href="/privacy">Privacy Policy</a></div>
 </div><div class="fbot">&copy; 2026 WOLF'S GARAGE LLC &middot; PORTLAND, OREGON &middot; GET BACK IN THE GARAGE</div></div></footer>
 
-<div id="lb"><span class="back">&#8592; Back</span><span class="x">&#10005;</span><img id="lbimg" alt=""></div>
 <div id="galleryLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;overflow-y:auto;padding:20px;">
  <div style="max-width:720px;margin:0 auto;background:#0A0A0A;border:1px solid var(--border-strong);padding:20px;position:relative;">
  <button onclick="closeLightbox()" aria-label="Close" style="position:absolute;top:10px;right:10px;background:none;border:1px solid var(--border);color:var(--bone);width:36px;height:36px;cursor:pointer;font-size:18px;">✕</button>
@@ -529,7 +521,7 @@ a.phase{display:block;color:inherit}
  <input type="text" id="authNickname" placeholder="Nickname or handle (shown publicly)" autocomplete="nickname" style="display:none;">
  <input type="email" id="authEmail" placeholder="Email" required autocomplete="email">
  <div class="pw-wrap"><input type="password" id="authPassword" class="pw-input" placeholder="Password" required minlength="6" autocomplete="current-password"><button type="button" class="pw-toggle" aria-label="Show password" onclick="togglePw('authPassword',this)">👁</button></div>
- <p class="small" id="nicknameHint" style="display:none;margin:4px 0 8px;color:rgba(245,241,232,0.55);font-size:0.78rem;">Optional. Leave blank to show your email on posts and comments.</p>
+ <p class="small" id="nicknameHint" style="display:none;margin:4px 0 8px;color:rgba(245,241,232,0.55);font-size:0.78rem;">Optional. Leave blank to post as &ldquo;pack member.&rdquo;</p>
  <label class="modal-consent" id="consentRow" style="display:none;">
  <input type="checkbox" id="newsletterOptIn">
  <span><strong>Optional:</strong> email me the Pack newsletter &mdash; new drops, event reminders, community news. One or two emails a month. Your account works fine without it. Unsubscribe anytime.&#128058;</span>
@@ -546,13 +538,12 @@ a.phase{display:block;color:inherit}
 // Privacy-conscious analytics: event NAME only, never form contents, emails, or names.
 window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};try{wgTrack('page_view');}catch(e){}
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v1.71","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v1.73","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
-var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim"),qim=d.getElementById("qim");
+var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim");
 function onScroll(){var y=window.pageYOffset,h=d.documentElement.scrollHeight-window.innerHeight;if(prog)prog.style.width=(h>0?y/h*100:0)+"%";if(nav)nav.classList.toggle("solid",y>50);var bt2=d.getElementById("backtop");if(bt2)bt2.classList.toggle("on",y>600);
  if(scene)scene.style.backgroundPositionY=(12+y*0.012)+"%";
- var q=d.getElementById("mission");if(qim&&q){var r=q.getBoundingClientRect();qim.style.transform="translateY("+(r.top*-0.05)+"px)";}
  if(dirim){var dr=d.getElementById("directory").getBoundingClientRect();dirim.style.transform="translateY("+(dr.top*-0.04)+"px)";}}
 window.addEventListener("scroll",onScroll,{passive:true});onScroll();
 var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting)e.target.classList.add("in");});},{threshold:.14});
@@ -579,8 +570,12 @@ function censorText(s) {
   return out;
 }
 
-function galleryEscape(s) {
-  return (s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+function galleryEscape(s) { return escapeHtml(s); }
+
+function cldSize(u, w) {
+  if (typeof u !== 'string' || u.indexOf('res.cloudinary.com') === -1) return u;
+  if (!/\/upload\/v\d/.test(u)) return u;
+  return u.replace('/upload/', '/upload/f_auto,q_auto,w_' + w + '/');
 }
 
 function togglePw(inputId, btn) {
@@ -710,7 +705,7 @@ auth.onAuthStateChanged(function(user) {
   }
 });
 
-// --- Gallery: Wolf's Picks (3 manually-pinned) + Recent from Pack (all approved, newest first) ---
+// --- Gallery: Recent from Pack (all approved, newest first) ---
 function galleryTime(p) {
   const v = p.addedAt || p.submittedAt || p.createdAt;
   if (!v) return 0;
@@ -721,31 +716,15 @@ function galleryTime(p) {
 }
 
 async function loadGallery() {
-  const picksGrid = document.getElementById('wolfPicksGrid');
   const packGrid = document.getElementById('packRecentGrid');
-  if (!packGrid) return;  // Wolf's Picks removed for now; only the pack grid is required
+  if (!packGrid) return;
   try {
-    const [picksSnap, packSnap, allWolfSnap] = await Promise.all([
-      db.collection('wolf_photos').where('isPicked', '==', true).limit(10).get(),
-      db.collection('pack_photos').where('status', '==', 'approved').limit(100).get(),
-      db.collection('wolf_photos').orderBy('addedAt', 'desc').limit(12).get()
-    ]);
-    let picks = picksSnap.docs.map(d => ({ id: d.id, source: 'wolf', ...d.data() }));
-    // If fewer than 3 are pinned, fall back to most recent wolf_photos so the row always renders
-    if (picks.length < 3) {
-      const fillers = allWolfSnap.docs
-        .map(d => ({ id: d.id, source: 'wolf', ...d.data() }))
-        .filter(p => !picks.find(x => x.id === p.id));
-      picks = picks.concat(fillers).slice(0, 3);
-    } else {
-      picks = picks.sort((a, b) => galleryTime(b) - galleryTime(a)).slice(0, 3);
-    }
+    const packSnap = await db.collection('pack_photos').where('status', '==', 'approved').limit(100).get();
     const pack = packSnap.docs.map(d => ({ id: d.id, source: 'pack', ...d.data() }))
       .sort((a, b) => galleryTime(b) - galleryTime(a))
       .slice(0, 100);
-    galleryCache.picks = picks;
+    galleryCache.picks = [];
     galleryCache.pack = pack;
-    renderGalleryGrid('wolfPicksGrid', picks, "No Wolf picks yet. Check back soon.");
     renderGalleryGrid('packRecentGrid', pack, "No Pack photos yet. Sign in and post the first one.");
   } catch (err) {
     console.error('Gallery load error:', err);
@@ -763,7 +742,7 @@ function renderGalleryGrid(gridId, list, emptyMsg) {
   grid.innerHTML = list.map(p => {
     const safeCaption = galleryEscape(p.caption || '');
     const verifiedBadge = p.source === 'wolf' ? '<span class="gphoto-verified">WOLF</span>' : '';
-    const imgSrc = p.imageUrl || p.imageData || '';
+    const imgSrc = cldSize(p.imageUrl || p.imageData || '', 600);
     return '<div class="gphoto" onclick="openLightbox(\'' + p.source + '\',\'' + p.id + '\')" style="background-image:url(\'' + imgSrc + '\');background-size:cover;background-position:center;cursor:pointer;aspect-ratio:1;">'
          + verifiedBadge
          + '<span class="gphoto-label">' + safeCaption + '</span>'
@@ -785,7 +764,8 @@ window.openLightbox = async function(source, id) {
     } catch (err) { console.warn('Lightbox fetch failed:', err); return; }
   }
   lightboxCurrent = { source: source, id: id, photo: photo };
-  document.getElementById('lbImage').src = photo.imageUrl || photo.imageData || '';
+  document.getElementById('lbImage').src = cldSize(photo.imageUrl || photo.imageData || '', 1600);
+  document.getElementById('lbImage').alt = photo.caption || 'Pack photo';
   document.getElementById('lbCaption').textContent = photo.caption || '';
   document.getElementById('lbBadge').innerHTML = source === 'wolf' ? '<span class="gphoto-verified" style="position:static;display:inline-block;">WOLF</span>' : '';
   document.getElementById('galleryLightbox').style.display = 'block';
@@ -882,7 +862,7 @@ async function refreshComments() {
     }
     wrap.innerHTML = snap.docs.map(d => {
       const c = d.data();
-      const who = galleryEscape((c.authorEmail || 'anon').split('@')[0]);
+      const who = galleryEscape(c.authorName || 'pack member');
       const when = c.createdAt && c.createdAt.toMillis ? new Date(c.createdAt.toMillis()).toLocaleDateString() : '';
       return '<div style="border-left:2px solid var(--border);padding:6px 10px;">'
         + '<div style="color:var(--copper);font-family:\'Oswald\',sans-serif;font-size:11px;letter-spacing:1.5px;">' + who + ' · ' + when + '</div>'
@@ -926,6 +906,7 @@ document.addEventListener('DOMContentLoaded', function() {
       await db.collection(col).doc(lightboxCurrent.id).collection('comments').add({
         text: censored,
         authorEmail: user.email,
+        authorName: (user.displayName || '').trim() || null,
         authorUid: user.uid,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -950,6 +931,29 @@ auth.onAuthStateChanged(function() {
 
 // Initial load
 loadGallery();
+
+// Wolf Wares: live product feed with the hardcoded cards as fallback.
+async function loadShop() {
+  const grid = document.getElementById('shopGrid');
+  if (!grid) return;
+  try {
+    const r = await fetch('/api/shop');
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!data || !data.ok || !Array.isArray(data.products) || data.products.length < 2) return;
+    const esc = escapeHtml;
+    grid.innerHTML = data.products.slice(0, 4).map(p => {
+      const img = p.image ? p.image + (p.image.indexOf('?') > -1 ? '&' : '?') + 'width=640' : '';
+      const price = p.price ? '$' + esc(p.price) : '';
+      return '<a class="prod reveal in" onclick="wgTrack(\'shop_outbound_click\')" href="' + esc(p.url) + '">'
+        + '<div class="pimg" style="background-image:url(\'' + esc(img) + '\')"></div>'
+        + '<div class="pinfo"><div class="pn">' + esc(p.title) + '</div>'
+        + '<div class="pr">' + price + '</div>'
+        + '<span class="pbtn">Shop Now &#8594;</span></div></a>';
+    }).join('');
+  } catch (err) { /* fallback: hardcoded cards stay */ }
+}
+loadShop();
 
 
 function escapeHtml(s) {
@@ -986,7 +990,7 @@ function bltDistanceMiles(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function bltEscape(s) { return (s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function bltEscape(s) { return escapeHtml(s); }
 
 function bltGeocodeZip(zip) {
   return new Promise(function(resolve) {
