@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="2.01">
+<meta name="version" content="2.02">
 <link rel="canonical" href="https://wolfsgarage.com">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -445,6 +445,15 @@ a:where(.fcol a,.lk a){position:relative}
 <!-- Vercel Web Analytics: pageviews/referrers. 404s harmlessly until Web Analytics
      is enabled for this project in the Vercel dashboard. No cookies, no PII. -->
 <script defer src="/_vercel/insights/script.js"></script>
+<!-- Google Analytics 4 (live 2026-08-22). Ad-personalization and Google-signals
+     are disabled on purpose - the privacy page's promises depend on it. -->
+<script>
+(function(){var GA4_ID='G-HLEPJC2X2S';if(!GA4_ID)return;
+var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+GA4_ID;document.head.appendChild(s);
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;
+gtag('js',new Date());gtag('config',GA4_ID,{allow_google_signals:false,allow_ad_personalization_signals:false});
+})();
+</script>
 </head><body>
 <div id="prog"></div>
 <nav id="nav"><div class="lk"><a href="#calendar">Events</a><a href="/directory">Directory</a><a href="#gallery">Garage Stories</a><a href="#shop">Wolf Wares</a><a href="#mission">About</a><a class="navcta" href="/events?when=30d">Find Events</a></div><button class="wg2-burger" id="wg2Burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button><span class="nm" style="margin-left:auto">WOLF'S GARAGE</span><img class="seal" src="https://res.cloudinary.com/dancaaglf/image/upload/f_auto,q_auto/v1785040960/wg-site-seal.jpg" alt="Wolf's Garage seal"></nav><div class="wg2-drawer" id="wg2Drawer"><a href="#calendar">Events</a><a href="/directory">Directory</a><a href="#gallery">Garage Stories</a><a href="#shop">Wolf Wares</a><a href="#bulletin">Bulletin</a><a href="#mission">About</a><a href="#tools">Road Ahead</a><a href="#connect">The Weekend Sheet</a><a href="/events?when=30d" style="color:var(--red)">Find Events</a></div>
@@ -758,7 +767,7 @@ a:where(.fcol a,.lk a){position:relative}
 // Privacy-conscious analytics: event NAME only, never form contents, emails, or names.
 window.wgTrack=function(n){try{if(!n)return;(window.wgq=window.wgq||[]).push(n);if(window.__wgV===undefined){var m=document.querySelector('meta[name=version]');window.__wgV=(m&&m.getAttribute('content'))||'';}var b=JSON.stringify({e:String(n).slice(0,40),v:window.__wgV});if(navigator.sendBeacon){navigator.sendBeacon("/api/track",b);}else{var x=new XMLHttpRequest();x.open("POST","/api/track",true);x.send(b);}}catch(e){}};try{wgTrack('page_view');}catch(e){}
 (function(){"use strict";var d=document;
-console.log("%cWolf's Garage site v2.01","color:#CC0000;font-family:monospace;font-weight:bold");
+console.log("%cWolf's Garage site v2.02","color:#CC0000;font-family:monospace;font-weight:bold");
 var es=d.querySelectorAll(".hero .entr");for(var i=0;i<es.length;i++){(function(el,k){setTimeout(function(){el.classList.add("in");},140+k*120);})(es[i],i);}
 var run=d.getElementById("run");if(run)run.innerHTML=run.innerHTML+run.innerHTML;
 var nav=d.getElementById("nav"),prog=d.getElementById("prog"),scene=d.getElementById("scene"),dirim=d.getElementById("dirim");
