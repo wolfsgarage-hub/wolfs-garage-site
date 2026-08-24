@@ -262,6 +262,9 @@ a.phase{display:block;color:inherit}
 .modal-consent input{margin-top:3px;accent-color:var(--red);width:16px;height:16px;flex:0 0 16px}
 
 /* ===== Phase 1: the Garage Door redesign (v2.0) ===== */
+/* film grain over everything (from the approved prototype) */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E")}
 /* door hero */
 .wg2-track{height:220vh;height:220svh;position:relative}
 .wg2-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#0A0A0A}
