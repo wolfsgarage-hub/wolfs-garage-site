@@ -2,22 +2,32 @@
   "redirects": [
     {
       "source": "/pages/hot-rodder-directory",
-      "destination": "https://wolfs-garage-community.vercel.app",
-      "permanent": false
+      "destination": "/directory",
+      "permanent": true
     },
     {
       "source": "/pages/hot-rodder-directory/(.*)",
-      "destination": "https://wolfs-garage-community.vercel.app/$1",
-      "permanent": false
+      "destination": "/directory/$1",
+      "permanent": true
     },
     {
       "source": "/pack",
-      "destination": "https://wolfs-garage-community.vercel.app",
+      "destination": "/directory",
       "permanent": false
     },
     {
       "source": "/pages/join-the-list",
       "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/directory/",
+      "destination": "/directory",
+      "permanent": true
+    },
+    {
+      "source": "/get-listed.html",
+      "destination": "/directory/get-listed.html",
       "permanent": false
     }
   ],
@@ -27,7 +37,8 @@
     { "source": "/events", "destination": "/events.html" },
     { "source": "/events/", "destination": "/events.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/events/:slug", "destination": "/api/event-page?slug=:slug" }
+    { "source": "/events/:slug", "destination": "/api/event-page?slug=:slug" },
+    { "source": "/sitemap-events.xml", "destination": "/api/sitemap-events" }
   ],
   "headers": [
     {
@@ -35,6 +46,13 @@
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    },
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
       ]
     }
   ]
