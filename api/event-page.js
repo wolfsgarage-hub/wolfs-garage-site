@@ -6,6 +6,12 @@ import { rpc, clientIp, localLimit, esc } from './_wg.js';
 
 const LOGO = 'https://res.cloudinary.com/dancaaglf/image/upload/w_96,h_96,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png';
 const OG_IMG = 'https://res.cloudinary.com/dancaaglf/image/upload/b_rgb:0A0A0A,c_pad,w_1200,h_630,q_auto,f_jpg/v1782974224/og-wolf-logo.jpg';
+// One canonical host for every URL search engines see (apex redirects here).
+const SITE = 'https://www.wolfsgarage.com';
+// Brand fonts, self-hosted (same woff2 files Google Fonts served): no render-blocking third-party CSS.
+const FONTS = '<link rel="preload" href="/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin>'
+  + '<link rel="preload" href="/fonts/work-sans-latin.woff2" as="font" type="font/woff2" crossorigin>'
+  + '<style>' + "@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/bebas-neue-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/bebas-neue-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}@font-face{font-family:'Oswald';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/oswald-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}@font-face{font-family:'Oswald';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/oswald-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}@font-face{font-family:'Oswald';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/oswald-vietnamese.woff2) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}@font-face{font-family:'Oswald';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/oswald-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}@font-face{font-family:'Oswald';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/oswald-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}@font-face{font-family:'Special Elite';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/special-elite-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}@font-face{font-family:'Special Elite';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/special-elite-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}@font-face{font-family:'Work Sans';font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/work-sans-vietnamese.woff2) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}@font-face{font-family:'Work Sans';font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/work-sans-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}@font-face{font-family:'Work Sans';font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/work-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}" + '</style>';
 
 const ACCESS_LABEL = {
   public_free: 'Free · open to the public',
@@ -36,8 +42,7 @@ function page(title, body, meta) {
     + '<title>' + esc(title) + '</title>'
     + (meta || '')
     + '<link rel="icon" type="image/png" href="' + LOGO + '">'
-    + '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-    + '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Special+Elite&display=swap" rel="stylesheet">'
+    + FONTS
     + '<style>'
     + ':root{--bg:#0A0A0A;--red:#CC0000;--bone:#F5F1E8;--copper:#C8922A;--panel:#141414;--panel-2:#1c1c1c;--border:rgba(245,241,232,.08);--border-strong:rgba(245,241,232,.18)}'
     + '*{box-sizing:border-box;margin:0;padding:0}'
@@ -88,7 +93,7 @@ export default async function handler(req, res) {
   res.setHeader('content-type', 'text/html; charset=utf-8');
 
   if (!/^[a-z0-9-]{3,120}$/.test(slug)) {
-    res.status(404).send(page('Event not found — Wolf’s Garage',
+    res.status(404).send(page('Event Not Found | Wolf\'s Garage',
       '<h1>EVENT NOT FOUND</h1><p>That listing doesn’t exist or was removed.</p><p style="margin-top:16px"><a class="btn-red" href="/events">BROWSE ALL EVENTS</a></p>'));
     return;
   }
@@ -97,12 +102,12 @@ export default async function handler(req, res) {
   try {
     data = await rpc('wg_get_event', { p_slug: slug }, ip);
   } catch (e) {
-    res.status(e.status === 429 ? 429 : 502).send(page('Wolf’s Garage Events',
+    res.status(e.status === 429 ? 429 : 502).send(page('Wolf\'s Garage Events',
       '<h1>HOLD ON</h1><p>' + (e.status === 429 ? 'Too many requests — give it a minute.' : 'Something went wrong loading this event. Try again shortly.') + '</p>'));
     return;
   }
   if (!data || data.ok !== true) {
-    res.status(404).send(page('Event not found — Wolf’s Garage',
+    res.status(404).send(page('Event Not Found | Wolf\'s Garage',
       '<h1>EVENT NOT FOUND</h1><p>That listing doesn’t exist or was removed.</p><p style="margin-top:16px"><a class="btn-red" href="/events">BROWSE ALL EVENTS</a></p>'));
     return;
   }
@@ -153,7 +158,7 @@ export default async function handler(req, res) {
   const ld = {
     '@context': 'https://schema.org', '@type': 'Event',
     name: e.title, description: desc,
-    url: 'https://wolfsgarage.com/events/' + e.slug,
+    url: SITE + '/events/' + e.slug,
     eventStatus: 'https://schema.org/' + (e.event_status === 'canceled' ? 'EventCancelled' : e.event_status === 'postponed' ? 'EventPostponed' : 'EventScheduled'),
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode'
   };
@@ -161,19 +166,37 @@ export default async function handler(req, res) {
   if (e.venue_name) {
     ld.location = { '@type': 'Place', name: e.venue_name, address: { '@type': 'PostalAddress', streetAddress: e.venue_address || undefined, addressLocality: e.venue_city || e.city || undefined, addressRegion: e.venue_state || e.state || undefined, postalCode: e.venue_zip || undefined, addressCountry: 'US' } };
   }
+  if (!ld.location && (e.city || e.state)) {
+    ld.location = { '@type': 'Place', name: cityState, address: { '@type': 'PostalAddress', addressLocality: e.city || undefined, addressRegion: e.state || undefined, addressCountry: 'US' } };
+  }
+  if (e.access_type === 'public_free') ld.isAccessibleForFree = true;
   if (e.organizer_name) ld.organizer = { '@type': 'Organization', name: e.organizer_name, url: e.organizer_website || undefined };
   if (e.registration_url) ld.offers = { '@type': 'Offer', url: e.registration_url };
   if (e.flyer_url) ld.image = e.flyer_url;
 
   const meta = (passed ? '<meta name="robots" content="noindex">' : '')
     + '<meta name="description" content="' + esc(desc) + '">'
-    + '<link rel="canonical" href="https://wolfsgarage.com/events/' + esc(e.slug) + '">'
+    + '<link rel="canonical" href="' + SITE + '/events/' + esc(e.slug) + '">'
     + '<meta property="og:title" content="' + esc(e.title) + '">'
     + '<meta property="og:description" content="' + esc(desc) + '">'
     + '<meta property="og:type" content="website">'
-    + '<meta property="og:url" content="https://wolfsgarage.com/events/' + esc(e.slug) + '">'
+    + '<meta property="og:url" content="' + SITE + '/events/' + esc(e.slug) + '">'
+    + '<meta property="og:site_name" content="Wolf&#39;s Garage">'
     + '<meta property="og:image" content="' + (e.flyer_url ? esc(e.flyer_url) : OG_IMG) + '">'
-    + '<script type="application/ld+json">' + JSON.stringify(ld).replace(/</g, '\\u003c') + '</script>';
+    + '<meta property="og:image:alt" content="' + (e.flyer_url ? 'Event flyer for ' + esc(e.title) : 'Wolf&#39;s Garage logo') + '">'
+    + '<meta name="twitter:card" content="summary_large_image">'
+    + '<meta name="twitter:title" content="' + esc(e.title) + '">'
+    + '<meta name="twitter:description" content="' + esc(desc) + '">'
+    + '<meta name="twitter:image" content="' + (e.flyer_url ? esc(e.flyer_url) : OG_IMG) + '">'
+    + '<script type="application/ld+json">' + JSON.stringify(ld).replace(/</g, '\\u003c') + '</script>'
+    + '<script type="application/ld+json">' + JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Wolf\'s Garage', item: SITE + '/' },
+          { '@type': 'ListItem', position: 2, name: 'Events', item: SITE + '/events' },
+          { '@type': 'ListItem', position: 3, name: e.title, item: SITE + '/events/' + e.slug }
+        ]
+      }).replace(/</g, '\\u003c') + '</script>';
 
   const mapsQ = encodeURIComponent([e.venue_name, e.venue_address, e.venue_city || e.city, e.venue_state || e.state, e.venue_zip].filter(Boolean).join(', '));
   const occHtml = passed
@@ -266,5 +289,10 @@ export default async function handler(req, res) {
     + '</script>';
 
   res.setHeader('cache-control', 's-maxage=300, stale-while-revalidate=3600');
-  res.status(200).send(page(e.title + ' — Automotive Events — Wolf’s Garage', body, meta));
+  let whenTxt = '';
+  if (nextOcc && nextOcc.local_date) {
+    try { whenTxt = new Date(nextOcc.local_date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }); } catch { whenTxt = ''; }
+  }
+  const pageTitle = [e.title, whenTxt, cityState, 'Wolf\'s Garage'].filter(Boolean).join(' | ');
+  res.status(200).send(page(pageTitle, body, meta));
 }
