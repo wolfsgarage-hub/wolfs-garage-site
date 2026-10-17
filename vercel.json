@@ -1,5 +1,7 @@
 {
   "redirects": [
+    {"source":"/post-maker","destination":"https://raw.githack.com/wolfsgarage-hub/Wolfs-admin/main/index.html?tab=studio&v=39.0.0","permanent":false},
+    {"source":"/social-queue","destination":"https://raw.githack.com/wolfsgarage-hub/Wolfs-admin/main/social-queue.html?v=1.2.0","permanent":false},
     {
       "source": "/pages/hot-rodder-directory",
       "destination": "/directory",
@@ -41,6 +43,8 @@
     { "source": "/sitemap-events.xml", "destination": "/api/sitemap-events" }
   ],
   "headers": [
+    {"source":"/post-maker","headers":[{"key":"X-Robots-Tag","value":"noindex, nofollow"}]},
+    {"source":"/social-queue","headers":[{"key":"X-Robots-Tag","value":"noindex, nofollow"}]},
     {
       "source": "/api/(.*)",
       "headers": [
