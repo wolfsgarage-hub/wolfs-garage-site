@@ -1,7 +1,7 @@
 {
   "redirects": [
-    {"source":"/post-maker","destination":"https://raw.githack.com/wolfsgarage-hub/Wolfs-admin/main/index.html?tab=studio&v=39.0.0","permanent":false},
-    {"source":"/social-queue","destination":"https://raw.githack.com/wolfsgarage-hub/Wolfs-admin/main/social-queue.html?v=1.2.0","permanent":false},
+    {"source":"/post-maker","destination":"https://raw.githack.com/wolfsgarage-hub/Wolfs-admin/main/index.html?tab=studio&v=39.1.0","permanent":false},
+    {"source":"/social-queue","destination":"https://raw.githack.com/wolfsgarage-hub/Wolfs-admin/main/social-queue.html?v=1.3.0","permanent":false},
     {
       "source": "/pages/hot-rodder-directory",
       "destination": "/directory",
