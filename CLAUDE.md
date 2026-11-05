@@ -70,7 +70,7 @@ echo "Token scrubbed."
 
 | Repo | Serves | Host | Vercel project | Notes |
 |---|---|---|---|---|
-| `wolfs-garage-site` | wolfsgarage.com | Vercel `wolfsgarage` | `prj_xkSqPioBA9MnFkIOPt9A8ths2379` | Main marketing site. v1.41. |
+| `wolfs-garage-site` | wolfsgarage.com | Vercel `wolfsgarage` | `prj_xkSqPioBA9MnFkIOPt9A8ths2379` | Main marketing site. v2.05. |
 | `wolfs-garage-community` | Hot Rodder Directory | Vercel `wolfsgarage` | `prj_07ZQNcTf2xB0RmkPoYp1slYrydk6` | Directory live at /directory. v3.21.8. Firebase `wolfs-garage-directory`. |
 | `Wolfs-admin` | Admin + Quick Add | raw.githack.com | — | Daily-driver = `main/index.html` (NOT community/admin.html). Quick Add = `main/quick.html`. Post gen = `wg-post-generator-v6.3.html`. |
 | `wolfsgarage-growth-engine` | Growth Engine PWA | Vercel `wolfsgaragenw-9926` | `prj_4uKh5iqJeRauAFgPIdyXYbaIUTyO` | Branch `rebuild/growth-engine-core`. v2.13.0. Parallel actor pushes here — fetch HEAD before push, never force-push. |
