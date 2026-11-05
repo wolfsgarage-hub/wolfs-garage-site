@@ -2,7 +2,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content">
 <title>Wolf's Garage. Get Back in the Garage.</title>
 <meta name="description" content="Find local car events, independent businesses, real builds, and hands-on skills that keep car culture alive. Portland, Oregon. Get Back in the Garage.">
-<meta name="version" content="2.04">
+<meta name="version" content="2.05">
 <link rel="canonical" href="https://www.wolfsgarage.com/">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dancaaglf/image/upload/w_64,h_64,c_fill,g_auto,r_max,f_png/v1782974224/og-wolf-logo.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dancaaglf/image/upload/w_180,h_180,c_fill,g_auto,f_png/v1782974224/og-wolf-logo.png">
@@ -1820,17 +1820,18 @@ window.lbNav = function(dir) {
   var rail = document.getElementById('wg2Rail');
   if (rail) {
     var from = new Date(), to = new Date(Date.now() + 14 * 864e5);
-    function iso(d){ return d.toISOString().slice(0, 10); }
+    function iso(d){ return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); }
     fetch('/api/events?zip=97217&radius=100&from=' + iso(from) + '&to=' + iso(to) + '&sort=soonest')
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(d){
-        if (!d || !d.ok || !Array.isArray(d.results) || !d.results.length) { railFallback(); return; }
+        if (!d || !d.ok || !Array.isArray(d.results)) { railFallback(); return; }
+        if (!d.results.length) { railFallback(d.total); return; }
         var seen = {}, withFlyer = [];
         d.results.forEach(function(e){
           if (!e.flyer_url || seen[e.slug]) return;
           seen[e.slug] = 1; withFlyer.push(e);
         });
-        if (withFlyer.length < 3) { railFallback(); return; }
+        if (!withFlyer.length) { railFallback(d.total); return; }
         rail.innerHTML = withFlyer.slice(0, 6).map(function(e){
           var dt = '';
           try {
@@ -1850,13 +1851,13 @@ window.lbNav = function(dir) {
       })
       .catch(railFallback);
   }
-  function railFallback(){
+  function railFallback(total){
     if (!rail) return;
     rail.innerHTML = '<div style="grid-column:1/-1;background:var(--panel-2,#141414);border:1px solid var(--border,#2a2624);border-left:4px solid var(--red);padding:20px;text-align:center;">'
       + '<div style="font-family:\'Oswald\',sans-serif;text-transform:uppercase;letter-spacing:0.14em;font-size:0.85rem;color:var(--copper);margin-bottom:6px;">THE EVENT FINDER</div>'
       + '<p style="font-size:0.95rem;color:rgba(245,241,232,0.8);margin:0;">Every show, cruise-in and swap meet near you, searchable by ZIP and distance.</p></div>';
     var stat0 = document.getElementById('wg2StatNear');
-    if (stat0) stat0.textContent = '–';
+    if (stat0) stat0.textContent = typeof total === 'number' ? String(total) : '–';
   }
   function countUp(el, target){
     if (reduced) { el.textContent = String(target); return; }
